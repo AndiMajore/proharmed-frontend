@@ -1,4 +1,4 @@
-const HOST = "api.digest-validation.net"
+const HOST = "mesidha-api.zbh.uni-hamburg.de"
 export const CONTEXT_PATH="/"
 // export const BACKEND_PORT= "8080"
 export const HOST_URL = "https://" + HOST //+ ":" + BACKEND_PORT

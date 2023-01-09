@@ -1,6 +1,7 @@
-FROM node:16.15 as build-stage
+FROM node:16.17 as build-stage
 WORKDIR /app
 COPY package*.json ./
+RUN npm install -g npm@8.19.2
 RUN npm install
 COPY ./ .
 COPY docker/index.html public/index.html
@@ -9,23 +10,11 @@ COPY docker/Config.js src/Config.js
 
 RUN npm run build
 
-FROM andimajore/nedrex_repo:server_base as production-stage
+FROM nginx:1.23.1-alpine as production-stage
 WORKDIR /usr/app
 
-RUN wget https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.66/bin/apache-tomcat-8.5.66.tar.gz
-RUN tar -xzf apache-tomcat-8.5.66.tar.gz
-RUN rm apache-tomcat-8.5.66.tar.gz
-RUN mv apache-tomcat-8.5.66 apache-tomcat
-RUN rm -rf webapps/*
+COPY --from=build-stage /app/dist /usr/share/nginx/html/
 
-WORKDIR apache-tomcat
-COPY --from=build-stage /app/dist webapps/ROOT/
-COPY docker/WEB-INF webapps/ROOT/WEB-INF
+COPY docker/default.conf /etc/nginx/conf.d/
 
-COPY docker/conf/* conf/
-
-#EXPOSE 8080
-#EXPOSE 8090
-
-#ENTRYPOINT tail -F conf/web.xml
-ENTRYPOINT bin/catalina.sh run
+EXPOSE 80
