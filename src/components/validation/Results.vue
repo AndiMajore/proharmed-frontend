@@ -1,13 +1,13 @@
 <template>
   <div style="width: 100%;  padding: 16px">
     <v-sheet style="margin-top: 16px;">
-      <div style="display: flex; justify-content: center" v-if="!error && result ===undefined">
+      <div style="display: flex; justify-content: center" v-if="!error && !result">
         <v-subheader :class="{sh:!mobile, sh_mobile:mobile}">Status: {{
             status ? status + (status === "Queued" ? "(" + queueStats.queuePosition + "/" + queueStats.queueLength + ")" : '') : "communicating..."
           }}
         </v-subheader>
       </div>
-      <div v-if="result===undefined">
+      <div v-if="!result">
         <v-progress-linear :color="error?'error':'primary'" :indeterminate="progress===undefined"
                            :value="progress"></v-progress-linear>
         <div style="width: 100%; display: flex; justify-content: center; margin-top:8px;">
@@ -29,11 +29,14 @@
         <v-divider></v-divider>
         <v-tabs-items v-model="resultTab">
           <v-tab-item>
-            <InputTab @downloadEvent="downloadFile" :task-i-d="taskID" :id-map="idMap" :type="type" :mode="mode" :mobile="mobile" :input="input" :zips="zips"></InputTab>
+            <InputTab @downloadEvent="downloadFile" :task-i-d="taskID" :mode="mode" :mobile="mobile"
+                      :input="input"></InputTab>
           </v-tab-item>
 
           <v-tab-item style="width: 100%">
-            <OutputTab @reloadFiles="loadPlots()" @downloadEvent="downloadFile" :taskID="taskID" :mobile="mobile" :result="result" :plots="plots" :csvs="csvs" :input="input" :type="type" :mode="mode" :zips="zips" :reference-type="getIDType(input.reference_id)"></OutputTab>
+            <OutputTab @reloadFiles="loadData()" @downloadEvent="downloadFile" :taskID="taskID" :mobile="mobile"
+                       :result="resultPreview" :plots="plots" :csvs="csvs" :txts="txt" :input="input" :mode="mode"
+                       :zips="zips" :result-file-u-r-l="this.getResultFileURL()"></OutputTab>
           </v-tab-item>
         </v-tabs-items>
       </div>
@@ -46,12 +49,12 @@
 
 import OutputTab from "@/components/validation/start/result/OutputTab";
 import InputTab from "@/components/validation/start/result/InputTab";
+
 export default {
   name: "Results",
   components: {OutputTab, InputTab},
   props: {
     params: Object,
-    idMap: Object,
     mobile: {
       type: Boolean,
       default: false,
@@ -59,73 +62,60 @@ export default {
   },
   data() {
     return {
-      result: undefined,
+      result: false,
       error: false,
       taskID: undefined,
       status: "",
       resultTab: 1,
       queueStats: undefined,
       mode: undefined,
-      type: undefined,
       plots: undefined,
       csvs: undefined,
       zips: undefined,
+      txt: undefined,
       progress: undefined,
       input: undefined,
+      resultPreview: undefined,
     }
   },
 
   created() {
     this.taskID = this.$route.query.id
-    console.log(this.params)
     if (this.taskID) {
       this.queryStatus()
-    } else {
-      this.execute()
     }
   },
 
   methods: {
-    saveResult: function (result) {
-      if (typeof result !== "object") {
-        this.error = true
-        return;
-      }
-      this.result = result.result
-      this.loadPlots()
-    },
-    getFilePath: function (name) {
-      return this.$config.HOST_URL + "/result_file?name=" + name
+    getFilePath: function (uid, name) {
+      return this.$config.HOST_URL + "/download_file?uid=" + uid + "&filename=" + name
     },
 
     downloadFile: function (name) {
       window.open(name)
     },
-    getClusterNames: function (clustering) {
-      const uniq = []
-      clustering.map(e => e.cluster).forEach(e => {
-        if (uniq.indexOf(e) === -1)
-          uniq.push(e)
-      })
-      return uniq
-    },
 
-    loadPlots: function () {
+    loadData: function () {
       this.$http.getResultFiles(this.taskID).then(files => {
-        this.plots = files.filter(file => file.type === 'png').map(file => this.getFilePath(file.name))
-        this.csvs = files.filter(file => file.type === 'csv').map(file => this.getFilePath(file.name))
-        this.zips = files.filter(file => file.type === 'zip').map(file => this.getFilePath(file.name))
-      }).catch(console.error)
+        this.plots = files.filter(file => file.name.endsWith('png')).map(file => this.getFilePath(this.taskID, file.name))
+        this.csvs = files.filter(file => file.name.endsWith('csv')).map(file => this.getFilePath(this.taskID, file.name))
+        this.zips = files.filter(file => file.name.endsWith('zip')).map(file => this.getFilePath(this.taskID, file.name))
+        this.txt = files.filter(file => file.name.endsWith('txt')).map(file => this.getFilePath(this.taskID, file.name))
+      }).then(() => {
+        this.$http.getInput(this.taskID).then(input => {
+          delete input.uid
+          this.input = input
+        }).then(() => {
+          this.$http.getPreview(this.getResultFileURL().split("?")[1]).then(data => {
+            this.resultPreview = JSON.parse(data)
+          }).catch(console.error)
+        }).catch(console.error)
+      }).catch(console.error).finally(() => {
+        this.result = true
+      })
     },
 
-    getIDType: function (id) {
-      for (let idType of Object.keys(this.idMap)) {
-        if (this.idMap[idType].map(e => e.value).includes(id)) {
-          return idType
-        }
-      }
-      return undefined
-    },
+
     isMobile: function () {
       return this.mobile
     },
@@ -144,14 +134,19 @@ export default {
       return window.location
     },
 
-    queryResult: function () {
-      this.$http.getTaskResult(this.taskID).then(this.saveResult).catch(console.error)
+    queryResult: async function () {
+      this.loadData()
     },
+
+    getResultFileURL() {
+      if (!this.csvs || !this.input)
+        return undefined
+      return this.csvs.filter(c => !c.endsWith(this.input.filename))[0]
+    },
+
 
     queryStatus: function () {
       this.$http.getTaskStatus(this.taskID).then((response) => {
-        if (!this.input)
-          this.input = response.input
         if (!this.mode)
           this.mode = response.mode
         if (!this.type)
@@ -173,69 +168,6 @@ export default {
       }).catch(console.error)
     },
 
-
-    saveTaskId: function (response) {
-      this.taskID = response.task
-      this.$router.push("/result?id=" + this.taskID)
-      this.queryStatus()
-    },
-    reset: function () {
-      this.$router.push("/")
-      this.$router.go()
-    },
-
-    execute: function () {
-      this.step = 2
-      switch (this.params.mode) {
-        case "set": {
-          this.$http.validate_set(this.params.targetID, this.params.target, this.params.runs, this.params.replace, this.params.distance, this.params.background, this.params.type, this.params.sigCont, this.params.mail, this.params.sigContTargets).then(response => {
-            this.saveTaskId(response)
-          }).catch(() => {
-            this.error = true
-          })
-          break;
-        }
-        case "network": {
-          if(!this.params.referenceID) {
-            this.$http.validate_subnetwork(this.params.targetID, this.params.target, this.params.runs, this.params.replace, this.params.distance, this.params.background, this.params.network, this.params.type, this.params.sigCont, this.params.mail, this.params.sigContTargets).then(response => {
-              this.saveTaskId(response)
-            }).catch(() => {
-              this.error = true
-            })
-          }else{
-            this.$http.validate_subnetwork_set(this.params.targetID, this.params.target, this.params.referenceID, this.params.reference,this.params.runs, this.params.replace, this.params.distance, this.params.background, this.params.network, this.params.type, this.params.sigCont, this.params.mail, this.params.sigContTargets).then(response => {
-              this.saveTaskId(response)
-            }).catch(() => {
-              this.error = true
-            })
-          }
-          break;
-        }
-        case "id-set": {
-          this.$http.validate_id_set(this.params.targetID, this.params.target, this.params.referenceID, this.params.reference, this.params.runs, this.params.replace, this.params.enriched, this.params.distance, this.params.background, this.params.type, this.params.sigCont, this.params.mail, this.params.sigContTargets).then(response => {
-            this.saveTaskId(response)
-          }).catch(() => {
-            this.error = true
-          })
-          break
-        }
-        case "set-set": {
-          this.$http.validate_set_set(this.params.targetID, this.params.target, this.params.referenceID, this.params.reference, this.params.runs, this.params.replace, this.params.enriched, this.params.distance, this.params.background, this.params.type, this.params.sigCont, this.params.mail, this.params.sigContTargets).then(response => {
-            this.saveTaskId(response)
-          }).catch(() => {
-            this.error = true
-          })
-          break
-        }
-        case "cluster": {
-          this.$http.validate_cluster(this.params.targetID, this.params.target, this.params.runs, this.params.replace, this.params.distance, this.params.background, this.params.type, this.params.sigCont, this.params.mail, this.params.sigContTargets).then(response => {
-            this.saveTaskId(response)
-          }).catch(() => {
-            this.error = true
-          })
-        }
-      }
-    }
 
   }
 

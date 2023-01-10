@@ -40,14 +40,10 @@
     <Selection v-if="step===0" @filterEvent="startConfiguration" @remapEvent="startConfiguration"
                @reduceEvent="startConfiguration" @orthoEvent="startConfiguration" :mobile="mobile"></Selection>
     <template v-if="step===1 && mode">
-      <ConfigurationFilter v-if="mode==='filter'"></ConfigurationFilter>
+      <ConfigurationFilter @applyFilterEvent="runFilter" v-if="mode==='filter'" :mode="mode"
+                           :organism-list="organismList"></ConfigurationFilter>
     </template>
-<!--    <Configuration v-else-if="step===1" @resetEvent="resetValidation" :mode="params.mode" :mobile="mobile"-->
-<!--                   :type="params.type"-->
-<!--                   :id-map="idMap"-->
-<!--                   @validationEvent="validate"></Configuration>-->
-    <Results v-else-if="step===2" @resetEvent="resetValidation" :params="params" :id-map="idMap"
-             :mobile="mobile"></Results>
+    <Results v-if="step===2" @resetEvent="resetValidation" :params="params" :mobile="mobile"></Results>
   </div>
 </template>
 
@@ -66,13 +62,13 @@ export default {
     return {
       digestDescription: "",
       step: 0,
-      params: {
-        mode: undefined,
-        type: undefined,
-      },
-      result: undefined,
-      mobile: this.isMobile(),
       mode: undefined,
+      result: undefined,
+      params: {},
+      mobile: this.isMobile(),
+      organismList: [
+        'human', 'rat', 'mouse', 'rabbit'
+      ]
     }
   },
 
@@ -111,17 +107,26 @@ export default {
 
     startConfiguration: function (data) {
       this.step = 1
-      console.log(data.mode)
       this.mode = data.mode
     },
     resetValidation: function () {
       this.step = 0
       this.result = undefined;
-      this.params = {mode: undefined, type: undefined}
+      this.mode = undefined
+      this.params = {}
     },
-    validate: function (data) {
-      this.params = data;
-      this.step = 2
+
+    runFilter: function (payload) {
+      this.$http.runFilter(payload).then(response => {
+        this.saveTaskResponse(response)
+        this.step = 2
+      })
+    },
+
+    saveTaskResponse: function (response) {
+      if (response.data.uid){
+          this.$router.push("/result?id="+response.data.uid)
+      }
     }
   },
 
