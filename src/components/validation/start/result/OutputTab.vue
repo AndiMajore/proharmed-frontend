@@ -96,7 +96,7 @@
           </v-btn>
         </div>
       </v-container>
-      <template v-if="mode==='filter' || mode === 'reduce'">
+      <template v-if="mode==='filter' || mode === 'reduce' || mode === 'ortho'">
         <v-divider></v-divider>
         <div style="display:flex">
           <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Filter Details
