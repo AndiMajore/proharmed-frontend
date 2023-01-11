@@ -33,6 +33,18 @@ const ApiService = {
         return this.post("/run_filter",payload)
     },
 
+    runRemap(payload){
+        return this.post("/run_remap",payload)
+    },
+
+    runReduce(payload){
+        return this.post("/run_reduce",payload)
+    },
+
+    runOrtho(payload){
+        return this.post("/run_ortho",payload)
+    },
+
     getPreview(req){
         return this.get("/get_preview?"+req).then(response=>{
             return response.data

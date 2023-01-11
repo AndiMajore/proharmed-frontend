@@ -1,5 +1,31 @@
 <template>
   <div>
+    <v-card tile value="true" timeout="-1" top centered color="error" style="padding: 16px; margin: 16px"><b
+        style="color: white;display: flex; justify-content: center"> Your input
+      and output data will be deleted after 24h or click here to delete them now!</b>
+      <v-card-actions style="display: flex; justify-content: center; margin-top: 16px">
+        <v-btn @click="deleteDialogModel=true">Delete
+          <v-icon right>fas fa-trash</v-icon>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+    <v-dialog v-model="deleteDialogModel" max-width="700px">
+      <v-sheet>
+        <v-card>
+          <v-card-title>
+            Delete data
+          </v-card-title>
+          <v-card-text>Are you sure you want to delete the input and output data now? This link wills stay active only
+            to show you used input parameters.
+          </v-card-text>
+          <v-divider style="margin: 8px 32px"></v-divider>
+          <v-card-actions style="display: flex; margin: 8px">
+            <v-btn style="justify-self: flex-start; margin: auto" @click="deleteDialogModel=false">Close</v-btn>
+            <v-btn color="error" style="justify-self: flex-end; margin: auto" @click="deleteData()">Delete</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-sheet>
+    </v-dialog>
     <div style="display:flex">
       <v-subheader style="justify-self: center; margin-left: auto; margin-right: 0">Matrix preview
       </v-subheader>
@@ -21,7 +47,7 @@
           </v-data-table>
         </v-col>
         <div style="display: flex; justify-content: center; margin: 32px;">
-          <v-btn @click="downloadFile(resultFileURL)">
+          <v-btn @click="$emit('downloadResultEvent')">
             <v-icon left>fas fa-download</v-icon>
             Download Output
           </v-btn>
@@ -70,13 +96,13 @@
           </v-btn>
         </div>
       </v-container>
-      <template v-if="mode==='filter'">
+      <template v-if="mode==='filter' || mode === 'reduce'">
         <v-divider></v-divider>
         <div style="display:flex">
           <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Filter Details
           </v-subheader>
         </div>
-        <v-container v-if="mode==='filter'">
+        <v-container>
           <v-row class="flex_content_center">
             <v-col cols="12" lg="6" class="flex_content_center">
               <div style="width: 100%">
@@ -124,6 +150,7 @@ export default {
   },
   data() {
     return {
+      deleteDialogModel: false,
     }
   },
 
@@ -151,6 +178,14 @@ export default {
         Object.keys(this.result).forEach(k => row[k] = Object.values(this.result[k])[idx])
         return row
       })
+    },
+
+    deleteData: function () {
+      this.$http.get("/clear?uid=" + this.taskID).then((response) => {
+        if (response.data.uid) {
+          location.reload()
+        }
+      }).catch(console.error)
     },
 
     getZIP: function (name) {

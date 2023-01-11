@@ -28,7 +28,7 @@
         <v-divider></v-divider>
         <div style="display: flex; justify-content: center">
           <v-subheader class="sh">
-            Filter Configuration
+            Remap Configuration
           </v-subheader>
         </div>
         <v-alert v-if="errorColumnName" type="error" dense>Missing column name to filter from the file!</v-alert>
@@ -60,8 +60,8 @@
                 </v-file-input>
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="Column name" style="max-width: 300px;"
-                              v-model="columnNameModel">
+                <v-text-field dense label="Protein column name" style="max-width: 300px;"
+                              v-model="pColumnNameModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>
                       <template v-slot:activator="{on, attrs}">
@@ -85,8 +85,40 @@
           <v-container>
             <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
+                <v-text-field dense label="Gene column name" style="max-width: 300px;"
+                              v-model="gColumnNameModel">
+                  <template v-slot:append-outer>
+                    <v-tooltip right>
+                      <template v-slot:activator="{on, attrs}">
+                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                      </template>
+                      <div style="width: 250px; text-align: justify">
+                        Insert ID of target ID type.
+                      </div>
+                    </v-tooltip>
+                  </template>
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" md="6" class="flex_content_center">
                 <v-select label="Organism"
                           v-model="organismModel" :items="organismList.map(o=>{return{text:o, value:o}})"
+                          style="max-width: 210px; min-width: 210px" outlined dense filled hide-details>
+                  <template v-slot:append-outer>
+                    <v-tooltip right>
+                      <template v-slot:activator="{on, attrs}">
+                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                      </template>
+                      <div style="width: 250px; text-align: justify">
+                        ID type of inserted {{ mode === 'network' ? 'node' : 'target' }} IDs. Click on the drop-down
+                        to see the supported types.
+                      </div>
+                    </v-tooltip>
+                  </template>
+                </v-select>
+              </v-col>
+              <v-col cols="12" md="6" class="flex_content_center">
+                <v-select label="Mode"
+                          v-model="modeModel" :items="modeList.map(o=>{return{text:o, value:o}})"
                           style="max-width: 210px; min-width: 210px" outlined dense filled hide-details>
                   <template v-slot:append-outer>
                     <v-tooltip right>
@@ -117,22 +149,7 @@
                 </v-checkbox>
               </v-col>
               <v-col cols="12" md="6" lg="3" class="flex_content_center">
-                <v-checkbox v-model="reviewedModel" label="Reviewed"
-                            style="max-width: 170px" hide-details>
-                  <template v-slot:append>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
-                      </template>
-                      <div style="width: 250px; text-align: justify">
-                        Set checkmark if the input target set should be compared to a reference.
-                      </div>
-                    </v-tooltip>
-                  </template>
-                </v-checkbox>
-              </v-col>
-              <v-col cols="12" md="6" lg="3" class="flex_content_center">
-                <v-checkbox v-model="revConModel" label="Rev con"
+                <v-checkbox v-model="skipFilledModel" label="Skip filled"
                             style="max-width: 170px" hide-details>
                   <template v-slot:append>
                     <v-tooltip right>
@@ -160,6 +177,29 @@
                     </v-tooltip>
                   </template>
                 </v-text-field>
+              </v-col>
+              <v-col cols="12" md="6" class="flex_content_center">
+                <v-file-input label="Upload fasta File"
+                              hide-details
+                              dense
+                              single-line
+                              style="width: 300px; max-width: 300px; cursor: pointer"
+                              @change="uploadFasta"
+                              prepend-inner-icon="fas fa-arrow-up-from-bracket">
+                  <template v-slot:append-outer>
+                    <v-tooltip right>
+                      <template v-slot:activator="{on, attrs}">
+                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                      </template>
+                      <div style="width: 250px; text-align: justify" v-if="mode !== 'network'">
+                        Upload of file with target IDs that are separated by a newline in the file.
+                      </div>
+                      <div style="width: 250px; text-align: justify" v-if="mode === 'network'">
+                        Upload a single column node list, edge list or .sif network file with node IDs.
+                      </div>
+                    </v-tooltip>
+                  </template>
+                </v-file-input>
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-text-field dense label="E-mail" style="max-width: 300px;"
@@ -216,13 +256,14 @@
 <script>
 
 export default {
-  name: "ConfigurationFilter",
+  name: "ConfigurationRemap",
 
   props: {
     mode: String,
     type: String,
     idMap: Object,
     organismList: Array,
+    modeList: Array,
     mobile: {
       type: Boolean,
       default: false,
@@ -238,15 +279,16 @@ export default {
       },
 
       uid: undefined,
-      columnNameModel: undefined,
+      pColumnNameModel: undefined,
+      gColumnNameModel: 'Gene names',
       organismModel: 'rat',
-      resultColumnNameModel: 'Filtered Protein IDs',
-      keepEmptyModel: true,
-      reviewedModel: false,
-      revConModel: false,
+      resultColumnNameModel: 'Remapped Gene Names',
+      keepEmptyModel: false,
+      skipFilledModel: false,
+      modeModel:'uniprot_primary',
+      fasta: undefined,
       filename: undefined,
       mailModel: undefined,
-
       errorColumnName: false,
       errorFile: false,
     }
@@ -264,7 +306,7 @@ export default {
           this.uid = data.uid
           console.log("got " + this.uid)
         }
-      }).catch(() => {
+      }).finally(() => {
         if (!this.uid)
           setTimeout(() => {
             this.init
@@ -281,10 +323,28 @@ export default {
       this.$http.post('/upload_file', data).then(response => {
         if (response.data.filename)
           this.filename = response.data.filename
-      }).catch(()=>{
-        console.log("retrying to save file")
-        this.init()
-        this.uploadFile(file)
+        else {
+          console.log("retrying to save file")
+          this.init()
+          this.uploadFile(file)
+        }
+      })
+    },
+
+    uploadFasta: function (file) {
+      if (!file)
+        return
+      let data = new FormData();
+      data.append('file', file, file.name)
+      data.append('uid', this.uid)
+      this.$http.post('/upload_file', data).then(response => {
+        if (response.data.filename)
+          this.fasta = response.data.filename
+        else {
+          console.log("retrying to save file")
+          this.init()
+          this.uploadFasta(file)
+        }
       })
     },
 
@@ -299,7 +359,7 @@ export default {
 
     checkEvent: async function () {
       this.errorFile = !this.filename;
-      this.errorColumnName = !this.columnNameModel || this.columnNameModel.length === 0
+      this.errorColumnName = !this.pColumnNameModel || this.pColumnNameModel.length === 0
       let error = this.errorFile || this.errorColumnName
       if (error) {
         this.setNotification('There are errors in your configuration!', 5000)
@@ -307,12 +367,14 @@ export default {
       let params = {
         uid: this.uid,
         filename: this.filename,
-        column: this.columnNameModel,
+        mode: this.modeModel,
+        p_column: this.pColumnNameModel,
+        g_column: this.gColumnNameModel,
         organism: this.organismModel,
+        skip: this.skipFilledModel,
         keep: this.keepEmptyModel,
-        reviewed: this.keepEmptyModel,
-        revCon: this.revConModel,
         resultColumn: this.resultColumnNameModel,
+        fasta: this.fasta,
         mail: this.mailModel
       }
       this.$emit("applyFilterEvent", params)

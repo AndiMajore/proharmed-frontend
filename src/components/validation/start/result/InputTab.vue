@@ -1,5 +1,9 @@
 <template>
   <div>
+    <v-card tile color="warning" style="padding: 16px; margin: 16px" v-show="deleted"><b
+        style="color: white;display: flex; justify-content: center"> Your input
+      and output data are removed, either because the task is older than 24h or because you requested deletion. If you want to regenerate the results, please start a new task with the previously used parameters, which you can find below!</b>
+    </v-card>
     <div style="display:flex;">
       <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">
         <span v-if="mode === 'filter'">Filter Input</span>
@@ -50,6 +54,7 @@ export default {
     input: Object,
     mode: String,
     taskID: String,
+    deleted: Boolean,
   },
 
   methods: {

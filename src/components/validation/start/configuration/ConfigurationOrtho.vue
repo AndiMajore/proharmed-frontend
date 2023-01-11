@@ -28,7 +28,7 @@
         <v-divider></v-divider>
         <div style="display: flex; justify-content: center">
           <v-subheader class="sh">
-            Filter Configuration
+            Map Orthologs Configuration
           </v-subheader>
         </div>
         <v-alert v-if="errorColumnName" type="error" dense>Missing column name to filter from the file!</v-alert>
@@ -61,7 +61,7 @@
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-text-field dense label="Column name" style="max-width: 300px;"
-                              v-model="columnNameModel">
+                              v-model="gColumnNameModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>
                       <template v-slot:activator="{on, attrs}">
@@ -101,38 +101,25 @@
                   </template>
                 </v-select>
               </v-col>
+              <v-col cols="12" md="6" class="flex_content_center">
+                <v-select label="Target organism"
+                          v-model="tarOrganismModel" :items="organismList.map(o=>{return{text:o, value:o}})"
+                          style="max-width: 210px; min-width: 210px" outlined dense filled hide-details>
+                  <template v-slot:append-outer>
+                    <v-tooltip right>
+                      <template v-slot:activator="{on, attrs}">
+                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                      </template>
+                      <div style="width: 250px; text-align: justify">
+                        ID type of inserted {{ mode === 'network' ? 'node' : 'target' }} IDs. Click on the drop-down
+                        to see the supported types.
+                      </div>
+                    </v-tooltip>
+                  </template>
+                </v-select>
+              </v-col>
               <v-col cols="12" md="6" lg="3" class="flex_content_center">
                 <v-checkbox v-model="keepEmptyModel" label="Keep Empty"
-                            style="max-width: 170px" hide-details>
-                  <template v-slot:append>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
-                      </template>
-                      <div style="width: 250px; text-align: justify">
-                        Set checkmark if the input target set should be compared to a reference.
-                      </div>
-                    </v-tooltip>
-                  </template>
-                </v-checkbox>
-              </v-col>
-              <v-col cols="12" md="6" lg="3" class="flex_content_center">
-                <v-checkbox v-model="reviewedModel" label="Reviewed"
-                            style="max-width: 170px" hide-details>
-                  <template v-slot:append>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
-                      </template>
-                      <div style="width: 250px; text-align: justify">
-                        Set checkmark if the input target set should be compared to a reference.
-                      </div>
-                    </v-tooltip>
-                  </template>
-                </v-checkbox>
-              </v-col>
-              <v-col cols="12" md="6" lg="3" class="flex_content_center">
-                <v-checkbox v-model="revConModel" label="Rev con"
                             style="max-width: 170px" hide-details>
                   <template v-slot:append>
                     <v-tooltip right>
@@ -216,7 +203,7 @@
 <script>
 
 export default {
-  name: "ConfigurationFilter",
+  name: "ConfigurationOrtho",
 
   props: {
     mode: String,
@@ -238,12 +225,11 @@ export default {
       },
 
       uid: undefined,
-      columnNameModel: undefined,
+      gColumnNameModel: undefined,
       organismModel: 'rat',
-      resultColumnNameModel: 'Filtered Protein IDs',
-      keepEmptyModel: true,
-      reviewedModel: false,
-      revConModel: false,
+      tarOrganismModel: 'human',
+      resultColumnNameModel: 'Ortholog Gene Names',
+      keepEmptyModel: false,
       filename: undefined,
       mailModel: undefined,
 
@@ -264,7 +250,7 @@ export default {
           this.uid = data.uid
           console.log("got " + this.uid)
         }
-      }).catch(() => {
+      }).finally(() => {
         if (!this.uid)
           setTimeout(() => {
             this.init
@@ -281,10 +267,11 @@ export default {
       this.$http.post('/upload_file', data).then(response => {
         if (response.data.filename)
           this.filename = response.data.filename
-      }).catch(()=>{
-        console.log("retrying to save file")
-        this.init()
-        this.uploadFile(file)
+        else {
+          console.log("retrying to save file")
+          this.init()
+          this.uploadFile(file)
+        }
       })
     },
 
@@ -299,7 +286,7 @@ export default {
 
     checkEvent: async function () {
       this.errorFile = !this.filename;
-      this.errorColumnName = !this.columnNameModel || this.columnNameModel.length === 0
+      this.errorColumnName = !this.gColumnNameModel || this.gColumnNameModel.length === 0
       let error = this.errorFile || this.errorColumnName
       if (error) {
         this.setNotification('There are errors in your configuration!', 5000)
@@ -307,12 +294,10 @@ export default {
       let params = {
         uid: this.uid,
         filename: this.filename,
-        column: this.columnNameModel,
+        g_column: this.gColumnNameModel,
         organism: this.organismModel,
+        t_organism: this.tarOrganismModel,
         keep: this.keepEmptyModel,
-        reviewed: this.keepEmptyModel,
-        revCon: this.revConModel,
-        resultColumn: this.resultColumnNameModel,
         mail: this.mailModel
       }
       this.$emit("applyFilterEvent", params)

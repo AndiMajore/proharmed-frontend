@@ -42,6 +42,12 @@
     <template v-if="step===1 && mode">
       <ConfigurationFilter @applyFilterEvent="runFilter" v-if="mode==='filter'" :mode="mode"
                            :organism-list="organismList"></ConfigurationFilter>
+      <ConfigurationRemap @applyFilterEvent="runRemap" v-if="mode==='remap'" :mode="mode"
+                          :organism-list="organismList" :mode-list="modeList"></ConfigurationRemap>
+      <ConfigurationReduce @applyFilterEvent="runReduce" v-if="mode==='reduce'" :mode="mode"
+                           :organism-list="organismList" :mode-list="modeList"></ConfigurationReduce>
+      <ConfigurationOrtho @applyFilterEvent="runOrtho" v-if="mode==='ortho'" :mode="mode"
+                          :organism-list="organismList" ></ConfigurationOrtho>
     </template>
     <Results v-if="step===2" @resetEvent="resetValidation" :params="params" :mobile="mobile"></Results>
   </div>
@@ -52,11 +58,23 @@
 import Selection from "@/components/validation/Selection";
 import Results from "@/components/validation/Results";
 import ConfigurationFilter from "@/components/validation/start/configuration/ConfigurationFilter.vue";
+import ConfigurationRemap from "@/components/validation/start/configuration/ConfigurationRemap.vue";
+import ConfigurationReduce from "@/components/validation/start/configuration/ConfigurationReduce.vue";
+import ConfigurationOrtho from "@/components/validation/start/configuration/ConfigurationOrtho.vue";
 
 export default {
 
 
   name: "Validation",
+
+  components: {
+    Results,
+    ConfigurationFilter,
+    ConfigurationRemap,
+    ConfigurationReduce,
+    ConfigurationOrtho,
+    Selection,
+  },
 
   data() {
     return {
@@ -68,6 +86,9 @@ export default {
       mobile: this.isMobile(),
       organismList: [
         'human', 'rat', 'mouse', 'rabbit'
+      ],
+      modeList:[
+          'all','fasta','uniprot','uniprot_primary','uniprot_one'
       ]
     }
   },
@@ -123,18 +144,34 @@ export default {
       })
     },
 
+    runRemap: function (payload) {
+      this.$http.runRemap(payload).then(response => {
+        this.saveTaskResponse(response)
+        this.step = 2
+      })
+    },
+
+    runReduce: function (payload) {
+      this.$http.runReduce(payload).then(response => {
+        this.saveTaskResponse(response)
+        this.step = 2
+      })
+    },
+
+    runOrtho: function (payload) {
+      this.$http.runOrtho(payload).then(response => {
+        this.saveTaskResponse(response)
+        this.step = 2
+      })
+    },
+
     saveTaskResponse: function (response) {
-      if (response.data.uid){
-          this.$router.push("/result?id="+response.data.uid)
+      if (response.data.uid) {
+        this.$router.push("/result?id=" + response.data.uid)
       }
     }
   },
 
-  components: {
-    Results,
-    ConfigurationFilter,
-    Selection,
-  }
 
 }
 </script>

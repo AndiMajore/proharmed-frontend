@@ -11,7 +11,7 @@
     <div style="display: flex; justify-content: center; margin-bottom: 8px">
       <v-btn depressed color="primary" @click="$emit('startEvent',{mode:mode})" rounded style="font-size: smaller">
         <v-icon left style="margin-right:4px ">fas fa-play</v-icon>
-        Validate
+        Run
       </v-btn>
     </div>
   </v-card>
