@@ -31,84 +31,98 @@
             Network Configuration
           </v-subheader>
         </div>
-        <v-alert v-if="errorColumnName" type="error" dense>Missing column name to filter from the file!</v-alert>
-        <v-alert v-if="errorFile" type="error" dense>Missing input file!</v-alert>
         <div :class="{border_mobile:mobile, border:!mobile}">
           <v-container style="padding-top: 16px">
+            <template v-for="(e, idx) in files">
+              <v-alert v-if="errorColumnName[idx]" type="error" :key="idx+'_col'" dense>Missing column name to filter
+                from the file!
+              </v-alert>
+              <v-alert v-if="errorFile[idx]" type="error" :key="idx+'_file'" dense>Missing input file!</v-alert>
+              <v-row style="width:100%" justify="center" :key="idx">
+                <v-col cols="1">
+                  <v-chip outlined>{{idx+1}}</v-chip>
+                </v-col>
+                <v-col cols="12" md="5" class="flex_content_center">
+                  <v-file-input label="Upload input File"
+                                hide-details
+                                dense
+                                single-line
+                                @change="(file)=>{uploadFile(file, idx)}"
+                                style="width: 300px; max-width: 300px; cursor: pointer"
+                                prepend-inner-icon="fas fa-arrow-up-from-bracket">
+                    <template v-slot:append-outer>
+                      <v-tooltip right>
+                        <template v-slot:activator="{on, attrs}">
+                          <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                        </template>
+                        <div style="width: 250px; text-align: justify">
+                          Upload a single column node list, edge list or .sif network file with node IDs.
+                        </div>
+                      </v-tooltip>
+                    </template>
+                  </v-file-input>
+                </v-col>
+                <v-col cols="12" md="5" class="flex_content_center">
+                  <v-text-field dense label="Column name" style="max-width: 300px;"
+                                v-model="files[idx].column">
+                    <template v-slot:append-outer>
+                      <v-tooltip right>
+                        <template v-slot:activator="{on, attrs}">
+                          <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                        </template>
+                        <div style="width: 250px; text-align: justify">
+                          Insert ID of target ID type.
+                        </div>
+                      </v-tooltip>
+                    </template>
+                  </v-text-field>
+                </v-col>
+                <v-col cols="1">
+                  <v-btn color="red" icon :disabled="idx<2"
+                         @click="files.splice(idx,1); errorColumnName.splice(idx, 1); errorFile.splice(idx,1)">
+                    <v-icon>fas fa-trash</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </template>
             <v-row style="width:100%" justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-file-input ref="tarInput" label="Upload input File"
-                              hide-details
-                              dense
-                              single-line
-                              style="width: 300px; max-width: 300px; cursor: pointer"
-                              @change="uploadFile"
-                              prepend-inner-icon="fas fa-arrow-up-from-bracket">
-                  <template v-slot:append-outer>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
-                      </template>
-                      <div style="width: 250px; text-align: justify">
-                        Upload a single column node list, edge list or .sif network file with node IDs.
-                      </div>
-                    </v-tooltip>
-                  </template>
-                </v-file-input>
-              </v-col>
-
-              <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="Column name" style="max-width: 300px;"
-                              v-model="resultColumnNameModel">
-                  <template v-slot:append-outer>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
-                      </template>
-                      <div style="width: 250px; text-align: justify">
-                        Insert ID of target ID type.
-                      </div>
-                    </v-tooltip>
-                  </template>
-                </v-text-field>
-              </v-col>
-              <v-col cols="12" md="6" class="flex_content_center">
-                <v-select label="Organism"
-                          v-model="organismModel" :items="[{text:'human', value:'human'}]"
-                          style="max-width: 210px; min-width: 210px" outlined dense filled hide-details>
-                  <template v-slot:append-outer>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
-                      </template>
-                      <div style="width: 250px; text-align: justify">
-                        ID type of inserted IDs. Click on the drop-down
-                        to see the supported types.
-                      </div>
-                    </v-tooltip>
-                  </template>
-                </v-select>
-              </v-col>
-              <v-col cols="12" md="6" class="flex_content_center">
-                <v-select label="Organism"
-                          v-model="idSpaceModel" :items="idSpaceList.map(i=>{return{text:i, value:i}})"
-                          style="max-width: 210px; min-width: 210px" outlined dense filled hide-details>
-                  <template v-slot:append-outer>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
-                      </template>
-                      <div style="width: 250px; text-align: justify">
-                        ID type of inserted IDs. Click on the drop-down
-                        to see the supported types.
-                      </div>
-                    </v-tooltip>
-                  </template>
-                </v-select>
+                <v-btn icon
+                       @click="files.push({file:'', column:''}); errorColumnName.push(false); errorFile.push(false)">
+                  <v-icon>fas fa-plus</v-icon>
+                </v-btn>
               </v-col>
             </v-row>
           </v-container>
         </div>
+        <v-divider></v-divider>
+        <div style="display: flex; justify-content: center">
+          <v-subheader class="sh">
+            Optional
+          </v-subheader>
+        </div>
+        <v-container>
+          <v-row justify="center">
+            <v-col cols="12" md="6" class="flex_content_center">
+              <v-text-field style="max-width: 120px; min-width: 120px" outlined filled dense
+                            v-model="thresholdModel"
+                            type="number"
+                            label="Threshold"
+              >
+                <template v-slot:append-outer>
+                  <v-tooltip right>
+                    <template v-slot:activator="{on, attrs}">
+                      <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                    </template>
+                    <div style="width: 250px; text-align: justify">
+                      Threshold.
+                    </div>
+                  </v-tooltip>
+                </template>
+              </v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
         <v-divider></v-divider>
       </v-sheet>
       <v-container>
@@ -151,7 +165,7 @@ export default {
   props: {
     mode: String,
     type: String,
-    idSpaceList:Array,
+    idSpaceList: Array,
     mobile: {
       type: Boolean,
       default: false,
@@ -168,13 +182,15 @@ export default {
 
       uid: undefined,
       resultColumnNameModel: undefined,
+      thresholdModel: 1,
+      files: [{file: '', column: ''},{file: '', column: ''}],
       idSpaceModel: 'uniprot',
       organismModel: 'human',
       filename: undefined,
       mailModel: undefined,
 
-      errorColumnName: false,
-      errorFile: false,
+      errorColumnName: [false, false],
+      errorFile: [false, false],
     }
   },
 
@@ -197,18 +213,19 @@ export default {
       })
     },
 
-    uploadFile: function (file) {
+    uploadFile: function (file, idx) {
       if (!file)
         return
       let data = new FormData();
       data.append('file', file, file.name)
       data.append('uid', this.uid)
-      this.$http.post('/upload_file', data).then(response => {
-        if (response.data.filename)
-          this.filename = response.data.filename
-      }).catch(()=>{
+
+      this.$http.post('/upload_file', data).then(response=>{
+        if(response.data.filename)
+          this.files[idx].filename =response.data.filename
+      }).catch(() => {
         this.init()
-        this.uploadFile(file)
+        this.uploadFile(file, idx)
       })
     },
 
@@ -222,17 +239,21 @@ export default {
     ,
 
     checkEvent: async function () {
-      this.errorFile = !this.filename;
-      this.errorColumnName = !this.columnNameModel || this.columnNameModel.length === 0
-      let error = this.errorFile || this.errorColumnName
+      let error = false
+      for (let idx = 0; idx < this.files.length; idx++) {
+        this.errorFile[idx] = !this.files[idx].filename
+        this.errorColumnName[idx] = !this.files[idx].column
+        error = this.errorFile[idx] || this.errorColumnName[idx] || error
+      }
       if (error) {
         this.setNotification('There are errors in your configuration!', 5000)
+        return
       }
       let params = {
         uid: this.uid,
-        filename: this.filename,
-        idSpace: this.idSpaceModel,
-        resultColumn: this.resultColumnNameModel,
+        filenames: this.files.map(e => e.filename),
+        columns: this.files.map(e => e.column),
+        threshold: this.thresholdModel,
       }
       this.$emit("applyFilterEvent", params)
     },

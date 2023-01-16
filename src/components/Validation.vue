@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card
-        :style="{'background-color': '#EEF4FB', width: '100%', padding: mobile ? '16px' :'16px 32px', display: 'flex'}">
+        :style="{'background-color': '#444444', width: '100%', padding: mobile ? '16px' :'16px 32px', display: 'flex'}">
       <div style="width:32%; justify-content: flex-start">
         <picture>
           <img :src="getLogoPath()" type="image/png" width="45%">
@@ -9,7 +9,7 @@
       </div>
       <div style="width: 60%; justify-content: flex-end; margin-left: auto; margin-right: 0">
         <div style=" height: 100%;display:flex;">
-          <p :style="{'font-size': mobile ? '1rem' : '1.3rem', color: '#000000', 'align-self': 'flex-end', 'margin-top': 'auto', 'margin-bottom': 0}">
+          <p :style="{'font-size': mobile ? '1rem' : '1.3rem', color: '#ffffff', 'align-self': 'flex-end', 'margin-top': 'auto', 'margin-bottom': 0}">
             {{ taglineText }}</p>
         </div>
       </div>
@@ -33,6 +33,8 @@
                            :organism-list="organismList" :mode-list="reduceModeList"></ConfigurationReduce>
       <ConfigurationOrtho @applyFilterEvent="runOrtho"  @resetEvent="resetValidation" v-if="mode==='ortho'" :mode="mode"
                           :organism-list="organismList"></ConfigurationOrtho>
+      <ConfigurationIntersect @applyFilterEvent="runIntersect"  @resetEvent="resetValidation" v-if="mode==='intersect'" :mode="mode"
+                             :organism-list="organismList"></ConfigurationIntersect>
       <ConfigurationNetwork @applyFilterEvent="runNetwork"  @resetEvent="resetValidation" v-if="mode==='network'" :mode="mode" :id-space-list="idSpaceList"></ConfigurationNetwork>
     </template>
     <Results v-if="step===2" @resetEvent="resetValidation" :params="params" :mobile="mobile"></Results>
@@ -63,6 +65,7 @@ import ConfigurationRemap from "@/components/validation/start/configuration/Conf
 import ConfigurationReduce from "@/components/validation/start/configuration/ConfigurationReduce.vue";
 import ConfigurationOrtho from "@/components/validation/start/configuration/ConfigurationOrtho.vue";
 import ConfigurationNetwork from "@/components/validation/start/configuration/ConfigurationNetwork.vue";
+import ConfigurationIntersect from "@/components/validation/start/configuration/ConfigurationIntersect.vue";
 
 export default {
 
@@ -76,6 +79,7 @@ export default {
     ConfigurationReduce,
     ConfigurationOrtho,
     ConfigurationNetwork,
+    ConfigurationIntersect,
     Selection,
   },
 
@@ -171,6 +175,13 @@ export default {
         this.step = 2
       })
     },
+    runIntersect: function (payload){
+      this.$http.runIntersect(payload).then(response=>{
+        this.saveTaskResponse(response)
+        this.step = 2
+      })
+    },
+
 
     saveTaskResponse: function (response) {
       if (response.data.uid) {

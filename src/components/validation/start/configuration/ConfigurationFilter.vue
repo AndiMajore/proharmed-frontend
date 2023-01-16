@@ -259,7 +259,6 @@ export default {
       this.$http.initTask(this.mode).then(data => {
         if (data.uid) {
           this.uid = data.uid
-          console.log("got " + this.uid)
         }
       }).catch(() => {
         if (!this.uid)
@@ -279,7 +278,6 @@ export default {
         if (response.data.filename)
           this.filename = response.data.filename
       }).catch(()=>{
-        console.log("retrying to save file")
         this.init()
         this.uploadFile(file)
       })

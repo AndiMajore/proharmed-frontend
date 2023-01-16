@@ -301,7 +301,6 @@ export default {
       this.$http.initTask(this.mode).then(data => {
         if (data.uid) {
           this.uid = data.uid
-          console.log("got " + this.uid)
         }
       }).finally(() => {
         if (!this.uid)
@@ -321,7 +320,6 @@ export default {
         if (response.data.filename)
           this.filename = response.data.filename
         else {
-          console.log("retrying to save file")
           this.init()
           this.uploadFile(file)
         }
@@ -338,7 +336,6 @@ export default {
         if (response.data.filename)
           this.fasta = response.data.filename
         else {
-          console.log("retrying to save file")
           this.init()
           this.uploadFasta(file)
         }

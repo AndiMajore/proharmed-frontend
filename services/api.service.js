@@ -49,6 +49,10 @@ const ApiService = {
         return this.post("/save_network", payload)
     },
 
+    runIntersect(payload){
+      return this.post("/run_intersect", payload)
+    },
+
     getPreview(req){
         return this.get("/get_preview?"+req).then(response=>{
             return response.data

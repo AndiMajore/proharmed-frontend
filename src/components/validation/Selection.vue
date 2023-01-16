@@ -23,7 +23,7 @@
       </v-col>
       <v-col cols="6">
         <TypeCard title="Intersection analysis" text="Analyse intersections between proteomics datasets"
-                  mode="intersect" :image="getCardImage('drugstone')" @startEvent="startEvent" :mobile="isMobile()">
+                  mode="intersect" :image="getCardImage('intersection')" @startEvent="startEvent" :mobile="isMobile()">
         </TypeCard>
       </v-col>
       <v-col cols="6">
