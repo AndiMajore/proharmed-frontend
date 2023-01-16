@@ -142,6 +142,30 @@
           <div style="width: 250px">Download detailed logs</div>
         </v-tooltip>
       </div>
+      <template v-if="input.organism === 'human'">
+        <template v-if="drugstoneNetwork && drugstoneNetwork.nodes">
+          <v-divider></v-divider>
+          <div style="display:flex">
+            <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Network integration
+            </v-subheader>
+          </div>
+          <template v-if="drugstoneNetwork.nodes.length < 200">
+            <drugst-one
+                groups='{"nodeGroups":{"protein":{"type":"protein","color":"#4da300","font":{"color":"#f0f0f0"},"groupName":"Protein","shape":"circle","id":"protein"}},"edgeGroups":{"default":{"color":"#000000","groupName":"default edge"}}}'
+                :config=getDrugstoneConfig()
+                :network="getDrugstoneNetwork(drugstoneNetwork)">
+            </drugst-one>
+          </template>
+          <template v-else>
+            <div v-if="drugstoneNetwork" style="text-align: justify-all">
+              <i>The constructed network contains {{ drugstoneNetwork.nodes.length }} proteins, which cannot be
+                displayed
+                all together due to performance issues. Please use the network integration function on a subset of the
+                data instead.</i>
+            </div>
+          </template>
+        </template>
+      </template>
     </template>
   </div>
 </template>
@@ -159,6 +183,7 @@ export default {
     resultFileURL: String,
     zips: Array,
     result: Object,
+    resultFile: String,
     mobile: {
       type: Boolean,
       default: false,
@@ -167,11 +192,13 @@ export default {
   data() {
     return {
       deleteDialogModel: false,
+      drugstoneNetwork: undefined
     }
   },
 
   created() {
-
+    if (this.input.organism === 'human')
+      this.initDrugstoneNetwork()
   },
 
   methods: {
@@ -186,6 +213,41 @@ export default {
             return {text: k, value: k}
           }
       )
+    },
+
+    getDrugstoneConfig: function () {
+      return JSON.stringify({
+        "identifier": this.getIDSpace(),
+        "title": "Harmonized entries",
+        "nodeShadow": true,
+        "edgeShadow": false,
+        "autofillEdges": true,
+        "showLegend": true,
+      })
+    },
+
+    getIDSpace: function () {
+      if (this.mode === 'filter')
+        return 'uniprot'
+      return 'symbol'
+    },
+
+    initDrugstoneNetwork: async function () {
+      this.$http.post("/get_result_column", {
+        uid: this.taskID,
+        filename: this.resultFile,
+        column: this.input.resultColumn
+      }).then(response => {
+        this.drugstoneNetwork = {
+          nodes: [...new Set(response.data.filter(n => n.length > 0).flatMap(n => n.includes(";") ? n.split(";") : [n]))].map(n => {
+            return {id: n, group: 'protein'}
+          })
+        }
+      })
+    },
+
+    getDrugstoneNetwork: function (){
+      return JSON.stringify(this.drugstoneNetwork)
     },
 
     getItems: function () {

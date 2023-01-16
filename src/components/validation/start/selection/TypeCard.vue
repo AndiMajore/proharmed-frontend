@@ -1,5 +1,5 @@
 <template>
-  <v-card :style="{width:'100%', margin: mobile ? '' : '8px', 'margin-bottom':'0', height: '100%',padding: mobile ? '4px' :''}">
+  <v-card :style="{width:'100%', margin: mobile ? '' : '', 'margin-bottom':'0', height: '100%',padding: mobile ? '4px' :''}">
     <v-card-title :style="{'font-size' : mobile ? '1.2rem' : '', 'margin-bottom' : mobile ? '8px' :''}">{{title}}</v-card-title>
     <v-card-subtitle :style="{height: '52px', 'font-size' :mobile ? '1rem' :''}">{{text}}
     </v-card-subtitle>

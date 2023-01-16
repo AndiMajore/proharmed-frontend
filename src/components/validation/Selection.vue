@@ -21,8 +21,14 @@
                   :image="getCardImage('ortho')">
         </TypeCard>
       </v-col>
-      <v-col cols="12">
-        <TypeCard  title="drugst.one" text="Map orthologs" mode="ortho" @startEvent="startEvent" :mobile="isMobile()">
+      <v-col cols="6">
+        <TypeCard title="Intersection analysis" text="Analyse intersections between proteomics datasets"
+                  mode="intersect" :image="getCardImage('drugstone')" @startEvent="startEvent" :mobile="isMobile()">
+        </TypeCard>
+      </v-col>
+      <v-col cols="6">
+        <TypeCard title="Network integration" text="Use Drugst.One to integrate proteomics data into network space"
+                  mode="drugstone" :image="getCardImage('drugstone')" @startEvent="startEvent" :mobile="isMobile()">
         </TypeCard>
       </v-col>
     </v-row>
@@ -57,7 +63,6 @@ export default {
     },
     getCardImage: function (mode) {
       return this.$config.STATIC_PATH + "assets/" + mode + ".png"
-      // return this.$config.STATIC_PATH + "assets/" + mode + "_" + type + (fallback ? ".png":".avif")
     },
     startEvent: function (data) {
       this.$emit("filterEvent", data)

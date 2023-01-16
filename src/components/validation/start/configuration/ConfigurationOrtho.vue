@@ -295,7 +295,8 @@ export default {
         organism: this.organismModel,
         t_organism: this.tarOrganismModel,
         keep: this.keepEmptyModel,
-        mail: this.mailModel
+        mail: this.mailModel,
+        resultColumn: this.resultColumnNameModel,
       }
       this.$emit("applyFilterEvent", params)
     },
