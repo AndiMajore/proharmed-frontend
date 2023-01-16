@@ -45,6 +45,10 @@ const ApiService = {
         return this.post("/run_ortho",payload)
     },
 
+    runNetwork(payload){
+        return this.post("/save_network", payload)
+    },
+
     getPreview(req){
         return this.get("/get_preview?"+req).then(response=>{
             return response.data

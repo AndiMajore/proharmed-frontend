@@ -34,7 +34,8 @@
           </v-tab-item>
 
           <v-tab-item style="width: 100%" v-if="!deleted">
-            <OutputTab v-if="result" @reloadFiles="loadData()" @downloadEvent="downloadFile" @downloadResultEvent="downloadFile(resultFileURL)" :taskID="taskID" :mobile="mobile"
+            <OutputTab v-if="result" @reloadFiles="loadData()" @downloadEvent="downloadFile"
+                       @downloadResultEvent="downloadFile(resultFileURL)" :taskID="taskID" :mobile="mobile"
                        :result="resultPreview" :plots="plots" :csvs="csvs" :txts="txt" :input="input" :mode="mode"
                        :zips="zips" :result-file-u-r-l="resultFileURL" :result-file="resultFile"></OutputTab>
           </v-tab-item>
@@ -102,6 +103,10 @@ export default {
       this.$http.getInput(this.taskID).then(input => {
         delete input.uid
         this.input = input
+        if(this.mode === 'network'){
+          this.resultFileURL = this.getFilePath(this.taskID, input.filename)
+          this.resultFile = input.filename
+        }
       }).then(() => {
         if (this.deleted) {
           this.resultTab = 0
@@ -157,7 +162,7 @@ export default {
           this.error = true
         if (response.deleted)
           this.deleted = true
-        if(response.output) {
+        if (response.output) {
           this.resultFileURL = this.getFilePath(this.taskID, response.output)
           this.resultFile = response.output
         }

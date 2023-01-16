@@ -33,6 +33,7 @@
                            :organism-list="organismList" :mode-list="reduceModeList"></ConfigurationReduce>
       <ConfigurationOrtho @applyFilterEvent="runOrtho"  @resetEvent="resetValidation" v-if="mode==='ortho'" :mode="mode"
                           :organism-list="organismList"></ConfigurationOrtho>
+      <ConfigurationNetwork @applyFilterEvent="runNetwork"  @resetEvent="resetValidation" v-if="mode==='network'" :mode="mode" :id-space-list="idSpaceList"></ConfigurationNetwork>
     </template>
     <Results v-if="step===2" @resetEvent="resetValidation" :params="params" :mobile="mobile"></Results>
     <template v-if="step===0">
@@ -61,6 +62,7 @@ import ConfigurationFilter from "@/components/validation/start/configuration/Con
 import ConfigurationRemap from "@/components/validation/start/configuration/ConfigurationRemap.vue";
 import ConfigurationReduce from "@/components/validation/start/configuration/ConfigurationReduce.vue";
 import ConfigurationOrtho from "@/components/validation/start/configuration/ConfigurationOrtho.vue";
+import ConfigurationNetwork from "@/components/validation/start/configuration/ConfigurationNetwork.vue";
 
 export default {
 
@@ -73,6 +75,7 @@ export default {
     ConfigurationRemap,
     ConfigurationReduce,
     ConfigurationOrtho,
+    ConfigurationNetwork,
     Selection,
   },
 
@@ -84,6 +87,9 @@ export default {
       result: undefined,
       params: {},
       mobile: this.isMobile(),
+      idSpaceList:[
+        'symbol','entrez','ensembl','uniprot'
+      ],
       organismList: [
         'human', 'rat', 'mouse', 'rabbit'
       ],
@@ -154,6 +160,13 @@ export default {
 
     runOrtho: function (payload) {
       this.$http.runOrtho(payload).then(response => {
+        this.saveTaskResponse(response)
+        this.step = 2
+      })
+    },
+
+    runNetwork: function(payload){
+      this.$http.runNetwork(payload).then(response=>{
         this.saveTaskResponse(response)
         this.step = 2
       })

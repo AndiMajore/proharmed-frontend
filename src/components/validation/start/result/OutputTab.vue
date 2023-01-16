@@ -60,68 +60,35 @@
         </div>
       </v-row>
     </v-container>
-    <template v-if="plots">
-      <v-divider></v-divider>
-      <div style="display:flex">
-        <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Overview Figures
-        </v-subheader>
-      </div>
-      <v-container>
-        <v-row>
-          <v-col cols="12" lg="6" class="flex_content_center">
-            <div style="width: 100%">
-              <div class="flex_content_center">
-                <v-img :src="getPlot('overview_log_bar')" contain
-                       style="position: relative; max-width: 70%">
-                  <v-btn icon small style="position: absolute; right: 0"
-                         @click="downloadFile(getPlot('overview_log_bar'))">
-                    <v-icon small>fas fa-download</v-icon>
-                  </v-btn>
-                </v-img>
-              </div>
-            </div>
-          </v-col>
-          <v-col cols="12" lg="6" class="flex_content_center">
-            <div style="width: 100%">
-              <div class="flex_content_center">
-                <v-img :src="getPlot('overview_log_box')" contain
-                       style="position: relative; max-width: 70%">
-                  <v-btn icon small style="position: absolute; right: 0"
-                         @click="downloadFile(getPlot('overview_log_box'))">
-                    <v-icon small>fas fa-download</v-icon>
-                  </v-btn>
-                </v-img>
-              </div>
-            </div>
-          </v-col>
-        </v-row>
-        <div style="display: flex; justify-content: center; margin: 32px;">
-          <v-tooltip right>
-            <template v-slot:activator="{on, attrs}">
-              <v-btn @click="downloadFile(getFile('txt','overview_log.txt'))" v-on="on" v-bind="attrs">
-                <v-icon left>fas fa-download</v-icon>
-                Download Log.txt
-              </v-btn>
-            </template>
-            <div style="width: 250px">Download whole log file</div>
-          </v-tooltip>
-        </div>
-      </v-container>
-      <template v-if="mode==='filter' || mode === 'reduce' || mode === 'ortho'">
+    <template v-if="mode !=='network'">
+      <template v-if="plots">
         <v-divider></v-divider>
         <div style="display:flex">
-          <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Filter Details
+          <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Overview Figures
           </v-subheader>
         </div>
         <v-container>
-          <v-row class="flex_content_center">
+          <v-row>
             <v-col cols="12" lg="6" class="flex_content_center">
               <div style="width: 100%">
                 <div class="flex_content_center">
-                  <v-img :src="getPlot('detailed_log')" contain
+                  <v-img :src="getPlot('overview_log_bar')" contain
                          style="position: relative; max-width: 70%">
                     <v-btn icon small style="position: absolute; right: 0"
-                           @click="downloadFile(getPlot('detailed_log'))">
+                           @click="downloadFile(getPlot('overview_log_bar'))">
+                      <v-icon small>fas fa-download</v-icon>
+                    </v-btn>
+                  </v-img>
+                </div>
+              </div>
+            </v-col>
+            <v-col cols="12" lg="6" class="flex_content_center">
+              <div style="width: 100%">
+                <div class="flex_content_center">
+                  <v-img :src="getPlot('overview_log_box')" contain
+                         style="position: relative; max-width: 70%">
+                    <v-btn icon small style="position: absolute; right: 0"
+                           @click="downloadFile(getPlot('overview_log_box'))">
                       <v-icon small>fas fa-download</v-icon>
                     </v-btn>
                   </v-img>
@@ -129,41 +96,77 @@
               </div>
             </v-col>
           </v-row>
+          <div style="display: flex; justify-content: center; margin: 32px;">
+            <v-tooltip right>
+              <template v-slot:activator="{on, attrs}">
+                <v-btn @click="downloadFile(getFile('txt','overview_log.txt'))" v-on="on" v-bind="attrs">
+                  <v-icon left>fas fa-download</v-icon>
+                  Download Log.txt
+                </v-btn>
+              </template>
+              <div style="width: 250px">Download whole log file</div>
+            </v-tooltip>
+          </div>
         </v-container>
-      </template>
-      <div style="display: flex; justify-content: center; margin: 32px;">
-        <v-tooltip right>
-          <template v-slot:activator="{on, attrs}">
-            <v-btn @click="downloadFile(getFile('txt','detailed_log.txt'))" v-on="on" v-bind="attrs">
-              <v-icon left>fas fa-download</v-icon>
-              Download Log.txt
-            </v-btn>
-          </template>
-          <div style="width: 250px">Download detailed logs</div>
-        </v-tooltip>
-      </div>
-      <template v-if="input.organism === 'human'">
-        <template v-if="drugstoneNetwork && drugstoneNetwork.nodes">
+        <template v-if="mode==='filter' || mode === 'reduce' || mode === 'ortho'">
           <v-divider></v-divider>
           <div style="display:flex">
-            <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Network integration
+            <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Filter Details
             </v-subheader>
           </div>
-          <template v-if="drugstoneNetwork.nodes.length < 200">
-            <drugst-one
-                groups='{"nodeGroups":{"protein":{"type":"protein","color":"#4da300","font":{"color":"#f0f0f0"},"groupName":"Protein","shape":"circle","id":"protein"}},"edgeGroups":{"default":{"color":"#000000","groupName":"default edge"}}}'
-                :config=getDrugstoneConfig()
-                :network="getDrugstoneNetwork(drugstoneNetwork)">
-            </drugst-one>
-          </template>
-          <template v-else>
-            <div v-if="drugstoneNetwork" style="text-align: justify-all">
-              <i>The constructed network contains {{ drugstoneNetwork.nodes.length }} proteins, which cannot be
-                displayed
-                all together due to performance issues. Please use the network integration function on a subset of the
-                data instead.</i>
-            </div>
-          </template>
+          <v-container>
+            <v-row class="flex_content_center">
+              <v-col cols="12" lg="6" class="flex_content_center">
+                <div style="width: 100%">
+                  <div class="flex_content_center">
+                    <v-img :src="getPlot('detailed_log')" contain
+                           style="position: relative; max-width: 70%">
+                      <v-btn icon small style="position: absolute; right: 0"
+                             @click="downloadFile(getPlot('detailed_log'))">
+                        <v-icon small>fas fa-download</v-icon>
+                      </v-btn>
+                    </v-img>
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </template>
+        <div style="display: flex; justify-content: center; margin: 32px;">
+          <v-tooltip right>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn @click="downloadFile(getFile('txt','detailed_log.txt'))" v-on="on" v-bind="attrs">
+                <v-icon left>fas fa-download</v-icon>
+                Download Log.txt
+              </v-btn>
+            </template>
+            <div style="width: 250px">Download detailed logs</div>
+          </v-tooltip>
+        </div>
+      </template>
+
+    </template>
+    <template v-if="input.organism === 'human' || mode==='network'">
+      <template v-if="drugstoneNetwork && drugstoneNetwork.nodes">
+        <v-divider></v-divider>
+        <div style="display:flex">
+          <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Network integration
+          </v-subheader>
+        </div>
+        <template v-if="drugstoneNetwork.nodes.length < 200">
+          <drugst-one
+              groups='{"nodeGroups":{"protein":{"type":"protein","color":"#4da300","font":{"color":"#f0f0f0"},"groupName":"Protein","shape":"circle","id":"protein"}},"edgeGroups":{"default":{"color":"#000000","groupName":"default edge"}}}'
+              :config=getDrugstoneConfig()
+              :network="getDrugstoneNetwork(drugstoneNetwork)">
+          </drugst-one>
+        </template>
+        <template v-else>
+          <div v-if="drugstoneNetwork" style="text-align: justify-all">
+            <i>The constructed network contains {{ drugstoneNetwork.nodes.length }} proteins, which cannot be
+              displayed
+              all together due to performance issues. Please use the network integration function on a subset of the
+              data instead.</i>
+          </div>
         </template>
       </template>
     </template>
@@ -197,7 +200,7 @@ export default {
   },
 
   created() {
-    if (this.input.organism === 'human')
+    if (this.input.organism === 'human' || this.mode === 'network')
       this.initDrugstoneNetwork()
   },
 
@@ -227,6 +230,8 @@ export default {
     },
 
     getIDSpace: function () {
+      if (this.mode === 'network')
+        return this.input.idSpace
       if (this.mode === 'filter')
         return 'uniprot'
       return 'symbol'
@@ -238,15 +243,17 @@ export default {
         filename: this.resultFile,
         column: this.input.resultColumn
       }).then(response => {
-        this.drugstoneNetwork = {
+        return {
           nodes: [...new Set(response.data.filter(n => n.length > 0).flatMap(n => n.includes(";") ? n.split(";") : [n]))].map(n => {
             return {id: n, group: 'protein'}
           })
         }
+      }).then(nw => {
+        this.drugstoneNetwork = nw
       })
     },
 
-    getDrugstoneNetwork: function (){
+    getDrugstoneNetwork: function () {
       return JSON.stringify(this.drugstoneNetwork)
     },
 
