@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div style="background-color: #b2e57b; width: 100%; padding:16px">
-      <h2 :style="{display: 'flex', 'justify-content': 'center', color: 'white', 'font-size': mobile ? '2.5rem' : '4rem'}">
+    <div style="background-color: #EEF4FB; width: 100%; padding:16px">
+      <h2 :style="{display: 'flex', 'justify-content': 'center', color: 'black', 'font-size': mobile ? '2.5rem' : '4rem'}">
         About</h2>
     </div>
     <div :style="{padding: mobile ? '32px 16px' : '32px 64px'}">

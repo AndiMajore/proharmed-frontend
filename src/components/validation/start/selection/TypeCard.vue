@@ -4,9 +4,7 @@
     <v-card-subtitle :style="{height: '52px', 'font-size' :mobile ? '1rem' :''}">{{text}}
     </v-card-subtitle>
     <picture class="white--text align-end" style="width: 100%">
-      <source :srcset="image" type="image/avif" >
-      <source :srcset="fallback_image" type="image/png" >
-      <img alt="For safari users" :src="fallback_image" :style="{margin: isMobile()? '4px 15% 8px' : '8px 15% 48px', position: 'relative', width: '70%'}">
+      <img alt="For safari users" :src="image" :style="{margin: isMobile()? '4px 15% 8px' : '8px 15% 24px', position: 'relative', width: '70%'}">
     </picture>
     <div style="display: flex; justify-content: center; margin-bottom: 8px">
       <v-btn depressed color="primary" @click="$emit('startEvent',{mode:mode})" rounded style="font-size: smaller">

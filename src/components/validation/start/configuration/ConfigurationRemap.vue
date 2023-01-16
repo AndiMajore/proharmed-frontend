@@ -49,10 +49,7 @@
                       <template v-slot:activator="{on, attrs}">
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
-                      <div style="width: 250px; text-align: justify" v-if="mode !== 'network'">
-                        Upload of file with target IDs that are separated by a newline in the file.
-                      </div>
-                      <div style="width: 250px; text-align: justify" v-if="mode === 'network'">
+                      <div style="width: 250px; text-align: justify">
                         Upload a single column node list, edge list or .sif network file with node IDs.
                       </div>
                     </v-tooltip>
@@ -285,7 +282,7 @@ export default {
       resultColumnNameModel: 'Remapped Gene Names',
       keepEmptyModel: false,
       skipFilledModel: false,
-      modeModel:'uniprot_primary',
+      modeModel: 'uniprot_primary',
       fasta: undefined,
       filename: undefined,
       mailModel: undefined,

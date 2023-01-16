@@ -49,10 +49,7 @@
                       <template v-slot:activator="{on, attrs}">
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
-                      <div style="width: 250px; text-align: justify" v-if="mode !== 'network'">
-                        Upload of file with target IDs that are separated by a newline in the file.
-                      </div>
-                      <div style="width: 250px; text-align: justify" v-if="mode === 'network'">
+                      <div style="width: 250px; text-align: justify">
                         Upload a single column node list, edge list or .sif network file with node IDs.
                       </div>
                     </v-tooltip>
@@ -94,7 +91,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        ID type of inserted {{ mode === 'network' ? 'node' : 'target' }} IDs. Click on the drop-down
+                        ID type of inserted IDs. Click on the drop-down
                         to see the supported types.
                       </div>
                     </v-tooltip>
@@ -111,7 +108,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        ID type of inserted {{ mode === 'network' ? 'node' : 'target' }} IDs. Click on the drop-down
+                        ID type of inserted IDs. Click on the drop-down
                         to see the supported types.
                       </div>
                     </v-tooltip>

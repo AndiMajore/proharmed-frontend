@@ -1,24 +1,28 @@
 <template>
   <v-container style="padding-bottom: 32px">
     <v-row justify="center">
-      <v-col cols="10" md="6">
+      <v-col cols="10" lg="3" sm="6">
         <TypeCard title="Filter" text="Filter protein IDs" mode="filter" @startEvent="startEvent" :mobile="isMobile()"
-                  :image="getCardImage('set', false)" :fallback_image="getCardImage('set', 'gene', true)">
+                  :image="getCardImage('filter')">
         </TypeCard>
       </v-col>
-      <v-col cols="10" md="6">
+      <v-col cols="10" lg="3" sm="6">
         <TypeCard title="Remap" text="Remap gene names" mode="remap" @startEvent="startEvent" :mobile="isMobile()"
-                  :image="getCardImage('remap', false)" :fallback_image="getCardImage('set', 'gene', true)">
+                  :image="getCardImage('remap')">
         </TypeCard>
       </v-col>
-      <v-col cols="10" md="6">
+      <v-col cols="10" lg="3" sm="6">
         <TypeCard title="Reduce" text="Reduce gene names" mode="reduce" @startEvent="startEvent" :mobile="isMobile()"
-                  :image="getCardImage('reduce', false)" :fallback_image="getCardImage('set', 'gene', true)">
+                  :image="getCardImage('reduce')">
         </TypeCard>
       </v-col>
-      <v-col cols="10" md="6">
+      <v-col cols="10" lg="3" sm="6">
         <TypeCard title="Map orthologs" text="Map orthologs" mode="ortho" @startEvent="startEvent" :mobile="isMobile()"
-                  :image="getCardImage('ortho', false)" :fallback_image="getCardImage('set', 'gene', true)">
+                  :image="getCardImage('ortho')">
+        </TypeCard>
+      </v-col>
+      <v-col cols="12">
+        <TypeCard  title="drugst.one" text="Map orthologs" mode="ortho" @startEvent="startEvent" :mobile="isMobile()">
         </TypeCard>
       </v-col>
     </v-row>
@@ -51,9 +55,8 @@ export default {
     isMobile: function () {
       return this.mobile
     },
-    getCardImage: function (mode, fallback) {
-      this.$config.STATIC_PATH + "assets/" + mode + "_" + (fallback ? ".png" : ".avif")
-      return this.$config.STATIC_PATH + "assets/img.png"
+    getCardImage: function (mode) {
+      return this.$config.STATIC_PATH + "assets/" + mode + ".png"
       // return this.$config.STATIC_PATH + "assets/" + mode + "_" + type + (fallback ? ".png":".avif")
     },
     startEvent: function (data) {

@@ -42,15 +42,21 @@
     <v-container>
       <v-row justify="center" style="padding-top:16px; padding-bottom: 16px" v-if="result">
         <v-col cols="12" style="display: flex; justify-content: center">
-          <v-data-table :headers="getHeader()" :items="getItems()" style="overflow-y: auto; max-width: 100%"
+          <v-data-table disable-sort :headers="getHeader()" :items="getItems()"
+                        style="overflow-y: auto; max-width: 100%"
                         hide-default-footer :items-per-page="5">
           </v-data-table>
         </v-col>
         <div style="display: flex; justify-content: center; margin: 32px;">
-          <v-btn @click="$emit('downloadResultEvent')">
-            <v-icon left>fas fa-download</v-icon>
-            Download Output
-          </v-btn>
+          <v-tooltip right>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn @click="$emit('downloadResultEvent')" v-on="on" v-bind="attrs">
+                <v-icon left>fas fa-download</v-icon>
+                Download Output
+              </v-btn>
+            </template>
+            <div style="width: 250px">Download whole result matrix</div>
+          </v-tooltip>
         </div>
       </v-row>
     </v-container>
@@ -90,10 +96,15 @@
           </v-col>
         </v-row>
         <div style="display: flex; justify-content: center; margin: 32px;">
-          <v-btn @click="downloadFile(getFile('txt','overview_log.txt'))">
-            <v-icon left>fas fa-download</v-icon>
-            Download Log.txt
-          </v-btn>
+          <v-tooltip right>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn @click="downloadFile(getFile('txt','overview_log.txt'))" v-on="on" v-bind="attrs">
+                <v-icon left>fas fa-download</v-icon>
+                Download Log.txt
+              </v-btn>
+            </template>
+            <div style="width: 250px">Download whole log file</div>
+          </v-tooltip>
         </div>
       </v-container>
       <template v-if="mode==='filter' || mode === 'reduce' || mode === 'ortho'">
@@ -118,14 +129,19 @@
               </div>
             </v-col>
           </v-row>
-          <div style="display: flex; justify-content: center; margin: 32px;">
-            <v-btn @click="downloadFile(getFile('txt','detailed_log.txt'))">
+        </v-container>
+      </template>
+      <div style="display: flex; justify-content: center; margin: 32px;">
+        <v-tooltip right>
+          <template v-slot:activator="{on, attrs}">
+            <v-btn @click="downloadFile(getFile('txt','detailed_log.txt'))" v-on="on" v-bind="attrs">
               <v-icon left>fas fa-download</v-icon>
               Download Log.txt
             </v-btn>
-          </div>
-        </v-container>
-      </template>
+          </template>
+          <div style="width: 250px">Download detailed logs</div>
+        </v-tooltip>
+      </div>
     </template>
   </div>
 </template>
