@@ -27,7 +27,7 @@
       </v-sheet>
     </v-dialog>
     <div style="display:flex">
-      <v-subheader style="justify-self: center; margin-left: auto; margin-right: 0">Matrix preview
+      <v-subheader style="justify-self: center; margin-left: auto; margin-right: 0">{{mode === 'intersect' ? "Intersection summary":"Matrix preview"}}
       </v-subheader>
       <v-tooltip top>
         <template v-slot:activator="{attrs, on}">
@@ -42,9 +42,9 @@
     <v-container>
       <v-row justify="center" style="padding-top:16px; padding-bottom: 16px" v-if="result">
         <v-col cols="12" style="display: flex; justify-content: center">
-          <v-data-table disable-sort :headers="getHeader()" :items="getItems()"
+          <v-data-table :disable-sort="mode !== 'intersect'" :headers="getHeader()" :items="getItems()"
                         style="overflow-y: auto; max-width: 100%"
-                        hide-default-footer :items-per-page="5">
+                        :hide-default-footer="mode !== 'intersect'" :items-per-page="5">
           </v-data-table>
         </v-col>
         <div style="display: flex; justify-content: center; margin: 32px;">
@@ -282,7 +282,7 @@ export default {
     },
 
     getItems: function () {
-      return Object.keys(Object.values(this.result)).map(idx => {
+      return Object.keys(Object.values(this.result)[0]).map(idx => {
         let row = {}
         Object.keys(this.result).forEach(k => row[k] = Object.values(this.result[k])[idx])
         return row

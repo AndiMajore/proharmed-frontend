@@ -103,7 +103,7 @@ export default {
       this.$http.getInput(this.taskID).then(input => {
         delete input.uid
         this.input = input
-        if(this.mode === 'network'){
+        if (this.mode === 'network') {
           this.resultFileURL = this.getFilePath(this.taskID, input.filename)
           this.resultFile = input.filename
         }
@@ -118,9 +118,16 @@ export default {
           this.zips = files.filter(file => file.name.endsWith('zip')).map(file => this.getFilePath(this.taskID, file.name))
           this.txt = files.filter(file => file.name.endsWith('txt')).map(file => this.getFilePath(this.taskID, file.name))
         }).then(() => {
-          this.$http.getPreview(this.resultFileURL.split("?")[1]).then(data => {
-            this.resultPreview = JSON.parse(data)
-          }).catch(console.error)
+          if (this.mode !== 'intersect') {
+            this.$http.getPreview(this.resultFileURL.split("?")[1]).then(data => {
+              this.resultPreview = JSON.parse(data)
+            }).catch(console.error)
+          }else{
+            this.$http.getContent(this.resultFileURL.split("?")[1]).then(data=>{
+              this.resultPreview = JSON.parse(data)
+              console.log(this.resultPreview)
+            })
+          }
         }).catch(console.error)
       }).catch(console.error).finally(() => {
         this.result = true

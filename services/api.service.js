@@ -59,6 +59,12 @@ const ApiService = {
         })
     },
 
+    getContent(req){
+        return this.get("/get_file_content?"+req).then(response=>{
+            return response.data
+        })
+    },
+
 
     getTaskStatus(taskID) {
         return this.get("/status?task=" + taskID).then(response => {
