@@ -28,7 +28,13 @@
         <v-divider></v-divider>
         <div style="display: flex; justify-content: center">
           <v-subheader class="sh">
-            Network Configuration
+            <b>Intersection Analysis Configuration</b>
+          </v-subheader>
+        </div>
+        <v-divider></v-divider>
+        <div style="display: flex; justify-content: center">
+          <v-subheader class="sh">
+            File Upload
           </v-subheader>
         </div>
         <div :class="{border_mobile:mobile, border:!mobile}">
@@ -43,7 +49,7 @@
                   <v-chip outlined>{{idx+1}}</v-chip>
                 </v-col>
                 <v-col cols="12" md="5" class="flex_content_center">
-                  <v-file-input label="Upload input File"
+                  <v-file-input label="Upload Input File"
                                 hide-details
                                 dense
                                 single-line
@@ -56,7 +62,7 @@
                           <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                         </template>
                         <div style="width: 250px; text-align: justify">
-                          Upload a single column node list, edge list or .sif network file with node IDs.
+                        Upload file with a column containing the IDs that should be intersected. <br><i>Note: File can contain multiple additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
                         </div>
                       </v-tooltip>
                     </template>
@@ -71,7 +77,7 @@
                           <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                         </template>
                         <div style="width: 250px; text-align: justify">
-                          Insert ID of target ID type.
+                          Define the name of the column in the uploaded file containing the IDs that should be intersected.
                         </div>
                       </v-tooltip>
                     </template>
@@ -115,7 +121,7 @@
                       <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                     </template>
                     <div style="width: 250px; text-align: justify">
-                      Threshold.
+                      Only keep IDs which number of intersections is greater or equal the threshold.
                     </div>
                   </v-tooltip>
                 </template>

@@ -28,7 +28,13 @@
         <v-divider></v-divider>
         <div style="display: flex; justify-content: center">
           <v-subheader class="sh">
-            Network Configuration
+            <b>Network Integration Configuration</b>
+          </v-subheader>
+        </div>
+        <v-divider></v-divider>
+        <div style="display: flex; justify-content: center">
+          <v-subheader class="sh">
+            File Upload & Setup
           </v-subheader>
         </div>
         <v-alert v-if="errorColumnName" type="error" dense>Missing column name to filter from the file!</v-alert>
@@ -50,7 +56,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Upload a single column node list, edge list or .sif network file with node IDs.
+                        Upload file with a column containing the IDs that should be integrated. <br><i>Note: File can contain multiple additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
                       </div>
                     </v-tooltip>
                   </template>
@@ -58,7 +64,7 @@
               </v-col>
 
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="Column name" style="max-width: 300px;"
+                <v-text-field dense label="Column Name" style="max-width: 300px;"
                               v-model="resultColumnNameModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>
@@ -66,7 +72,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Insert ID of target ID type.
+                          Define the name of the column in the uploaded file containing the IDs that should be integrated.
                       </div>
                     </v-tooltip>
                   </template>
@@ -82,15 +88,15 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        ID type of inserted IDs. Click on the drop-down
-                        to see the supported types.
+                        Organism that the IDs should are associated to. <br><i>Click on the drop-down
+                        to see the supported types.</i>
                       </div>
                     </v-tooltip>
                   </template>
                 </v-select>
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-select label="Organism"
+                <v-select label="ID Type"
                           v-model="idSpaceModel" :items="idSpaceList.map(i=>{return{text:i, value:i}})"
                           style="max-width: 210px; min-width: 210px" outlined dense filled hide-details>
                   <template v-slot:append-outer>
@@ -99,8 +105,8 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        ID type of inserted IDs. Click on the drop-down
-                        to see the supported types.
+                        ID type of inserted IDs. <br><i>Click on the drop-down
+                        to see the supported types.</i>
                       </div>
                     </v-tooltip>
                   </template>

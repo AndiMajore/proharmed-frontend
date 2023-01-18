@@ -28,7 +28,13 @@
         <v-divider></v-divider>
         <div style="display: flex; justify-content: center">
           <v-subheader class="sh">
-            Filter Configuration
+            <b>Filter Protein IDs Configuration</b>
+          </v-subheader>
+        </div>
+        <v-divider></v-divider>
+        <div style="display: flex; justify-content: center">
+          <v-subheader class="sh">
+            File Upload
           </v-subheader>
         </div>
         <v-alert v-if="errorColumnName" type="error" dense>Missing column name to filter from the file!</v-alert>
@@ -37,7 +43,7 @@
           <v-container style="padding-top: 16px">
             <v-row style="width:100%" justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-file-input ref="tarInput" label="Upload input File"
+                <v-file-input ref="tarInput" label="Upload Input File"
                               hide-details
                               dense
                               single-line
@@ -50,7 +56,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Upload a single column node list, edge list or .sif network file with node IDs.
+                        Upload file with a column containing protein IDs. <br><i>Note: File can contain multiple additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
                       </div>
                     </v-tooltip>
                   </template>
@@ -65,7 +71,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Insert ID of target ID type.
+                        Define the name of the column in the uploaded file containing the protein IDs.
                       </div>
                     </v-tooltip>
                   </template>
@@ -76,7 +82,7 @@
           <v-divider></v-divider>
           <div style="display: flex; justify-content: center">
             <v-subheader class="sh">
-              Optional
+              Optional Parameters
             </v-subheader>
           </div>
           <v-container>
@@ -91,8 +97,8 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        ID type of inserted IDs. Click on the drop-down
-                        to see the supported types.
+                        Organism that the protein IDs should be associated to. <br><i>Click on the drop-down
+                        to see the supported types.</i>
                       </div>
                     </v-tooltip>
                   </template>
@@ -107,7 +113,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Set checkmark if the input target set should be compared to a reference.
+                        Set checkmark if empty rows after removal through filtering should be kept.
                       </div>
                     </v-tooltip>
                   </template>
@@ -122,7 +128,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Set checkmark if the input target set should be compared to a reference.
+                        Set checkmark if only reviewed IDs according to UniProt should be kept.
                       </div>
                     </v-tooltip>
                   </template>
@@ -137,14 +143,14 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Set checkmark if the input target set should be compared to a reference.
+                        Set checkmark if decoy (REV__) and contaminants (CON__) protein IDs should be kept.
                       </div>
                     </v-tooltip>
                   </template>
                 </v-checkbox>
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="Result column" style="max-width: 300px;"
+                <v-text-field dense label="Result Column" style="max-width: 300px;"
                               v-model="resultColumnNameModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>
@@ -152,14 +158,14 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Insert ID of target ID type.
+                        Define name of the column, where the filtered column with protein IDs should be saved.
                       </div>
                     </v-tooltip>
                   </template>
                 </v-text-field>
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="E-mail" style="max-width: 300px;"
+                <v-text-field dense label="E-Mail" style="max-width: 300px;"
                               v-model="mailModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>
@@ -167,7 +173,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Insert ID of target ID type.
+                        Include your E-Mail address if you wish to be notified once the filtering is finished.
                       </div>
                     </v-tooltip>
                   </template>

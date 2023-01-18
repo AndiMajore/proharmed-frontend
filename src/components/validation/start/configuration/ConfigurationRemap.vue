@@ -28,7 +28,13 @@
         <v-divider></v-divider>
         <div style="display: flex; justify-content: center">
           <v-subheader class="sh">
-            Remap Configuration
+            <b>Remap Gene Names Configuration</b>
+          </v-subheader>
+        </div>
+        <v-divider></v-divider>
+        <div style="display: flex; justify-content: center">
+          <v-subheader class="sh">
+            File Upload
           </v-subheader>
         </div>
         <v-alert v-if="errorColumnName" type="error" dense>Missing column name to filter from the file!</v-alert>
@@ -37,7 +43,7 @@
           <v-container style="padding-top: 16px">
             <v-row style="width:100%" justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-file-input ref="tarInput" label="Upload input File"
+                <v-file-input ref="tarInput" label="Upload Input File"
                               hide-details
                               dense
                               single-line
@@ -50,14 +56,14 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Upload a single column node list, edge list or .sif network file with node IDs.
+                        Upload file with a column containing protein IDs. <br><i>Note: File can contain multiple additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
                       </div>
                     </v-tooltip>
                   </template>
                 </v-file-input>
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="Protein column name" style="max-width: 300px;"
+                <v-text-field dense label="Protein IDs Column Name" style="max-width: 300px;"
                               v-model="pColumnNameModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>
@@ -65,7 +71,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Insert ID of target ID type.
+                        Define the name of the column in the uploaded file containing the protein IDs.
                       </div>
                     </v-tooltip>
                   </template>
@@ -76,13 +82,13 @@
           <v-divider></v-divider>
           <div style="display: flex; justify-content: center">
             <v-subheader class="sh">
-              Optional
+              Optional Parameters
             </v-subheader>
           </div>
           <v-container>
             <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="Gene column name" style="max-width: 300px;"
+                <v-text-field dense label="Gene Symbols Column Name" style="max-width: 300px;"
                               v-model="gColumnNameModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>
@@ -90,7 +96,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Insert ID of target ID type.
+                        Define the column with gene symbols, if you already have mapped gene symbols and wish to only fill the missing entries.
                       </div>
                     </v-tooltip>
                   </template>
@@ -106,8 +112,8 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        ID type of inserted {{ mode === 'network' ? 'node' : 'target' }} IDs. Click on the drop-down
-                        to see the supported types.
+                        Organism that the protein IDs should be associated to and therefore only genes from that organism are mapped. <br><i>Click on the drop-down
+                        to see the supported types.</i>
                       </div>
                     </v-tooltip>
                   </template>
@@ -123,8 +129,12 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        ID type of inserted {{ mode === 'network' ? 'node' : 'target' }} IDs. Click on the drop-down
-                        to see the supported types.
+                        Choose the mode, how the gene symbols should be mapped from the protein IDs. <br><br>
+                        <b>all:</b> use primarily fasta infos and additionally uniprot infos<br>
+                        <b>fasta:</b> use information extracted from fasta headers<br>
+                        <b>uniprot:</b> use mapping information from uniprot and use all gene names<br>
+                        <b>uniprot_primary:</b> use mapping information from uniprot and only all primary gene names<br>
+                        <b>uniprot_one:</b> use mapping information from uniprot and only use most frequent single gene name
                       </div>
                     </v-tooltip>
                   </template>
@@ -139,14 +149,14 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Set checkmark if the input target set should be compared to a reference.
+                        Set checkmark if rows without a mapped gene symbol after remapping should be kept.
                       </div>
                     </v-tooltip>
                   </template>
                 </v-checkbox>
               </v-col>
               <v-col cols="12" md="6" lg="3" class="flex_content_center">
-                <v-checkbox v-model="skipFilledModel" label="Skip filled"
+                <v-checkbox v-model="skipFilledModel" label="Skip Filled"
                             style="max-width: 170px" hide-details>
                   <template v-slot:append>
                     <v-tooltip right>
@@ -154,14 +164,15 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Set checkmark if the input target set should be compared to a reference.
+                        Set checkmark if rows with already existing gene symbol should be skipped.
+                        Already existing gene symbols will be searched in the defined <i>Gene Symbols Column Name</i> column.
                       </div>
                     </v-tooltip>
                   </template>
                 </v-checkbox>
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="Result column" style="max-width: 300px;"
+                <v-text-field dense label="Result Column" style="max-width: 300px;"
                               v-model="resultColumnNameModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>
@@ -169,14 +180,14 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Insert ID of target ID type.
+                        Define name of the column, where the remapped column with gene symbols should be saved.
                       </div>
                     </v-tooltip>
                   </template>
                 </v-text-field>
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-file-input label="Upload fasta File"
+                <v-file-input label="Upload Fasta File"
                               hide-details
                               dense
                               single-line
@@ -189,7 +200,8 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify" v-if="mode !== 'network'">
-                        Upload of file with target IDs that are separated by a newline in the file.
+                        Upload a FASTA file if mapping should be done trough the headers of the file.<br>
+                        <i>Note: Only used in Mode "all" or "fasta".</i>
                       </div>
                       <div style="width: 250px; text-align: justify" v-if="mode === 'network'">
                         Upload a single column node list, edge list or .sif network file with node IDs.
@@ -199,7 +211,7 @@
                 </v-file-input>
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="E-mail" style="max-width: 300px;"
+                <v-text-field dense label="E-Mail" style="max-width: 300px;"
                               v-model="mailModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>
@@ -207,7 +219,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Insert ID of target ID type.
+                        Include your E-Mail address if you wish to be notified once the remapping is finished.
                       </div>
                     </v-tooltip>
                   </template>
