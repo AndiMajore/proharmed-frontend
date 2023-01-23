@@ -88,4 +88,8 @@ html {
   scroll-padding-top: 50px; /* height of sticky header */
 }
 
+.v-input--checkbox {
+  margin-top: 0 !important;
+}
+
 </style>
