@@ -3,9 +3,9 @@
     <v-card
         :style="{'background-color': '#D0D3D6', width: '100%',  padding: mobile ? '16px' :'16px 32px', display: 'flex'}">
       <div style="width:100%; justify-content: flex-start; align-items: center; display: flex">
-        <picture style="height: 100%">
+<!--        <picture style="height: 100%">-->
           <img :src="getLogoPath()" type="image/png" width="70%">
-        </picture>
+<!--        </picture>-->
       </div>
       <div style="width: 60%; justify-content: flex-end; margin-left: auto; margin-right: 0">
         <div style=" height: 100%;display:flex;">
