@@ -127,6 +127,38 @@
                 </template>
               </v-text-field>
             </v-col>
+            <v-col cols="12" md="6" lg="3" class="flex_content_center">
+              <v-checkbox v-model="isHuman" label="Organism Human"
+                          style="max-width: 170px" hide-details>
+                <template v-slot:append>
+                  <v-tooltip right>
+                    <template v-slot:activator="{on, attrs}">
+                      <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                    </template>
+                    <div style="width: 250px; text-align: justify">
+                      Set checkmark if the organism used in your data is human.
+                    </div>
+                  </v-tooltip>
+                </template>
+              </v-checkbox>
+            </v-col>
+            <v-col cols="12" md="6" class="flex_content_center">
+              <v-select label="ID Type"
+                        v-model="idSpaceModel" :items="idSpaceList.concat(['other']).map(i=>{return{text:i, value:i}})"
+                        style="max-width: 210px; min-width: 210px" outlined dense filled hide-details>
+                <template v-slot:append-outer>
+                  <v-tooltip right>
+                    <template v-slot:activator="{on, attrs}">
+                      <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                    </template>
+                    <div style="width: 250px; text-align: justify">
+                      ID type of inserted IDs. <br><i>Click on the drop-down
+                      to see the supported types.</i>
+                    </div>
+                  </v-tooltip>
+                </template>
+              </v-select>
+            </v-col>
           </v-row>
         </v-container>
         <v-divider></v-divider>
@@ -190,8 +222,8 @@ export default {
       resultColumnNameModel: undefined,
       thresholdModel: 1,
       files: [{file: '', column: ''},{file: '', column: ''}],
-      idSpaceModel: 'uniprot',
-      organismModel: 'human',
+      idSpaceModel: 'other',
+      isHuman: false,
       filename: undefined,
       mailModel: undefined,
 
@@ -260,6 +292,9 @@ export default {
         filenames: this.files.map(e => e.filename),
         columns: this.files.map(e => e.column),
         threshold: this.thresholdModel,
+        organism: this.isHuman? 'human': 'other',
+        idSpace : this.idSpaceModel,
+        resultColumn: 'ID',
       }
       this.$emit("applyFilterEvent", params)
     },

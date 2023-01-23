@@ -6,7 +6,7 @@
     </div>
     <div :style="{padding: mobile ? '32px 16px' : '32px 64px'}">
       <b style="font-size: 1.5rem;">DIGEST</b>
-      <p style="text-align: justify; margin-top: 16px; margin-bottom: 32px"> MeSIdHa is a ... <a
+      <p style="text-align: justify; margin-top: 16px; margin-bottom: 32px"> ProHarMeD is a ... <a
             href="https://pypi.org/project/mqhandler/" target="_blank">standalone package</a>, or over a
       </p>
 
@@ -22,14 +22,14 @@
           <v-btn icon><a style="text-decoration: none" target="_blank" href="">
             <v-icon>fab fa-r-project</v-icon>
           </a></v-btn>
-          MeSIdHa source code [TODO]
+          ProHarMeD source code [TODO]
         </div>
         <div>
           <v-btn icon><a style="text-decoration: none" target="_blank"
                          href="">
             <v-icon>fas fa-graduation-cap</v-icon>
           </a></v-btn>
-          MeSIdHa tutorial material [TODO]
+          ProHarMeD tutorial material [TODO]
         </div>
       </div>
 

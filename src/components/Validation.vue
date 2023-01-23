@@ -34,13 +34,13 @@
       <ConfigurationOrtho @applyFilterEvent="runOrtho"  @resetEvent="resetValidation" v-if="mode==='ortho'" :mode="mode"
                           :organism-list="organismList"></ConfigurationOrtho>
       <ConfigurationIntersect @applyFilterEvent="runIntersect"  @resetEvent="resetValidation" v-if="mode==='intersect'" :mode="mode"
-                             :organism-list="organismList"></ConfigurationIntersect>
+                             :organism-list="organismList" :id-space-list="idSpaceList"></ConfigurationIntersect>
       <ConfigurationNetwork @applyFilterEvent="runNetwork"  @resetEvent="resetValidation" v-if="mode==='network'" :mode="mode" :id-space-list="idSpaceList"></ConfigurationNetwork>
     </template>
     <Results v-if="step===2" @resetEvent="resetValidation" :params="params" :mobile="mobile"></Results>
     <template v-if="step===0">
       <div style="display: flex; justify-content: center; margin-top: 32px;">
-        <v-subheader :style="{'font-size': mobile ? '1.4rem' : '1.5rem'}">How does MeSIdHa work?
+        <v-subheader :style="{'font-size': mobile ? '1.4rem' : '1.5rem'}">How does ProHarMeD work?
         </v-subheader>
       </div>
       <div
@@ -85,7 +85,7 @@ export default {
 
   data() {
     return {
-      taglineText: 'MeSIdHa is great and all...',
+      taglineText: 'ProHarMeD is great and all...',
       step: 0,
       mode: undefined,
       result: undefined,
@@ -123,11 +123,11 @@ export default {
       return check;
     },
     getIllustration: function () {
-      return this.$config.STATIC_PATH + "assets/MeSIdHa.png"
+      return this.$config.STATIC_PATH + "assets/ProHarMeD.png"
     },
 
     getLogoPath: function () {
-      return this.$config.STATIC_PATH + "assets/MeSIdHa_icon.png"
+      return this.$config.STATIC_PATH + "assets/ProHarMeD_icon.png"
     },
 
     startConfiguration: function (data) {

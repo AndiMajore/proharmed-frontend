@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   web:
-    image: andimajore/mesidha_frontend:latest
-    container_name: mesidha-frontend
+    image: andimajore/proharmed_frontend:latest
+    container_name: proharmed-frontend
     build: .
     restart: on-failure

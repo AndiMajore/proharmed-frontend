@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <v-toolbar elevation="4" dense :style="{'padding-left': isMobile()? '0': '15vw', 'padding-right': isMobile()? '5vw':'15vw', position: 'fixed', 'z-index': 1000, width: '100%'}">
-          <v-toolbar-title v-if="!isMobile()" style="cursor:pointer;" @click="$router.push('/'); $router.go()">MeSIdHa</v-toolbar-title>
+          <v-toolbar-title v-if="!isMobile()" style="cursor:pointer;" @click="$router.push('/'); $router.go()">ProHarMeD</v-toolbar-title>
           <v-spacer v-if="!isMobile()"></v-spacer>
           <v-btn depressed plain @click="checkRouting()">
             <router-link style="text-decoration: none" to="/">Home</router-link>

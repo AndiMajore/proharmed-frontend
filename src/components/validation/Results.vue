@@ -125,7 +125,6 @@ export default {
           }else{
             this.$http.getContent(this.resultFileURL.split("?")[1]).then(data=>{
               this.resultPreview = JSON.parse(data)
-              console.log(this.resultPreview)
             })
           }
         }).catch(console.error)

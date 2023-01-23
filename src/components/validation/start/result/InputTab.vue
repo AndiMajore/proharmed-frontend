@@ -59,7 +59,7 @@ export default {
 
   methods: {
     downloadInput: function () {
-      this.download('mesidha_' + this.taskID + "_input.json", JSON.stringify(this.input))
+      this.download('proharmed_' + this.taskID + "_input.json", JSON.stringify(this.input))
     },
     download: function (name, content) {
       let dl = document.createElement('a')
