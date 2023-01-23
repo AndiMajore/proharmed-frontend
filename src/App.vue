@@ -40,10 +40,11 @@ export default {
   components: {},
   watch: {
     '$route'(to, from) {
-      console.log(this.$route)
       if (to.path === '/' && (from.path !== to.path)) {
         if (to.hash !== from.hash) {
           location.href = "/" + to.hash
+        } else {
+          location.href = "/"
         }
         this.$router.go()
       }
@@ -79,9 +80,10 @@ export default {
 </script>
 
 <style lang="scss">
-a:not([href]){
+a:not([href]) {
   scroll-margin-top: 50px;
 }
+
 html {
   scroll-padding-top: 50px; /* height of sticky header */
 }

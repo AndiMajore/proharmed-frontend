@@ -77,6 +77,10 @@ export default {
           document.getElementById(this.$route.hash.replace("#",'')).scrollIntoView()
         }, 200)
       }
+    }else{
+      setTimeout(() => {
+        document.documentElement.scrollTo(0,0)
+      }, 200)
     }
   },
 
