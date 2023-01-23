@@ -10,13 +10,13 @@
           <router-link style="text-decoration: none" to="/">Home</router-link>
         </v-btn>
         <v-btn depressed plain @click="checkRouting()">
+          <router-link style="text-decoration: none" to="/#overview">Overview</router-link>
+        </v-btn>
+        <v-btn depressed plain @click="checkRouting()">
           <router-link style="text-decoration: none" to="/#harmonize">Harmonize</router-link>
         </v-btn>
         <v-btn depressed plain @click="checkRouting()">
           <router-link style="text-decoration: none" to="/#explore">Explore</router-link>
-        </v-btn>
-        <v-btn depressed plain @click="checkRouting()">
-          <router-link style="text-decoration: none" to="/#overview">Overview</router-link>
         </v-btn>
         <v-btn depressed plain>
           <router-link style="text-decoration: none" to="/about">About</router-link>
