@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="background-color: #444444; width: 100%; padding:16px">
+    <div style="background-color: #D0D3D6; width: 100%; padding:16px">
       <h2 :style="{display: 'flex', 'justify-content': 'center', color: 'white', 'font-size': mobile ? '2.5rem' : '4rem'}">
         About</h2>
     </div>

@@ -1,27 +1,19 @@
 <template>
   <div>
     <v-card
-        :style="{'background-color': '#444444', width: '100%', padding: mobile ? '16px' :'16px 32px', display: 'flex'}">
-      <div style="width:32%; justify-content: flex-start">
-        <picture>
-          <img :src="getLogoPath()" type="image/png" width="45%">
+        :style="{'background-color': '#D0D3D6', width: '100%',  padding: mobile ? '16px' :'16px 32px', display: 'flex'}">
+      <div style="width:100%; justify-content: flex-start; align-items: center; display: flex">
+        <picture style="height: 100%">
+          <img :src="getLogoPath()" type="image/png" width="70%">
         </picture>
       </div>
       <div style="width: 60%; justify-content: flex-end; margin-left: auto; margin-right: 0">
         <div style=" height: 100%;display:flex;">
-          <p :style="{'font-size': mobile ? '1rem' : '1.3rem', color: '#ffffff', 'align-self': 'flex-end', 'margin-top': 'auto', 'margin-bottom': 0}">
+          <p :style="{'font-size': mobile ? '1rem' : '1.3rem', 'align-self': 'flex-end', 'margin-top': 'auto', 'margin-bottom': 0}">
             {{ taglineText }}</p>
         </div>
       </div>
-
     </v-card>
-    <div v-if="step===0">
-      <v-divider></v-divider>
-      <div style="display: flex; justify-content: center; margin-top:32px">
-        <v-subheader :style="{'font-size': mobile ? '1.4rem' : '1.5rem'}">Harmonize your data now!
-        </v-subheader>
-      </div>
-    </div>
     <Selection v-if="step===0" @filterEvent="startConfiguration" @remapEvent="startConfiguration"
                @reduceEvent="startConfiguration" @orthoEvent="startConfiguration" :mobile="mobile"></Selection>
     <template v-if="step===1 && mode">
@@ -39,8 +31,9 @@
     </template>
     <Results v-if="step===2" @resetEvent="resetValidation" :params="params" :mobile="mobile"></Results>
     <template v-if="step===0">
+      <v-divider></v-divider>
       <div style="display: flex; justify-content: center; margin-top: 32px;">
-        <v-subheader :style="{'font-size': mobile ? '1.4rem' : '1.5rem'}">How does ProHarMeD work?
+        <v-subheader id="overview" :style="{'font-size': mobile ? '1.4rem' : '1.5rem'}">How does ProHarMeD work?
         </v-subheader>
       </div>
       <div
@@ -85,7 +78,7 @@ export default {
 
   data() {
     return {
-      taglineText: 'ProHarMeD is great and all...',
+      taglineText: 'Proteomic Meta-Study Harmonization, Mechanotyping and Drug-Repurposing Prediction',
       step: 0,
       mode: undefined,
       result: undefined,
@@ -127,7 +120,7 @@ export default {
     },
 
     getLogoPath: function () {
-      return this.$config.STATIC_PATH + "assets/ProHarMeD_icon.png"
+      return this.$config.STATIC_PATH + "assets/ProHarMeD_Logo.png"
     },
 
     startConfiguration: function (data) {
