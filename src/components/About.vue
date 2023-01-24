@@ -58,13 +58,13 @@
 <!--          <a href="https://doi.org/10.1093/BIB/BBAC247">https://doi.org/10.1093/BIB/BBAC247</a>-->
 <!--        </div>-->
 <!--      </div>-->
-      <b style="justify-content: center; display: flex;font-size: 1.25rem; color: #484848">Impressum</b>
+      <b style="justify-content: center; display: flex;font-size: 1.25rem; color: #484848">Imprint</b>
       <div style="height: .85rem"></div>
       <span style="justify-content: center; display: flex; font-size: .85rem">Prof. Dr. Jan Baumbach</span>
       <span
           style="justify-content: center; display: flex; font-size: .85rem">Chair of Computational Systems Biology</span>
       <div style="height: .85rem"></div>
-      <span style="justify-content: center; display: flex; font-size: .85rem">Phone: +49-40-42838-7313</span>
+      <span style="justify-content: center; display: flex; font-size: .85rem">Phone: +49-40-42838-{{getPhoneEnding()}}</span>
       <span style="justify-content: center; display: flex; font-size: .85rem">E-Mail: <a :href="'mailto:'+getMail()">cosy[at)zbh.uni-hamburg.de</a></span>
       <span style="justify-content: center; display: flex; font-size: .85rem">Address: Prof. Dr. Jan Baumbach</span>
       <span style="justify-content: center; display: flex; font-size: .85rem">University of Hamburg</span>
@@ -110,6 +110,9 @@ export default {
       mail = "jan.baum" + mail
       mail = mail.split("-").join("bach@uni-")
       return mail
+    },
+    getPhoneEnding: function(){
+      return "7313"
     }
   }
 
