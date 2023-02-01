@@ -9,12 +9,34 @@
             Back
           </v-btn>
         </v-col>
-        <!--        <v-col>-->
-        <!--          <v-btn color="primary" class="flex_self_center" outlined @click="loadExample(mode)">-->
-        <!--            <v-icon left>far fa-lightbulb</v-icon>-->
-        <!--            Load Example-->
-        <!--          </v-btn>-->
-        <!--        </v-col>-->
+        <v-col class="flex_content_center">
+          <v-menu offset-y open-on-hover>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                  color="primary"
+                  dark
+                  v-bind="attrs"
+                  v-on="on"
+              >
+                <v-icon left>far fa-lightbulb</v-icon>
+                Load Example
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item link v-for="(example,idx) in examples" :key="example.label" @click="loadExample(idx)">
+                {{ example.label }}
+                <v-tooltip right>
+                  <template v-slot:activator="{on, attrs}">
+                    <v-icon right v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                  </template>
+                  <div style="width: 250px; text-align: justify">
+                    Download Example {{ example.label }} input and sets parameters to those used in this example.
+                  </div>
+                </v-tooltip>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-col>
         <v-col align-self="end" class="flex">
           <v-btn color="primary" @click="checkEvent" class="flex_self_end">
             Harmonize
@@ -56,7 +78,8 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Upload file with a column containing protein IDs. <br><i>Note: File can contain multiple additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
+                        Upload file with a column containing protein IDs. <br><i>Note: File can contain multiple
+                        additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
                       </div>
                     </v-tooltip>
                   </template>
@@ -252,6 +275,44 @@ export default {
 
       errorColumnName: false,
       errorFile: false,
+      examples: [
+        {
+          label: 'Calciolari 2017',
+          file: 'Filter-Calciolari_2017.csv',
+          params: {
+            columnNameModel: "Protein IDs",
+            organismModel: "rat",
+            keepEmptyModel: false,
+            reviewedModel: false,
+            revConModel: false,
+            resultColumnNameModel: "Filtered Protein IDs"
+          }
+        },
+        {
+          label: 'Schmidt 2016',
+          file: 'Filter-Schmidt_2016.csv',
+          params: {
+            columnNameModel: "Protein IDs",
+            organismModel: "human",
+            keepEmptyModel: false,
+            reviewedModel: false,
+            revConModel: false,
+            resultColumnNameModel: "Filtered Protein IDs"
+          }
+        },
+        {
+          label: 'Schmidt 2018',
+          file: 'Filter-Schmidt_2018.csv',
+          params: {
+            columnNameModel: "Protein IDs",
+            organismModel: "human",
+            keepEmptyModel: false,
+            reviewedModel: false,
+            revConModel: false,
+            resultColumnNameModel: "Filtered Protein IDs"
+          }
+        }
+      ]
     }
   },
 
@@ -283,10 +344,22 @@ export default {
       this.$http.post('/upload_file', data).then(response => {
         if (response.data.filename)
           this.filename = response.data.filename
-      }).catch(()=>{
+      }).catch(() => {
         this.init()
         this.uploadFile(file)
       })
+    },
+
+    loadExample: function (idx) {
+      let example = this.examples[idx]
+      this.columnNameModel = example.params.columnNameModel
+      this.organismModel = example.params.organismModel
+      this.keepEmptyModel = example.params.keepEmptyModel
+      this.reviewedModel = example.params.reviewedModel
+      this.revConModel = example.params.revConModel
+      this.resultColumnNameModel = example.params.resultColumnNameModel
+
+      window.open(this.$config.HOST_URL + "/download_example_file?filename=" + example.file)
     },
 
     setNotification: function (message, timeout) {
@@ -311,7 +384,7 @@ export default {
         column: this.columnNameModel,
         organism: this.organismModel,
         keep: this.keepEmptyModel,
-        reviewed: this.keepEmptyModel,
+        reviewed: this.reviewedModel,
         revCon: this.revConModel,
         resultColumn: this.resultColumnNameModel,
         mail: this.mailModel

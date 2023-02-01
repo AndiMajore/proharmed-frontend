@@ -9,12 +9,35 @@
             Back
           </v-btn>
         </v-col>
-        <!--        <v-col>-->
-        <!--          <v-btn color="primary" class="flex_self_center" outlined @click="loadExample(mode)">-->
-        <!--            <v-icon left>far fa-lightbulb</v-icon>-->
-        <!--            Load Example-->
-        <!--          </v-btn>-->
-        <!--        </v-col>-->
+        <v-col class="flex_content_center">
+          <v-menu offset-y open-on-hover>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                  color="primary"
+                  dark
+                  v-bind="attrs"
+                  v-on="on"
+              >
+                <v-icon left>far fa-lightbulb</v-icon>
+                Load Example
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item link v-for="(example,idx) in examples" :key="example.label" @click="loadExample(idx)">
+                {{example.label}}
+                <v-tooltip right>
+                  <template v-slot:activator="{on, attrs}">
+                    <v-icon right v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                  </template>
+                  <div style="width: 250px; text-align: justify">
+                    Download Example {{example.label}} input and sets parameters to those used in this example.
+                  </div>
+                </v-tooltip>
+              </v-list-item>
+            </v-list>
+
+          </v-menu>
+        </v-col>
         <v-col align-self="end" class="flex">
           <v-btn color="primary" @click="checkEvent" class="flex_self_end">
             Visualize
@@ -181,6 +204,9 @@ export default {
 
       errorColumnName: false,
       errorFile: false,
+      examples:[
+        {label:'Drugstone', file:'Drugstone.tsv', params:{resultColumnNameModel: "ID", organismModel: "human", idSpaceModel:'symbol'}},
+      ]
     }
   },
 
@@ -201,6 +227,15 @@ export default {
             this.init
           }, 2000)
       })
+    },
+
+    loadExample: function(idx){
+      let example = this.examples[idx]
+      this.resultColumnNameModel = example.params.resultColumnNameModel
+      this.organismModel = example.params.organismModel
+      this.idSpaceModel = example.params.idSpaceModel
+
+      window.open(this.$config.HOST_URL + "/download_example_file?filename=" +example.file)
     },
 
     uploadFile: function (file) {

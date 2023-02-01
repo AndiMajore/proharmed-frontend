@@ -278,6 +278,7 @@ export default {
     },
 
     getDrugstoneNetwork: function () {
+      console.log(JSON.stringify(this.drugstoneNetwork))
       return JSON.stringify(this.drugstoneNetwork)
     },
 

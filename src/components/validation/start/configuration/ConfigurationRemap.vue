@@ -9,12 +9,34 @@
             Back
           </v-btn>
         </v-col>
-        <!--        <v-col>-->
-        <!--          <v-btn color="primary" class="flex_self_center" outlined @click="loadExample(mode)">-->
-        <!--            <v-icon left>far fa-lightbulb</v-icon>-->
-        <!--            Load Example-->
-        <!--          </v-btn>-->
-        <!--        </v-col>-->
+        <v-col class="flex_content_center">
+          <v-menu offset-y open-on-hover>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                  color="primary"
+                  dark
+                  v-bind="attrs"
+                  v-on="on"
+              >
+                <v-icon left>far fa-lightbulb</v-icon>
+                Load Example
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item link v-for="(example,idx) in examples" :key="example.label" @click="loadExample(idx)">
+                {{ example.label }}
+                <v-tooltip right>
+                  <template v-slot:activator="{on, attrs}">
+                    <v-icon right v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                  </template>
+                  <div style="width: 250px; text-align: justify">
+                    Download Example {{ example.label }} input and sets parameters to those used in this example.
+                  </div>
+                </v-tooltip>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-col>
         <v-col align-self="end" class="flex">
           <v-btn color="primary" @click="checkEvent" class="flex_self_end">
             Harmonize
@@ -300,6 +322,44 @@ export default {
       mailModel: undefined,
       errorColumnName: false,
       errorFile: false,
+      examples: [
+        {
+          label: 'Calciolari 2017',
+          file: 'Filter-Calciolari_2017.csv',
+          params: {
+            columnNameModel: "Filtered Protein IDs",
+            organismModel: "rat",
+            modeModel: "uniprot_primary",
+            keepEmptyModel: false,
+            skipFilledModel: false,
+            resultColumnNameModel: "Remapped Gene Names"
+          }
+        },
+        {
+          label: 'Schmidt 2016',
+          file: 'Filter-Schmidt_2016.csv',
+          params: {
+            columnNameModel: "Filtered Protein IDs",
+            organismModel: "human",
+            modeModel: "uniprot_primary",
+            keepEmptyModel: false,
+            skipFilledModel: false,
+            resultColumnNameModel: "Remapped Gene Names"
+          }
+        },
+        {
+          label: 'Schmidt 2018',
+          file: 'Filter-Schmidt_2018.csv',
+          params: {
+            columnNameModel: "Filtered Protein IDs",
+            organismModel: "human",
+            modeModel: "uniprot_primary",
+            keepEmptyModel: false,
+            skipFilledModel: false,
+            resultColumnNameModel: "Remapped Gene Names"
+          }
+        }
+      ]
     }
   },
 
@@ -336,6 +396,18 @@ export default {
           this.uploadFile(file)
         }
       })
+    },
+
+    loadExample: function (idx) {
+      let example = this.examples[idx]
+      this.columnNameModel = example.params.columnNameModel
+      this.organismModel = example.params.organismModel
+      this.keepEmptyModel = example.params.keepEmptyModel
+      this.modeModel = example.params.modeModel
+      this.skipFilledModel = example.params.skipFilledModel
+      this.resultColumnNameModel = example.params.resultColumnNameModel
+
+      window.open(this.$config.HOST_URL + "/download_example_file?filename=" + example.file)
     },
 
     uploadFasta: function (file) {

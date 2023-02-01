@@ -9,12 +9,35 @@
             Back
           </v-btn>
         </v-col>
-        <!--        <v-col>-->
-        <!--          <v-btn color="primary" class="flex_self_center" outlined @click="loadExample(mode)">-->
-        <!--            <v-icon left>far fa-lightbulb</v-icon>-->
-        <!--            Load Example-->
-        <!--          </v-btn>-->
-        <!--        </v-col>-->
+        <v-col class="flex_content_center">
+          <v-menu offset-y open-on-hover>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                  color="primary"
+                  dark
+                  v-bind="attrs"
+                  v-on="on"
+              >
+                <v-icon left>far fa-lightbulb</v-icon>
+                Load Example
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item link v-for="(example,idx) in examples" :key="example.label" @click="loadExample(idx)">
+                {{ example.label }}
+                <v-tooltip right>
+                  <template v-slot:activator="{on, attrs}">
+                    <v-icon right v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                  </template>
+                  <div style="width: 250px; text-align: justify">
+                    Download Example {{ example.label }} input and sets parameters to those used in this example.
+                  </div>
+                </v-tooltip>
+              </v-list-item>
+            </v-list>
+
+          </v-menu>
+        </v-col>
         <v-col align-self="end" class="flex">
           <v-btn color="primary" @click="checkEvent" class="flex_self_end">
             Visualize
@@ -46,7 +69,7 @@
               <v-alert v-if="errorFile[idx]" type="error" :key="idx+'_file'" dense>Missing input file!</v-alert>
               <v-row style="width:100%" justify="center" :key="idx">
                 <v-col cols="1">
-                  <v-chip outlined>{{idx+1}}</v-chip>
+                  <v-chip outlined>{{ idx + 1 }}</v-chip>
                 </v-col>
                 <v-col cols="12" md="5" class="flex_content_center">
                   <v-file-input label="Upload Input File"
@@ -62,7 +85,9 @@
                           <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                         </template>
                         <div style="width: 250px; text-align: justify">
-                        Upload file with a column containing the IDs that should be intersected. <br><i>Note: File can contain multiple additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
+                          Upload file with a column containing the IDs that should be intersected. <br><i>Note: File can
+                          contain multiple additional columns containing other information and will be <b>deleted</b>
+                          after 24 hours.</i>
                         </div>
                       </v-tooltip>
                     </template>
@@ -77,7 +102,8 @@
                           <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                         </template>
                         <div style="width: 250px; text-align: justify">
-                          Define the name of the column in the uploaded file containing the IDs that should be intersected.
+                          Define the name of the column in the uploaded file containing the IDs that should be
+                          intersected.
                         </div>
                       </v-tooltip>
                     </template>
@@ -221,7 +247,7 @@ export default {
       uid: undefined,
       resultColumnNameModel: undefined,
       thresholdModel: 1,
-      files: [{file: '', column: ''},{file: '', column: ''}],
+      files: [{file: '', column: ''}, {file: '', column: ''}],
       idSpaceModel: 'other',
       isHuman: false,
       filename: undefined,
@@ -229,6 +255,12 @@ export default {
 
       errorColumnName: [false, false],
       errorFile: [false, false],
+      examples: [
+        {
+          label: 'Schmidt 2017 & 2018, ...',
+          file: 'Intersect.zip',
+          params: {thresholdModel: 2, isHuman: true, idSpaceModel: 'symbol'}
+        },]
     }
   },
 
@@ -258,9 +290,9 @@ export default {
       data.append('file', file, file.name)
       data.append('uid', this.uid)
 
-      this.$http.post('/upload_file', data).then(response=>{
-        if(response.data.filename)
-          this.files[idx].filename =response.data.filename
+      this.$http.post('/upload_file', data).then(response => {
+        if (response.data.filename)
+          this.files[idx].filename = response.data.filename
       }).catch(() => {
         this.init()
         this.uploadFile(file, idx)
@@ -275,6 +307,14 @@ export default {
       this.notification.show = true
     }
     ,
+
+    loadExample: function (idx) {
+      let example = this.examples[idx]
+      this.thresholdModel = example.params.thresholdModel
+      this.isHuman = example.params.isHuman
+      this.idSpaceModel = example.params.idSpaceModel
+      window.open(this.$config.HOST_URL + "/download_example_file?filename=" + example.file)
+    },
 
     checkEvent: async function () {
       let error = false
@@ -292,8 +332,8 @@ export default {
         filenames: this.files.map(e => e.filename),
         columns: this.files.map(e => e.column),
         threshold: this.thresholdModel,
-        organism: this.isHuman? 'human': 'other',
-        idSpace : this.idSpaceModel,
+        organism: this.isHuman ? 'human' : 'other',
+        idSpace: this.idSpaceModel,
         resultColumn: 'ID',
       }
       this.$emit("applyFilterEvent", params)
