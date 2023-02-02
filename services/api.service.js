@@ -53,6 +53,12 @@ const ApiService = {
       return this.post("/run_intersect", payload)
     },
 
+    setExampleFile(req){
+        return this.get("/set_example_file?"+req).then(response=>{
+            return response.data
+        })
+    },
+
     getPreview(req){
         return this.get("/get_preview?"+req).then(response=>{
             return response.data

@@ -30,9 +30,21 @@
                     <v-icon right v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                   </template>
                   <div style="width: 250px; text-align: justify">
-                    Download Example {{ example.label }} input and sets parameters to those used in this example.
+                    Load example {{ example.label }} input and sets parameters to those used in this example.
                   </div>
                 </v-tooltip>
+                <v-list-item-action>
+                  <v-tooltip right>
+                    <template v-slot:activator="{on, attrs}">
+                      <v-btn icon small v-bind="attrs" v-on="on" @click="downloadExample(idx)">
+                        <v-icon small>fas fa-download</v-icon>
+                      </v-btn>
+                    </template>
+                    <div style="width: 250px; text-align: justify">
+                      Download the example file {{ example.label }}.
+                    </div>
+                  </v-tooltip>
+                </v-list-item-action>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -65,7 +77,7 @@
           <v-container style="padding-top: 16px">
             <v-row style="width:100%" justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-file-input ref="tarInput" label="Upload Input File"
+                <v-file-input ref="tarInput" :label="tarInputModel"
                               hide-details
                               dense
                               single-line
@@ -320,14 +332,15 @@ export default {
       fasta: undefined,
       filename: undefined,
       mailModel: undefined,
+      tarInputModel: "Upload input File",
       errorColumnName: false,
       errorFile: false,
       examples: [
         {
           label: 'Calciolari 2017',
-          file: 'Filter-Calciolari_2017.csv',
+          file: 'Remap-Calciolari_2017.csv',
           params: {
-            columnNameModel: "Filtered Protein IDs",
+            pColumnNameModel: "Filtered Protein IDs",
             organismModel: "rat",
             modeModel: "uniprot_primary",
             keepEmptyModel: false,
@@ -337,9 +350,9 @@ export default {
         },
         {
           label: 'Schmidt 2016',
-          file: 'Filter-Schmidt_2016.csv',
+          file: 'Remap-Schmidt_2016.csv',
           params: {
-            columnNameModel: "Filtered Protein IDs",
+            pColumnNameModel: "Filtered Protein IDs",
             organismModel: "human",
             modeModel: "uniprot_primary",
             keepEmptyModel: false,
@@ -349,9 +362,9 @@ export default {
         },
         {
           label: 'Schmidt 2018',
-          file: 'Filter-Schmidt_2018.csv',
+          file: 'Remap-Schmidt_2018.csv',
           params: {
-            columnNameModel: "Filtered Protein IDs",
+            pColumnNameModel: "Filtered Protein IDs",
             organismModel: "human",
             modeModel: "uniprot_primary",
             keepEmptyModel: false,
@@ -400,14 +413,26 @@ export default {
 
     loadExample: function (idx) {
       let example = this.examples[idx]
-      this.columnNameModel = example.params.columnNameModel
+      this.pColumnNameModel = example.params.pColumnNameModel
       this.organismModel = example.params.organismModel
       this.keepEmptyModel = example.params.keepEmptyModel
       this.modeModel = example.params.modeModel
       this.skipFilledModel = example.params.skipFilledModel
       this.resultColumnNameModel = example.params.resultColumnNameModel
 
-      window.open(this.$config.HOST_URL + "/download_example_file?filename=" + example.file)
+      this.$http.setExampleFile("uid=" + this.uid + "&filename=" + example.file).then(response => {
+        if (response.filename) {
+          this.filename = response.filename
+          this.tarInputModel = this.filename
+        }
+      }).catch(() => {
+        this.init()
+        this.loadExample(idx)
+      })
+    },
+
+    downloadExample: function (idx) {
+      window.open(this.$config.HOST_URL + "/download_example_file?filename=" + this.examples[idx].file)
     },
 
     uploadFasta: function (file) {

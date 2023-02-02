@@ -23,17 +23,31 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item link v-for="(example,idx) in examples" :key="example.label" @click="loadExample(idx)">
-                {{ example.label }}
-                <v-tooltip right>
-                  <template v-slot:activator="{on, attrs}">
-                    <v-icon right v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
-                  </template>
-                  <div style="width: 250px; text-align: justify">
-                    Download Example {{ example.label }} input and sets parameters to those used in this example.
-                  </div>
-                </v-tooltip>
-              </v-list-item>
+              <v-list>
+                <v-list-item link v-for="(example,idx) in examples" :key="example.label" @click="loadExample(idx)">
+                  {{ example.label }}
+                  <v-tooltip right>
+                    <template v-slot:activator="{on, attrs}">
+                      <v-icon right v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                    </template>
+                    <div style="width: 250px; text-align: justify">
+                      Load example {{ example.label }} input and sets parameters to those used in this example.
+                    </div>
+                  </v-tooltip>
+                  <v-list-item-action>
+                    <v-tooltip right>
+                      <template v-slot:activator="{on, attrs}">
+                        <v-btn icon small v-bind="attrs" v-on="on" @click="downloadExample(idx)">
+                          <v-icon small>fas fa-download</v-icon>
+                        </v-btn>
+                      </template>
+                      <div style="width: 250px; text-align: justify">
+                        Download the example file {{ example.label }}.
+                      </div>
+                    </v-tooltip>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
             </v-list>
 
           </v-menu>
@@ -72,12 +86,12 @@
                   <v-chip outlined>{{ idx + 1 }}</v-chip>
                 </v-col>
                 <v-col cols="12" md="5" class="flex_content_center">
-                  <v-file-input label="Upload Input File"
+                  <v-file-input ref="tarInput" :label="e.label"
                                 hide-details
                                 dense
                                 single-line
-                                @change="(file)=>{uploadFile(file, idx)}"
                                 style="width: 300px; max-width: 300px; cursor: pointer"
+                                @change="uploadFile"
                                 prepend-inner-icon="fas fa-arrow-up-from-bracket">
                     <template v-slot:append-outer>
                       <v-tooltip right>
@@ -85,7 +99,7 @@
                           <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                         </template>
                         <div style="width: 250px; text-align: justify">
-                          Upload file with a column containing the IDs that should be intersected. <br><i>Note: File can
+                          Upload file with a column containing the IDs that should be integrated. <br><i>Note: File can
                           contain multiple additional columns containing other information and will be <b>deleted</b>
                           after 24 hours.</i>
                         </div>
@@ -120,7 +134,7 @@
             <v-row style="width:100%" justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-btn icon
-                       @click="files.push({file:'', column:''}); errorColumnName.push(false); errorFile.push(false)">
+                       @click="files.push({file: '', column: '', label: 'Upload input File'}); errorColumnName.push(false); errorFile.push(false)">
                   <v-icon>fas fa-plus</v-icon>
                 </v-btn>
               </v-col>
@@ -247,7 +261,7 @@ export default {
       uid: undefined,
       resultColumnNameModel: undefined,
       thresholdModel: 1,
-      files: [{file: '', column: ''}, {file: '', column: ''}],
+      files: [{file: '', column: '', label: 'Upload input File'}, {file: '', column: '', label: 'Upload input File'}],
       idSpaceModel: 'other',
       isHuman: false,
       filename: undefined,
@@ -259,6 +273,10 @@ export default {
         {
           label: 'Schmidt 2017 & 2018, ...',
           file: 'Intersect.zip',
+          files: [{name: 'Intersect-Schmidt_2016.csv', column: 'Reduced Gene Names'},
+            {name: 'Intersect-Schmidt_2018.csv', column: 'Reduced Gene Names'},
+            {name: 'Intersect-Dong_2020.csv', column: 'Ortholog Gene Names'},
+            {name: 'Intersect-Calciolari_2017.csv', column: 'Ortholog Gene Names'}],
           params: {thresholdModel: 2, isHuman: true, idSpaceModel: 'symbol'}
         },]
     }
@@ -313,7 +331,22 @@ export default {
       this.thresholdModel = example.params.thresholdModel
       this.isHuman = example.params.isHuman
       this.idSpaceModel = example.params.idSpaceModel
-      window.open(this.$config.HOST_URL + "/download_example_file?filename=" + example.file)
+      for (let el of example.files) {
+        while (this.files.length > 0)
+          this.files.pop()
+        this.$http.setExampleFile("uid=" + this.uid + "&filename=" + el.name).then(response => {
+          if (response.filename) {
+            this.files.push({filename: response.filename, label: response.filename, column: el.column})
+          }
+        }).catch(() => {
+          this.init()
+          this.loadExample(idx)
+        })
+      }
+    },
+
+    downloadExample: function (idx) {
+      window.open(this.$config.HOST_URL + "/download_example_file?filename=" + this.examples[idx].file)
     },
 
     checkEvent: async function () {

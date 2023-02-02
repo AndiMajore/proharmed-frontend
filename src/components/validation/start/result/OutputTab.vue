@@ -27,7 +27,8 @@
       </v-sheet>
     </v-dialog>
     <div style="display:flex">
-      <v-subheader style="justify-self: center; margin-left: auto; margin-right: 0">{{mode === 'intersect' ? "Intersection summary":"Matrix preview"}}
+      <v-subheader style="justify-self: center; margin-left: auto; margin-right: 0">
+        {{ mode === 'intersect' ? "Intersection summary" : "Matrix preview" }}
       </v-subheader>
       <v-tooltip top>
         <template v-slot:activator="{attrs, on}">
@@ -61,28 +62,28 @@
       </v-row>
     </v-container>
     <template v-if="mode==='intersect' && plots">
-        <v-divider></v-divider>
-        <div style="display:flex">
-          <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Overview Figure
-          </v-subheader>
-        </div>
-        <v-container>
-          <v-row class="flex_content_center">
-            <v-col cols="12" lg="10" class="flex_content_center">
-              <div style="width: 60%">
-                <div class="flex_content_center">
-                  <v-img :src="getPlot('overview_intersections')" contain
-                         style="position: relative; max-width: 70%">
-                    <v-btn icon small style="position: absolute; right: 0"
-                           @click="downloadFile(getPlot('overview_intersections'))">
-                      <v-icon small>fas fa-download</v-icon>
-                    </v-btn>
-                  </v-img>
-                </div>
+      <v-divider></v-divider>
+      <div style="display:flex">
+        <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Overview Figure
+        </v-subheader>
+      </div>
+      <v-container>
+        <v-row class="flex_content_center">
+          <v-col cols="12" lg="10" class="flex_content_center">
+            <div style="width: 60%">
+              <div class="flex_content_center">
+                <v-img :src="getPlot('overview_intersections')" contain
+                       style="position: relative; max-width: 70%">
+                  <v-btn icon small style="position: absolute; right: 0"
+                         @click="downloadFile(getPlot('overview_intersections'))">
+                    <v-icon small>fas fa-download</v-icon>
+                  </v-btn>
+                </v-img>
               </div>
-            </v-col>
-          </v-row>
-        </v-container>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
     </template>
     <template v-if="mode !=='network' && mode !=='intersect'">
       <template v-if="plots">
@@ -173,25 +174,31 @@
     <template v-if="input.organism === 'human' || mode==='network'">
       <template v-if="drugstoneNetwork && drugstoneNetwork.nodes">
         <v-divider></v-divider>
-        <div style="display:flex">
-          <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Network integration
-          </v-subheader>
-        </div>
-        <template v-if="drugstoneNetwork.nodes.length < 200">
-          <drugst-one
-              groups='{"nodeGroups":{"protein":{"type":"protein","color":"#4da300","font":{"color":"#f0f0f0"},"groupName":"Protein","shape":"circle","id":"protein"}},"edgeGroups":{"default":{"color":"#000000","groupName":"default edge"}}}'
-              :config=getDrugstoneConfig()
-              :network="getDrugstoneNetwork(drugstoneNetwork)">
-          </drugst-one>
-        </template>
-        <template v-else>
-          <div v-if="drugstoneNetwork" style="text-align: justify-all">
-            <i>The constructed network contains {{ drugstoneNetwork.nodes.length }} proteins, which cannot be
-              displayed
-              all together due to performance issues. Please use the network integration function on a subset of the
-              data instead.</i>
-          </div>
-        </template>
+        <v-expansion-panels :value="mode === 'network' ? 0: undefined">
+          <v-expansion-panel>
+            <v-expansion-panel-header>
+              <div style="display:flex">
+                <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Network integration
+                </v-subheader>
+              </div>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content v-if="drugstoneNetwork.nodes.length < 200">
+              <drugst-one
+                  groups='{"nodeGroups":{"protein":{"type":"protein","color":"#4da300","font":{"color":"#f0f0f0"},"groupName":"Protein","shape":"circle","id":"protein"}},"edgeGroups":{"default":{"color":"#000000","groupName":"default edge"}}}'
+                  :config=getDrugstoneConfig()
+                  :network="getDrugstoneNetwork(drugstoneNetwork)">
+              </drugst-one>
+            </v-expansion-panel-content>
+            <v-expansion-panel-content v-else>
+              <div v-if="drugstoneNetwork" style="text-align: justify-all">
+                <i>The constructed network contains {{ drugstoneNetwork.nodes.length }} proteins, which cannot be
+                  displayed
+                  all together due to performance issues. Please use the network integration function on a subset of the
+                  data instead.</i>
+              </div>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </template>
     </template>
   </div>

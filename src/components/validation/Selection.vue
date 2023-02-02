@@ -44,7 +44,7 @@
           </TypeCard>
         </v-col>
         <v-col cols="6">
-          <TypeCard title="Network integration" text="Use Drugst.One to integrate proteomics data into network space"
+          <TypeCard title="Disease Mechanism Mining and Drug Repurposing" text="Use Drugst.One to integrate proteomics data into network space"
                     mode="network" :image="getCardImage('drugstone')" @startEvent="startEvent" :mobile="isMobile()">
           </TypeCard>
         </v-col>

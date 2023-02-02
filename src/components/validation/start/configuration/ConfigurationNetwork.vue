@@ -24,15 +24,27 @@
             </template>
             <v-list>
               <v-list-item link v-for="(example,idx) in examples" :key="example.label" @click="loadExample(idx)">
-                {{example.label}}
+                {{ example.label }}
                 <v-tooltip right>
                   <template v-slot:activator="{on, attrs}">
                     <v-icon right v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                   </template>
                   <div style="width: 250px; text-align: justify">
-                    Download Example {{example.label}} input and sets parameters to those used in this example.
+                    Load example {{ example.label }} input and sets parameters to those used in this example.
                   </div>
                 </v-tooltip>
+                <v-list-item-action>
+                  <v-tooltip right>
+                    <template v-slot:activator="{on, attrs}">
+                      <v-btn icon small v-bind="attrs" v-on="on" @click="downloadExample(idx)">
+                        <v-icon small>fas fa-download</v-icon>
+                      </v-btn>
+                    </template>
+                    <div style="width: 250px; text-align: justify">
+                      Download the example file {{ example.label }}.
+                    </div>
+                  </v-tooltip>
+                </v-list-item-action>
               </v-list-item>
             </v-list>
 
@@ -66,7 +78,7 @@
           <v-container style="padding-top: 16px">
             <v-row style="width:100%" justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-file-input ref="tarInput" label="Upload input File"
+                <v-file-input ref="tarInput" :label="tarInputModel"
                               hide-details
                               dense
                               single-line
@@ -79,7 +91,9 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Upload file with a column containing the IDs that should be integrated. <br><i>Note: File can contain multiple additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
+                        Upload file with a column containing the IDs that should be integrated. <br><i>Note: File can
+                        contain multiple additional columns containing other information and will be <b>deleted</b>
+                        after 24 hours.</i>
                       </div>
                     </v-tooltip>
                   </template>
@@ -95,7 +109,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                          Define the name of the column in the uploaded file containing the IDs that should be integrated.
+                        Define the name of the column in the uploaded file containing the IDs that should be integrated.
                       </div>
                     </v-tooltip>
                   </template>
@@ -180,7 +194,7 @@ export default {
   props: {
     mode: String,
     type: String,
-    idSpaceList:Array,
+    idSpaceList: Array,
     mobile: {
       type: Boolean,
       default: false,
@@ -201,11 +215,16 @@ export default {
       organismModel: 'human',
       filename: undefined,
       mailModel: undefined,
+      tarInputModel: "Upload input File",
 
       errorColumnName: false,
       errorFile: false,
-      examples:[
-        {label:'Drugstone', file:'Drugstone.tsv', params:{resultColumnNameModel: "ID", organismModel: "human", idSpaceModel:'symbol'}},
+      examples: [
+        {
+          label: 'Drugstone',
+          file: 'Drugstone.tsv',
+          params: {resultColumnNameModel: "ID", organismModel: "human", idSpaceModel: 'symbol'}
+        },
       ]
     }
   },
@@ -229,13 +248,24 @@ export default {
       })
     },
 
-    loadExample: function(idx){
+    loadExample: function (idx) {
       let example = this.examples[idx]
       this.resultColumnNameModel = example.params.resultColumnNameModel
       this.organismModel = example.params.organismModel
       this.idSpaceModel = example.params.idSpaceModel
+      this.$http.setExampleFile("uid=" + this.uid + "&filename=" + example.file).then(response => {
+        if (response.filename) {
+          this.filename = response.filename
+          this.tarInputModel = this.filename
+        }
+      }).catch(() => {
+        this.init()
+        this.loadExample(idx)
+      })
+    },
 
-      window.open(this.$config.HOST_URL + "/download_example_file?filename=" +example.file)
+    downloadExample: function (idx) {
+      window.open(this.$config.HOST_URL + "/download_example_file?filename=" + this.examples[idx].file)
     },
 
     uploadFile: function (file) {
@@ -247,7 +277,7 @@ export default {
       this.$http.post('/upload_file', data).then(response => {
         if (response.data.filename)
           this.filename = response.data.filename
-      }).catch(()=>{
+      }).catch(() => {
         this.init()
         this.uploadFile(file)
       })

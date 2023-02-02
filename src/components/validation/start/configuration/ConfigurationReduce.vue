@@ -23,17 +23,31 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item link v-for="(example,idx) in examples" :key="example.label" @click="loadExample(idx)">
-                {{ example.label }}
-                <v-tooltip right>
-                  <template v-slot:activator="{on, attrs}">
-                    <v-icon right v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
-                  </template>
-                  <div style="width: 250px; text-align: justify">
-                    Download Example {{ example.label }} input and sets parameters to those used in this example.
-                  </div>
-                </v-tooltip>
-              </v-list-item>
+              <v-list>
+                <v-list-item link v-for="(example,idx) in examples" :key="example.label" @click="loadExample(idx)">
+                  {{ example.label }}
+                  <v-tooltip right>
+                    <template v-slot:activator="{on, attrs}">
+                      <v-icon right v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                    </template>
+                    <div style="width: 250px; text-align: justify">
+                      Load example {{ example.label }} input and sets parameters to those used in this example.
+                    </div>
+                  </v-tooltip>
+                  <v-list-item-action>
+                    <v-tooltip right>
+                      <template v-slot:activator="{on, attrs}">
+                        <v-btn icon small v-bind="attrs" v-on="on" @click="downloadExample(idx)">
+                          <v-icon small>fas fa-download</v-icon>
+                        </v-btn>
+                      </template>
+                      <div style="width: 250px; text-align: justify">
+                        Download the example file {{ example.label }}.
+                      </div>
+                    </v-tooltip>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
             </v-list>
           </v-menu>
         </v-col>
@@ -65,7 +79,7 @@
           <v-container style="padding-top: 16px">
             <v-row style="width:100%" justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-file-input ref="tarInput" label="Upload Input File"
+                <v-file-input ref="tarInput" :label="tarInputModel"
                               hide-details
                               dense
                               single-line
@@ -261,6 +275,7 @@ export default {
       keepEmptyModel: false,
       filename: undefined,
       mailModel: undefined,
+      tarInputModel: "Upload input File",
 
       errorColumnName: false,
       errorFile: false,
@@ -269,7 +284,7 @@ export default {
           label: 'Calciolari 2017',
           file: 'Reduce-Calciolari_2017.csv',
           params: {
-            columnNameModel: "Remapped Gene Names",
+            gColumnNameModel: "Remapped Gene Names",
             organismModel: "rat",
             modeModel: "ensembl",
             keepEmptyModel: false,
@@ -280,7 +295,7 @@ export default {
           label: 'Schmidt 2016',
           file: 'Reduce-Schmidt_2016.csv',
           params: {
-            columnNameModel: "Remapped Gene Names",
+            gColumnNameModel: "Remapped Gene Names",
             organismModel: "human",
             modeModel: "ensembl",
             keepEmptyModel: false,
@@ -291,7 +306,7 @@ export default {
           label: 'Schmidt 2018',
           file: 'Reduce-Schmidt_2018.csv',
           params: {
-            columnNameModel: "Remapped Gene Names",
+            gColumnNameModel: "Remapped Gene Names",
             organismModel: "human",
             modeModel: "ensembl",
             keepEmptyModel: false,
@@ -339,13 +354,25 @@ export default {
 
     loadExample: function (idx) {
       let example = this.examples[idx]
-      this.columnNameModel = example.params.columnNameModel
+      this.gColumnNameModel = example.params.gColumnNameModel
       this.organismModel = example.params.organismModel
       this.keepEmptyModel = example.params.keepEmptyModel
       this.modeModel = example.params.modeModel
       this.resultColumnNameModel = example.params.resultColumnNameModel
 
-      window.open(this.$config.HOST_URL + "/download_example_file?filename=" + example.file)
+      this.$http.setExampleFile("uid=" + this.uid + "&filename=" + example.file).then(response => {
+        if (response.filename) {
+          this.filename = response.filename
+          this.tarInputModel = this.filename
+        }
+      }).catch(() => {
+        this.init()
+        this.loadExample(idx)
+      })
+    },
+
+    downloadExample: function (idx) {
+      window.open(this.$config.HOST_URL + "/download_example_file?filename=" + this.examples[idx].file)
     },
 
     setNotification: function (message, timeout) {
