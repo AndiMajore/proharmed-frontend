@@ -159,6 +159,8 @@
                   </template>
                 </v-select>
               </v-col>
+            </v-row>
+            <v-row justify="center">
               <v-col cols="12" md="6" lg="3" class="flex_content_center">
                 <v-checkbox v-model="keepEmptyModel" label="Keep Empty"
                             style="max-width: 170px" hide-details>
@@ -174,6 +176,8 @@
                   </template>
                 </v-checkbox>
               </v-col>
+            </v-row>
+            <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-text-field dense label="Result Column" style="max-width: 300px;"
                               v-model="resultColumnNameModel">
@@ -189,8 +193,11 @@
                   </template>
                 </v-text-field>
               </v-col>
+            </v-row>
+            <v-divider></v-divider>
+            <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="E-Mail" style="max-width: 300px;"
+                <v-text-field label="E-Mail" style="max-width: 300px;"
                               v-model="mailModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>

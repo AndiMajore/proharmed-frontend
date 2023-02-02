@@ -92,7 +92,8 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Upload file with a column containing gene symbols. <br><i>Note: File can contain multiple additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
+                        Upload file with a column containing gene symbols. <br><i>Note: File can contain multiple
+                        additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
                       </div>
                     </v-tooltip>
                   </template>
@@ -152,14 +153,18 @@
                       <div style="width: 250px; text-align: justify">
                         Choose the mode, how the gene symbols should be reduced. <br><br>
                         <b>ensembl:</b> Use gProfiler to reduce gene names to those having a Ensembl ID<br>
-                        <b>HGNC:</b> Use HGNC database to reduce gene names to those having an entry in HGNC (only for human)<br>
-                        <b>mygeneinfo:</b> Use mygeneinfo database to reduce gene names to those having an entry in mygeneinfo<br>
+                        <b>HGNC:</b> Use HGNC database to reduce gene names to those having an entry in HGNC (only for
+                        human)<br>
+                        <b>mygeneinfo:</b> Use mygeneinfo database to reduce gene names to those having an entry in
+                        mygeneinfo<br>
                         <b>enrichment:</b> Use gProfiler to reduce gene names to those having a functional annotation
                       </div>
                     </v-tooltip>
                   </template>
                 </v-select>
               </v-col>
+            </v-row>
+            <v-row justify="center">
               <v-col cols="12" md="6" lg="3" class="flex_content_center">
                 <v-checkbox v-model="keepEmptyModel" label="Keep Empty"
                             style="max-width: 170px" hide-details>
@@ -169,12 +174,14 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                         Set checkmark if empty rows after reduction should be kept.
+                        Set checkmark if empty rows after reduction should be kept.
                       </div>
                     </v-tooltip>
                   </template>
                 </v-checkbox>
               </v-col>
+            </v-row>
+            <v-row  justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-text-field dense label="Result Column" style="max-width: 300px;"
                               v-model="resultColumnNameModel">
@@ -190,8 +197,12 @@
                   </template>
                 </v-text-field>
               </v-col>
+              </v-row>
+            <v-divider>
+            </v-divider>
+            <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="E-Mail" style="max-width: 300px;"
+                <v-text-field label="E-Mail" style="max-width: 300px;"
                               v-model="mailModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>

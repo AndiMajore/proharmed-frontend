@@ -90,7 +90,8 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Upload file with a column containing protein IDs. <br><i>Note: File can contain multiple additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
+                        Upload file with a column containing protein IDs. <br><i>Note: File can contain multiple
+                        additional columns containing other information and will be <b>deleted</b> after 24 hours.</i>
                       </div>
                     </v-tooltip>
                   </template>
@@ -122,20 +123,38 @@
           <v-container>
             <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
+                <v-checkbox v-model="existingSymbolsModel" label="Existing Gene Symbols"
+                            hide-details>
+                  <template v-slot:append>
+                    <v-tooltip right>
+                      <template v-slot:activator="{on, attrs}">
+                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                      </template>
+                      <div style="width: 250px; text-align: justify">
+                        TODO
+                      </div>
+                    </v-tooltip>
+                  </template>
+                </v-checkbox>
+              </v-col>
+              <v-col cols="12" md="6" class="flex_content_center">
                 <v-text-field dense label="Gene Symbols Column Name" style="max-width: 300px;"
-                              v-model="gColumnNameModel">
+                              v-model="gColumnNameModel" :disabled="!existingSymbolsModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>
                       <template v-slot:activator="{on, attrs}">
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Define the column with gene symbols, if you already have mapped gene symbols and wish to only fill the missing entries.
+                        Define the column with gene symbols, if you already have mapped gene symbols and wish to only
+                        fill the missing entries.
                       </div>
                     </v-tooltip>
                   </template>
                 </v-text-field>
               </v-col>
+            </v-row>
+            <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-select label="Organism"
                           v-model="organismModel" :items="organismList.map(o=>{return{text:o, value:o}})"
@@ -146,7 +165,8 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        Organism that the protein IDs should be associated to and therefore only genes from that organism are mapped. <br><i>Click on the drop-down
+                        Organism that the protein IDs should be associated to and therefore only genes from that
+                        organism are mapped. <br><i>Click on the drop-down
                         to see the supported types.</i>
                       </div>
                     </v-tooltip>
@@ -168,12 +188,15 @@
                         <b>fasta:</b> use information extracted from fasta headers<br>
                         <b>uniprot:</b> use mapping information from uniprot and use all gene names<br>
                         <b>uniprot_primary:</b> use mapping information from uniprot and only all primary gene names<br>
-                        <b>uniprot_one:</b> use mapping information from uniprot and only use most frequent single gene name
+                        <b>uniprot_one:</b> use mapping information from uniprot and only use most frequent single gene
+                        name
                       </div>
                     </v-tooltip>
                   </template>
                 </v-select>
               </v-col>
+            </v-row>
+            <v-row justify="center">
               <v-col cols="12" md="6" lg="3" class="flex_content_center">
                 <v-checkbox v-model="keepEmptyModel" label="Keep Empty"
                             style="max-width: 170px" hide-details>
@@ -199,12 +222,15 @@
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Set checkmark if rows with already existing gene symbol should be skipped.
-                        Already existing gene symbols will be searched in the defined <i>Gene Symbols Column Name</i> column.
+                        Already existing gene symbols will be searched in the defined <i>Gene Symbols Column Name</i>
+                        column.
                       </div>
                     </v-tooltip>
                   </template>
                 </v-checkbox>
               </v-col>
+            </v-row>
+            <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-text-field dense label="Result Column" style="max-width: 300px;"
                               v-model="resultColumnNameModel">
@@ -244,8 +270,11 @@
                   </template>
                 </v-file-input>
               </v-col>
+            </v-row>
+            <v-divider></v-divider>
+            <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="E-Mail" style="max-width: 300px;"
+                <v-text-field label="E-Mail" style="max-width: 300px;"
                               v-model="mailModel">
                   <template v-slot:append-outer>
                     <v-tooltip right>
@@ -324,6 +353,7 @@ export default {
       uid: undefined,
       pColumnNameModel: undefined,
       gColumnNameModel: 'Gene names',
+      existingSymbolsModel: true,
       organismModel: 'rat',
       resultColumnNameModel: 'Remapped Gene Names',
       keepEmptyModel: false,
@@ -472,7 +502,7 @@ export default {
         filename: this.filename,
         mode: this.modeModel,
         p_column: this.pColumnNameModel,
-        g_column: this.gColumnNameModel,
+        g_column: this.existingSymbolsModel ? undefined : this.gColumnNameModel,
         organism: this.organismModel,
         skip: this.skipFilledModel,
         keep: this.keepEmptyModel,
