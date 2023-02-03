@@ -123,7 +123,7 @@
           <v-container>
             <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-checkbox v-model="existingSymbolsModel" label="Existing Gene Symbols"
+                <v-checkbox v-model="existingSymbolsModel" label="With Gene Symbol column"
                             hide-details>
                   <template v-slot:append>
                     <v-tooltip right>
@@ -352,8 +352,8 @@ export default {
 
       uid: undefined,
       pColumnNameModel: undefined,
-      gColumnNameModel: 'Gene names',
-      existingSymbolsModel: true,
+      gColumnNameModel: '',
+      existingSymbolsModel: false,
       organismModel: 'rat',
       resultColumnNameModel: 'Remapped Gene Names',
       keepEmptyModel: false,
@@ -502,7 +502,7 @@ export default {
         filename: this.filename,
         mode: this.modeModel,
         p_column: this.pColumnNameModel,
-        g_column: this.existingSymbolsModel ? undefined : this.gColumnNameModel,
+        g_column: this.existingSymbolsModel || this.existingSymbolsModel.length === 0 ? undefined : this.gColumnNameModel,
         organism: this.organismModel,
         skip: this.skipFilledModel,
         keep: this.keepEmptyModel,
