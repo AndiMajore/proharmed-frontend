@@ -131,7 +131,7 @@
                         <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
-                        TODO
+                        Set checkmark, if the data already contains a column with gene symbols.
                       </div>
                     </v-tooltip>
                   </template>

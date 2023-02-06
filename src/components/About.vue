@@ -7,29 +7,29 @@
     <div :style="{padding: mobile ? '32px 16px' : '32px 64px'}">
       <b style="font-size: 1.5rem;">DIGEST</b>
       <p style="text-align: justify; margin-top: 16px; margin-bottom: 32px"> ProHarMeD is a ... <a
-            href="https://pypi.org/project/mqhandler/" target="_blank">standalone package</a>, or over a
+            href="https://pypi.org/project/proharmed/" target="_blank">standalone package</a>, or over a
       </p>
 
       <b style="font-size: 1.5rem">Resources</b>
       <div style="margin-top: 16px; margin-bottom: 32px">
         <div>
-          <v-btn icon><a style="text-decoration: none" target="_blank" href="https://pypi.org/project/mqhandler/">
+          <v-btn icon><a style="text-decoration: none" target="_blank" href="https://pypi.org/project/Progarmed/">
             <v-icon>fab fa-python</v-icon>
           </a></v-btn>
-          Python package (mqhandler [for now])
+          Python package (proharmed)
         </div>
         <div>
-          <v-btn icon><a style="text-decoration: none" target="_blank" href="">
+          <v-btn icon><a style="text-decoration: none" target="_blank" href="https://github.com/symbod/proharmed-R">
             <v-icon>fab fa-r-project</v-icon>
           </a></v-btn>
-          ProHarMeD source code [TODO]
+          ProHarMeD source code
         </div>
         <div>
           <v-btn icon><a style="text-decoration: none" target="_blank"
-                         href="">
+                         href="https://github.com/symbod/proharmed/blob/main/tutorial.ipynb">
             <v-icon>fas fa-graduation-cap</v-icon>
           </a></v-btn>
-          ProHarMeD tutorial material [TODO]
+          ProHarMeD tutorial material
         </div>
       </div>
 
