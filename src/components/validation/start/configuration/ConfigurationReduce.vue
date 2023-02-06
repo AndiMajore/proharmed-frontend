@@ -280,7 +280,7 @@ export default {
 
       uid: undefined,
       gColumnNameModel: undefined,
-      organismModel: 'rat',
+      organismModel: 'human',
       resultColumnNameModel: 'Reduced Gene Names',
       modeModel: 'ensembl',
       keepEmptyModel: false,

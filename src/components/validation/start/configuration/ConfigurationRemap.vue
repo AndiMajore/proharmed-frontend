@@ -354,7 +354,7 @@ export default {
       pColumnNameModel: undefined,
       gColumnNameModel: '',
       existingSymbolsModel: false,
-      organismModel: 'rat',
+      organismModel: 'human',
       resultColumnNameModel: 'Remapped Gene Names',
       keepEmptyModel: false,
       skipFilledModel: false,

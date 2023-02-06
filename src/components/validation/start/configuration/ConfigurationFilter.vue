@@ -287,7 +287,7 @@ export default {
 
       uid: undefined,
       columnNameModel: undefined,
-      organismModel: 'rat',
+      organismModel: 'human',
       resultColumnNameModel: 'Filtered Protein IDs',
       keepEmptyModel: true,
       reviewedModel: false,
