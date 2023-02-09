@@ -26,7 +26,7 @@
         </v-card>
       </v-sheet>
     </v-dialog>
-    <div style="display:flex">
+    <div style="display:flex" v-show="mode!=='network'">
       <v-subheader style="justify-self: center; margin-left: auto; margin-right: 0">
         {{ mode === 'intersect' ? "Intersection summary" : "Matrix preview" }}
       </v-subheader>
@@ -48,7 +48,7 @@
                         :hide-default-footer="mode !== 'intersect'" :items-per-page="5">
           </v-data-table>
         </v-col>
-        <div style="display: flex; justify-content: center; margin: 32px;">
+        <div style="display: flex; justify-content: center; margin: 32px;" v-show="mode!=='network'">
           <v-tooltip right>
             <template v-slot:activator="{on, attrs}">
               <v-btn @click="$emit('downloadResultEvent')" v-on="on" v-bind="attrs">
