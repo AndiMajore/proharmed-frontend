@@ -5,15 +5,32 @@
         About</h2>
     </div>
     <div :style="{padding: mobile ? '32px 16px' : '32px 64px'}">
-      <b style="font-size: 1.5rem;">DIGEST</b>
-      <p style="text-align: justify; margin-top: 16px; margin-bottom: 32px"> ProHarMeD is a ... <a
-            href="https://pypi.org/project/proharmed/" target="_blank">standalone package</a>, or over a
+      <b style="font-size: 1.5rem;">ProHarMeD</b>
+        <p style="text-align: justify; margin-top: 16px; margin-bottom: 32px"> ProHarMeD (<b>Pro</b>teomic Meta-Study <b>Har</b>monization, <b>Me</b>chanotyping and
+            <b>D</b>rug Repurposing Candidate Prediction) is a versatile tool designed to harmonize and compare
+            proteomics data collected from multiple studies.
+          It also aids in extracting disease mechanisms and identifying potential drug repurposing candidates.
+          The tool is accessible through a website, as well as a <a
+            href="https://pypi.org/project/proharmed/" target="_blank">Python library</a> and an <a
+            href="https://github.com/symbod/proharmed-R" target="_blank">R package</a>.
+          <br><br>
+          One of the key features of ProHarMeD is its ability to perform ID and name conversions between protein and gene levels,
+          as well as across different organisms through ortholog mapping. The tool provides detailed logs,
+          keeping track of the IDs that are gained or lost at each step of the conversion process.
+          <br><br>
+          Additionally, ProHarMeD determines the common IDs shared by different studies, suggesting potential disease mechanisms
+          and automatically identifying drug repurposing candidates. These results are presented in an interactive
+          visualization format within the web tool.
+          <br><br>
+          By employing ProHarMeD, researchers can harmonize proteomics data from various sources in meta-analyses.
+          The tool evaluates the effectiveness of ID conversions and remappings, bridging the gap between proteomics research,
+          disease mechanism exploration, and drug repurposing.
       </p>
 
       <b style="font-size: 1.5rem">Resources</b>
       <div style="margin-top: 16px; margin-bottom: 32px">
         <div>
-          <v-btn icon><a style="text-decoration: none" target="_blank" href="https://pypi.org/project/Progarmed/">
+          <v-btn icon><a style="text-decoration: none" target="_blank" href="https://pypi.org/project/proharmed/">
             <v-icon>fab fa-python</v-icon>
           </a></v-btn>
           Python package (proharmed)
@@ -22,14 +39,14 @@
           <v-btn icon><a style="text-decoration: none" target="_blank" href="https://github.com/symbod/proharmed-R">
             <v-icon>fab fa-r-project</v-icon>
           </a></v-btn>
-          ProHarMeD source code
+          ProHarMeD R Package
         </div>
         <div>
           <v-btn icon><a style="text-decoration: none" target="_blank"
-                         href="https://github.com/symbod/proharmed/blob/main/tutorial.ipynb">
-            <v-icon>fas fa-graduation-cap</v-icon>
+                         href="https://github.com/symbod/proharmed">
+            <v-icon>fab fa-github</v-icon>
           </a></v-btn>
-          ProHarMeD tutorial material
+          ProHarMeD source code
         </div>
       </div>
 
