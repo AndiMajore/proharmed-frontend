@@ -10,7 +10,7 @@ COPY docker/Config.js src/Config.js
 
 RUN npm run build
 
-FROM nginx:1.23.3-alpine as production-stage
+FROM nginx:alpine as production-stage
 WORKDIR /usr/app
 
 COPY --from=build-stage /app/dist /usr/share/nginx/html/
