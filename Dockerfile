@@ -16,7 +16,7 @@ RUn apk upgrade --available
 
 WORKDIR /usr/app
 
-COPY --from=build-stage /app/dist /usr/share/nginx/html/proharmed/
+COPY --from=build-stage /app/dist /usr/share/nginx/html/
 
 COPY docker/default.conf /etc/nginx/conf.d/
 
