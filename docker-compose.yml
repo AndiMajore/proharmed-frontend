@@ -1,7 +1,6 @@
 version: "3.3"
 services:
   web:
-    image: andimajore/proharmed_frontend:latest
     container_name: proharmed-frontend
     build: .
     restart: on-failure
