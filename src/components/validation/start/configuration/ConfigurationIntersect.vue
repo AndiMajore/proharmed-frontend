@@ -366,7 +366,7 @@ export default {
     },
 
     downloadExample: function (idx) {
-      window.open(this.$config.HOST_URL + "/download_example_file?filename=" + this.examples[idx].file)
+      window.open(this.$config.HOST_URL + this.$config.CONTEXT_PATH+  "download_example_file?filename=" + this.examples[idx].file)
     },
 
     checkEvent: async function () {

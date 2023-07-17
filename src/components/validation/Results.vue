@@ -92,7 +92,7 @@ export default {
 
   methods: {
     getFilePath: function (uid, name) {
-      return this.$config.HOST_URL + "/download_file?uid=" + uid + "&filename=" + name
+      return this.$config.HOST_URL + this.$config.CONTEXT_PATH+"download_file?uid=" + uid + "&filename=" + name
     },
 
     downloadFile: function (name) {

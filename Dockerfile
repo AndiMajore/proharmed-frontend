@@ -8,7 +8,7 @@ COPY docker/index.html public/index.html
 COPY docker/vue.config.js ./vue.config.js
 COPY docker/Config.js src/Config.js
 
-RUN npm run build -- --base-href=./
+RUN npm run build
 
 FROM nginx:alpine as production-stage
 RUN apk add --upgrade apk-tools
