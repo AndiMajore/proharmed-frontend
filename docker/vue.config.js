@@ -4,7 +4,7 @@ module.exports = {
 
     outputDir: "dist",
     assetsDir: "static",
-    publicPath: "/",
+    publicPath: "/proharmed/",
     transpileDependencies: [
         'vuetify'
     ],
