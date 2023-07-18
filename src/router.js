@@ -5,7 +5,7 @@ import About from "@/components/About";
 
 const router = new Router({
         mode: "history",
-        base: "/proharmed",
+        base: CONFIG.PATH_PREFIX,
         // base: "./",
         routes: [
             // {path:"/explore/:view/result/:job", component:App},
