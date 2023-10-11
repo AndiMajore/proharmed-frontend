@@ -68,13 +68,11 @@
       </div>
       <b style="font-size: 1.5rem">Cite</b>
       <div style="margin-top: 16px; margin-bottom: 64px"><i>Added one available</i></div>
-<!--      <div style="margin-top: 16px; margin-bottom: 64px">If you find MeSIdHa useful please cite:-->
-<!--        <div style="margin: 16px 64px">Klaudia Adamowicz, Andreas Maier, Jan Baumbach, David B Blumenthal, Online <i>in silico</i>-->
-<!--          validation of disease and gene sets, clusterings or subnetworks with DIGEST. <i>Briefings in-->
-<!--            Bioinformatics</i>, Volume 23, Issue 4, July 2022, bbac247.-->
-<!--          <a href="https://doi.org/10.1093/BIB/BBAC247">https://doi.org/10.1093/BIB/BBAC247</a>-->
-<!--        </div>-->
-<!--      </div>-->
+      <div style="margin-top: 16px; margin-bottom: 64px">If you find MeSIdHa useful please cite:
+        <div style="margin: 16px 64px">Adamowicz, K., Arend, L., Maier, A., <i>et al.</i> Proteomic meta-study harmonization, mechanotyping and drug repurposing candidate prediction with ProHarMeD. <i>npj Syst Biol Appl</i> <b>9</b>, 49 (2023).
+         <a href="https://doi.org/10.1038/s41540-023-00311-7">https://doi.org/10.1038/s41540-023-00311-7</a>
+        </div>
+      </div>
       <b style="justify-content: center; display: flex;font-size: 1.25rem; color: #484848">Imprint</b>
       <div style="height: .85rem"></div>
       <span style="justify-content: center; display: flex; font-size: .85rem">Prof. Dr. Jan Baumbach</span>
