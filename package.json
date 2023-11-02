@@ -33,7 +33,8 @@
   "overrides": {
     "@vue/cli-service": {
       "webpack-dev-server": "4.9.0"
-    }
+    },
+    "postcss": ">=8.4.31"
   },
   "browserslist": [
     "> 1%",
