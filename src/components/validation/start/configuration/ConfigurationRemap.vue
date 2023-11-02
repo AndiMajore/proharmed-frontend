@@ -496,6 +496,7 @@ export default {
       let error = this.errorFile || this.errorColumnName
       if (error) {
         this.setNotification('There are errors in your configuration!', 5000)
+        return
       }
       let params = {
         uid: this.uid,
