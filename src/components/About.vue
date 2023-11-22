@@ -67,7 +67,6 @@
         </div>
       </div>
       <b style="font-size: 1.5rem">Cite</b>
-      <div style="margin-top: 16px; margin-bottom: 64px"><i>Added one available</i></div>
       <div style="margin-top: 16px; margin-bottom: 64px">If you find ProHarMeD useful please cite:
         <div style="margin: 16px 64px">Adamowicz, K., Arend, L., Maier, A., <i>et al.</i> Proteomic meta-study harmonization, mechanotyping and drug repurposing candidate prediction with ProHarMeD. <i>npj Syst Biol Appl</i> <b>9</b>, 49 (2023).
          <a href="https://doi.org/10.1038/s41540-023-00311-7">https://doi.org/10.1038/s41540-023-00311-7</a>
