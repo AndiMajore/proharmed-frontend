@@ -294,7 +294,7 @@ export default {
 
     checkEvent: async function () {
       this.errorFile = !this.filename;
-      this.errorColumnName = !this.columnNameModel || this.columnNameModel.length === 0
+      this.errorColumnName = !this.resultColumnNameModel || this.resultColumnNameModel.length === 0
       let error = this.errorFile || this.errorColumnName
       if (error) {
         this.setNotification('There are errors in your configuration!', 5000)
