@@ -32,12 +32,14 @@
       </v-subheader>
       <v-tooltip top>
         <template v-slot:activator="{attrs, on}">
-          <v-btn icon @click="downloadFile(getZIP('.zip'))" v-on="on" v-bind="attrs" :disabled="mode==='network'">
+          <v-btn icon @click="downloadFile(getZIP('.zip'))" v-on="on" v-bind="attrs"
                  style="justify-self: flex-end; margin-left: auto; margin-right: 0; top: 12px">
-            <v-icon>fas fa-download</v-icon>
+            <v-icon :style="{'color':mode==='network'?'gray':'black'}">fas fa-download</v-icon>
+
           </v-btn>
         </template>
-        <div>Download all files as .zip</div>
+        <div v-if="mode!=='network'">Download all files as .zip</div>
+        <div v-else>Downloads are available through the network view</div>
       </v-tooltip>
     </div>
     <v-container>
@@ -238,6 +240,8 @@ export default {
   methods: {
 
     downloadFile: function (file) {
+      if(this.mode === 'network')
+        return
       this.$emit('downloadEvent', file)
     }
     ,
