@@ -32,12 +32,13 @@
       </v-subheader>
       <v-tooltip top>
         <template v-slot:activator="{attrs, on}">
-          <v-btn icon @click="downloadFile(getZIP('.zip'))" v-on="on" v-bind="attrs"
+          <v-btn icon @click="downloadFile(getZIP('.zip'))" v-on="on" v-bind="attrs" :disabled="mode==='network'">
                  style="justify-self: flex-end; margin-left: auto; margin-right: 0; top: 12px">
             <v-icon>fas fa-download</v-icon>
           </v-btn>
         </template>
-        <div>Download all files as .zip</div>
+        <div v-if="mode!=='network'">Download all files as .zip</div>
+        <div v-else>Downloads are available in the network view below</div>
       </v-tooltip>
     </div>
     <v-container>
