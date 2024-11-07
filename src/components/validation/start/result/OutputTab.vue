@@ -37,7 +37,7 @@
             <v-icon>fas fa-download</v-icon>
           </v-btn>
         </template>
-        <div><span v-if="mode!=='network'">Download all files as .zip</span><span>Downloads are available in the network view below</span></div>
+        <div>Download all files as .zip</div>
       </v-tooltip>
     </div>
     <v-container>
