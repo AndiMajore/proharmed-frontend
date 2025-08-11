@@ -322,7 +322,6 @@ export default {
     },
 
     uploadFile: function (file, idx) {
-      console.log("index="+idx)
       if (!file)
         return
       let data = new FormData();
@@ -331,8 +330,6 @@ export default {
 
       this.$http.post('/upload_file', data).then(response => {
         if (response.data.filename) {
-          console.log(idx)
-          console.log(this.files)
           this.files[idx].filename = response.data.filename
         }
       }).catch((e) => {
