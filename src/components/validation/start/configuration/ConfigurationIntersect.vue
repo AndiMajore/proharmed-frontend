@@ -91,7 +91,7 @@
                                 dense
                                 single-line
                                 style="width: 300px; max-width: 300px; cursor: pointer"
-                                @change="uploadFile"
+                                @change="uploadFile($event, idx)"
                                 prepend-inner-icon="fas fa-arrow-up-from-bracket">
                     <template v-slot:append-outer>
                       <v-tooltip right>
@@ -322,6 +322,7 @@ export default {
     },
 
     uploadFile: function (file, idx) {
+      console.log("index="+idx)
       if (!file)
         return
       let data = new FormData();
@@ -329,9 +330,13 @@ export default {
       data.append('uid', this.uid)
 
       this.$http.post('/upload_file', data).then(response => {
-        if (response.data.filename)
+        if (response.data.filename) {
+          console.log(idx)
+          console.log(this.files)
           this.files[idx].filename = response.data.filename
-      }).catch(() => {
+        }
+      }).catch((e) => {
+        console.error(e)
         this.init()
         this.uploadFile(file, idx)
       })
