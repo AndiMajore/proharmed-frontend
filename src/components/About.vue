@@ -66,6 +66,15 @@
           jan.baumbach(_at-]uni-hamburg.de
         </div>
       </div>
+      <b style="font-size: 1.5rem">Web-Application</b>
+      <div style="margin-top: 16px; margin-bottom: 32px">
+        <div>
+          <v-btn icon><a style="text-decoration: none" :href="'mailto:'+getAMMail()">
+            <v-icon>fas fa-envelope</v-icon>
+          </a></v-btn>
+          andreas.maier-1(_at-]uni-hamburg.de
+        </div>
+      </div>
       <b style="font-size: 1.5rem">Cite</b>
       <div style="margin-top: 16px; margin-bottom: 64px">If you find ProHarMeD useful please cite:
         <div style="margin: 16px 64px">Adamowicz, K., Arend, L., Maier, A., <i>et al.</i> Proteomic meta-study harmonization, mechanotyping and drug repurposing candidate prediction with ProHarMeD. <i>npj Syst Biol Appl</i> <b>9</b>, 49 (2023).
@@ -76,14 +85,13 @@
       <div style="height: .85rem"></div>
       <span style="justify-content: center; display: flex; font-size: .85rem">Prof. Dr. Jan Baumbach</span>
       <span
-          style="justify-content: center; display: flex; font-size: .85rem">Chair of Computational Systems Biology</span>
+          style="justify-content: center; display: flex; font-size: .85rem">Institute for Computational Systems Biology (CoSy.Bio)</span>
       <div style="height: .85rem"></div>
-      <span style="justify-content: center; display: flex; font-size: .85rem">Phone: +49-40-42838-{{getPhoneEnding()}}</span>
-      <span style="justify-content: center; display: flex; font-size: .85rem">E-Mail: <a :href="'mailto:'+getMail()">cosy[at)zbh.uni-hamburg.de</a></span>
+      <span style="justify-content: center; display: flex; font-size: .85rem">E-Mail: <a :href="'mailto:'+getMail()">management-cosybio[at)zbh.uni-hamburg.de</a></span>
       <span style="justify-content: center; display: flex; font-size: .85rem">Address: Prof. Dr. Jan Baumbach</span>
       <span style="justify-content: center; display: flex; font-size: .85rem">University of Hamburg</span>
-      <span style="justify-content: center; display: flex; font-size: .85rem">Notkestraße 9</span>
-      <span style="justify-content: center; display: flex; font-size: .85rem">22607 Hamburg</span>
+      <span style="justify-content: center; display: flex; font-size: .85rem">Albert-Einstein-Ring 8-10</span>
+      <span style="justify-content: center; display: flex; font-size: .85rem">22761 Hamburg</span>
       <span style="justify-content: center; display: flex; font-size: .85rem">Germany</span>
     </div>
 
@@ -109,14 +117,20 @@ export default {
     },
     getMail: function () {
       let mail = "zbh.uni-hamburg.de"
-      mail = "cosy" + mail
-      mail = mail.split("z").join("b@z")
+      mail = "management-cosybi" + mail
+      mail = mail.split("z").join("o@z")
       return mail
     },
     getKAMail: function () {
       let mail = "-hamburg.de"
       mail = "klaudia.adamowicz" + mail
       mail = mail.split("z").join("z@uni")
+      return mail
+    },
+    getAMMail: function () {
+      let mail = "-hamburg.de"
+      mail = "andreas.ma" + mail
+      mail = mail.split("ma").join("maier-1@uni")
       return mail
     },
     getJBMail: function () {
