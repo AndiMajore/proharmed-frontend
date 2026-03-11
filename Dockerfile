@@ -1,7 +1,7 @@
-FROM node:18.13 as build-stage
+FROM node:22.12-alpine as build-stage
 WORKDIR /app
 COPY package*.json ./
-RUN npm install -g npm@8.19.3
+RUN npm install -g npm@10.9.0
 RUN npm install
 COPY ./ .
 COPY docker/index.html public/index.html
