@@ -39,6 +39,9 @@
       "svgo":">=2.8.1",
       "serialize-javascript": ">=7.0.3"
     },
+    "vue-cli-plugin-compression":{
+      "serialize-javascript": ">=7.0.3"
+    },
     "postcss": ">=8.4.31"
   },
   "browserslist": [
