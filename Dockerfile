@@ -4,8 +4,8 @@ COPY package*.json ./
 RUN npm install -g npm@10.9.0
 RUN npm install
 COPY ./ .
-COPY docker/index.html public/index.html
-COPY docker/vue.config.js ./vue.config.js
+COPY docker/index.html ./index.html
+COPY docker/vite.config.js ./vite.config.js
 COPY docker/Config.js src/Config.js
 
 RUN npm run build

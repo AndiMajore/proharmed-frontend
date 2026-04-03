@@ -2,44 +2,43 @@
   <div style="width: 100%;  padding: 16px">
     <v-sheet style="margin-top: 16px;">
       <div style="display: flex; justify-content: center" v-if="!error && !result">
-        <v-subheader :class="{sh:!mobile, sh_mobile:mobile}">Status: {{
+        <v-list-subheader :class="{sh:!mobile, sh_mobile:mobile}">Status: {{
             status ? status + (status === "Queued" ? "(" + queueStats.queuePosition + "/" + queueStats.queueLength + ")" : '') : "communicating..."
           }}
-        </v-subheader>
+        </v-list-subheader>
       </div>
       <div v-if="!result">
         <v-progress-linear :color="error?'error':'primary'" :indeterminate="progress===undefined"
-                           :value="progress"></v-progress-linear>
+                           :model-value="progress" density="compact"></v-progress-linear>
         <div style="width: 100%; display: flex; justify-content: center; margin-top:8px;">
           <i v-if="taskID && !result">You may return to your results later using the following URL: <a
               :href="getCurrentURL()">{{ getCurrentURL() }}</a></i>
         </div>
       </div>
       <div v-else :style="{'padding-left': isMobile() ? '16px':'64px', 'padding-right': isMobile() ? '16px': '64px'}">
-        <v-tabs v-model="resultTab" centered>
-          <v-tabs-slider color="primary"></v-tabs-slider>
-          <v-tab>
+        <v-tabs v-model="resultTab" align-tabs="center">
+          <v-tab :value="0">
             Input
           </v-tab>
-          <v-tab :disabled="deleted">
+          <v-tab :value="1" :disabled="deleted">
             Result
           </v-tab>
 
         </v-tabs>
         <v-divider></v-divider>
-        <v-tabs-items v-model="resultTab">
-          <v-tab-item>
+        <v-window v-model="resultTab">
+          <v-window-item :value="0">
             <InputTab @downloadEvent="downloadFile" :task-i-d="taskID" :mode="mode" :mobile="mobile"
                       :input="input" :deleted="deleted"></InputTab>
-          </v-tab-item>
+          </v-window-item>
 
-          <v-tab-item style="width: 100%" v-if="!deleted">
+          <v-window-item style="width: 100%" v-if="!deleted" :value="1">
             <OutputTab v-if="result" @reloadFiles="loadData()" @downloadEvent="downloadFile"
                        @downloadResultEvent="downloadFile(resultFileURL)" :taskID="taskID" :mobile="mobile"
                        :result="resultPreview" :plots="plots" :csvs="csvs" :txts="txt" :input="input" :mode="mode"
                        :zips="zips" :result-file-u-r-l="resultFileURL" :result-file="resultFile"></OutputTab>
-          </v-tab-item>
-        </v-tabs-items>
+          </v-window-item>
+        </v-window>
       </div>
       <span v-if="error"><i>An error with following message occurred: {{ status }}</i></span>
     </v-sheet>
@@ -48,8 +47,8 @@
 
 <script>
 
-import OutputTab from "@/components/validation/start/result/OutputTab";
-import InputTab from "@/components/validation/start/result/InputTab";
+import OutputTab from "@/components/validation/start/result/OutputTab.vue";
+import InputTab from "@/components/validation/start/result/InputTab.vue";
 
 export default {
   name: "Results",

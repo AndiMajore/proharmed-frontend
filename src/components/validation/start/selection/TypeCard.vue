@@ -1,14 +1,15 @@
 <template>
   <v-card :style="{width:'100%', margin: mobile ? '' : '', 'margin-bottom':'0', height: '100%',padding: mobile ? '4px' :''}">
-    <v-card-title :style="{'font-size' : mobile ? '1.2rem' : '', 'margin-bottom' : mobile ? '8px' :''}">{{title}}</v-card-title>
-    <v-card-subtitle :style="{height: '52px', 'font-size' :mobile ? '1rem' :''}">{{text}}
-    </v-card-subtitle>
+    <v-card-title :style="{'font-size' : mobile ? '1.2rem' : '', 'margin-bottom' : mobile ? '4px' : '8px'}">{{
+        title
+      }}
+    </v-card-title>
     <picture class="white--text align-end" style="width: 100%">
       <img alt="For safari users" :src="image" :style="{margin: isMobile()? '4px 15% 8px' : '8px 15% 24px', position: 'relative', width: '70%'}">
     </picture>
     <div style="display: flex; justify-content: center; margin-bottom: 8px">
-      <v-btn depressed color="primary" @click="$emit('startEvent',{mode:mode})" rounded style="font-size: smaller">
-        <v-icon left style="margin-right:4px ">fas fa-play</v-icon>
+      <v-btn variant="flat" color="primary" @click="$emit('startEvent',{mode:mode})" rounded style="font-size: smaller">
+        <v-icon start icon="fa:fas fa-play"></v-icon>
         Run
       </v-btn>
     </div>
@@ -19,13 +20,24 @@
 export default {
   name: "TypeCard",
   props: {
-    title: String,
-    text: String,
-    image: String,
-    mode: String,
-    fallback_image: String,
-    width:{
-      type:String,
+    title: {
+      type: String,
+      default: ""
+    },
+    text: {
+      type: String,
+      default: ""
+    },
+    mode: {
+      type: String,
+      default: ""
+    },
+    image: {
+      type: String,
+      default: ""
+    },
+    image_width: {
+      type: String,
       default:"45%"
     },
     mobile: {

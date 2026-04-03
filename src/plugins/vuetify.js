@@ -1,15 +1,29 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
-import '@fortawesome/fontawesome-free/css/all.css' // Ensure you are using css-loader
-import 'vuetify/dist/vuetify.min.css'
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+import { aliases, fa } from 'vuetify/iconsets/fa'
+import { mdi } from 'vuetify/iconsets/mdi'
+import '@fortawesome/fontawesome-free/css/all.css'
 
-
-Vue.use(Vuetify);
-
-const opts = {
-    icons: {
-        iconfont:'fa',
+export default createVuetify({
+  components,
+  directives,
+  theme: {
+    themes: {
+      light: {
+        colors: {
+          primary: '#6495ED',
+        },
+      },
     },
-}
-
-export default new Vuetify(opts);
+  },
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      fa,
+      mdi,
+    },
+  },
+})

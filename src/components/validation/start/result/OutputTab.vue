@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-card tile value="true" timeout="-1" top centered color="error" style="padding: 16px; margin: 16px"><b
+    <v-card tile value="true" style="padding: 16px; margin: 16px" color="error"><b
         style="color: white;display: flex; justify-content: center"> Your input
       and output data will be deleted after 24h or click here to delete them now!</b>
       <v-card-actions style="display: flex; justify-content: center; margin-top: 16px">
         <v-btn @click="deleteDialogModel=true">Delete
-          <v-icon right>fas fa-trash</v-icon>
+          <v-icon end>fas fa-trash</v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -27,12 +27,12 @@
       </v-sheet>
     </v-dialog>
     <div style="display:flex" v-show="mode!=='network'">
-      <v-subheader style="justify-self: center; margin-left: auto; margin-right: 0">
+      <v-list-subheader style="justify-self: center; margin-left: auto; margin-right: 0">
         {{ mode === 'intersect' ? "Intersection summary" : "Matrix preview" }}
-      </v-subheader>
-      <v-tooltip top>
-        <template v-slot:activator="{attrs, on}">
-          <v-btn icon @click="downloadFile(getZIP('.zip'))" v-on="on" v-bind="attrs"
+      </v-list-subheader>
+      <v-tooltip location="top">
+        <template v-slot:activator="{ props }">
+          <v-btn icon @click="downloadFile(getZIP('.zip'))"  v-bind="props"
                  style="justify-self: flex-end; margin-left: auto; margin-right: 0; top: 12px">
             <v-icon :style="{'color':mode==='network'?'gray':'black'}">fas fa-download</v-icon>
 
@@ -45,16 +45,16 @@
     <v-container>
       <v-row justify="center" style="padding-top:16px; padding-bottom: 16px" v-if="result">
         <v-col cols="12" style="display: flex; justify-content: center">
-          <v-data-table :disable-sort="mode !== 'intersect'" :headers="getHeader()" :items="getItems()"
+          <v-data-table :headers="getHeader()" :items="getItems()"
                         style="overflow-y: auto; max-width: 100%"
-                        :hide-default-footer="mode !== 'intersect'" :items-per-page="5">
+                        :items-per-page="5">
           </v-data-table>
         </v-col>
         <div style="display: flex; justify-content: center; margin: 32px;" v-show="mode!=='network'">
-          <v-tooltip right>
-            <template v-slot:activator="{on, attrs}">
-              <v-btn @click="$emit('downloadResultEvent')" v-on="on" v-bind="attrs">
-                <v-icon left>fas fa-download</v-icon>
+          <v-tooltip location="end">
+            <template v-slot:activator="{ props }">
+              <v-btn @click="$emit('downloadResultEvent')"  v-bind="props">
+                <v-icon start>fas fa-download</v-icon>
                 Download Output
               </v-btn>
             </template>
@@ -66,19 +66,19 @@
     <template v-if="mode==='intersect' && plots">
       <v-divider></v-divider>
       <div style="display:flex">
-        <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Overview Figure
-        </v-subheader>
+        <v-list-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Overview Figure
+        </v-list-subheader>
       </div>
       <v-container>
         <v-row class="flex_content_center">
           <v-col cols="12" lg="10" class="flex_content_center">
             <div style="width: 60%">
               <div class="flex_content_center">
-                <v-img :src="getPlot('overview_intersections')" contain
+                <v-img :src="getPlot('overview_intersections')"
                        style="position: relative; max-width: 70%">
-                  <v-btn icon small style="position: absolute; right: 0"
+                  <v-btn icon density="compact" style="position: absolute; right: 0"
                          @click="downloadFile(getPlot('overview_intersections'))">
-                    <v-icon small>fas fa-download</v-icon>
+                    <v-icon density="compact">fas fa-download</v-icon>
                   </v-btn>
                 </v-img>
               </div>
@@ -91,19 +91,19 @@
       <template v-if="plots">
         <v-divider></v-divider>
         <div style="display:flex">
-          <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Overview Figures
-          </v-subheader>
+          <v-list-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Overview Figures
+          </v-list-subheader>
         </div>
         <v-container>
           <v-row>
             <v-col cols="12" lg="6" class="flex_content_center">
               <div style="width: 100%">
                 <div class="flex_content_center">
-                  <v-img :src="getPlot('overview_log_bar')" contain
+                  <v-img :src="getPlot('overview_log_bar')"
                          style="position: relative; max-width: 70%">
-                    <v-btn icon small style="position: absolute; right: 0"
+                    <v-btn icon density="compact" style="position: absolute; right: 0"
                            @click="downloadFile(getPlot('overview_log_bar'))">
-                      <v-icon small>fas fa-download</v-icon>
+                      <v-icon density="compact">fas fa-download</v-icon>
                     </v-btn>
                   </v-img>
                 </div>
@@ -112,11 +112,11 @@
             <v-col cols="12" lg="6" class="flex_content_center">
               <div style="width: 100%">
                 <div class="flex_content_center">
-                  <v-img :src="getPlot('overview_log_box')" contain
+                  <v-img :src="getPlot('overview_log_box')"
                          style="position: relative; max-width: 70%">
-                    <v-btn icon small style="position: absolute; right: 0"
+                    <v-btn icon density="compact" style="position: absolute; right: 0"
                            @click="downloadFile(getPlot('overview_log_box'))">
-                      <v-icon small>fas fa-download</v-icon>
+                      <v-icon density="compact">fas fa-download</v-icon>
                     </v-btn>
                   </v-img>
                 </div>
@@ -124,10 +124,10 @@
             </v-col>
           </v-row>
           <div style="display: flex; justify-content: center; margin: 32px;">
-            <v-tooltip right>
-              <template v-slot:activator="{on, attrs}">
-                <v-btn @click="downloadFile(getFile('txt','overview_log.txt'))" v-on="on" v-bind="attrs">
-                  <v-icon left>fas fa-download</v-icon>
+            <v-tooltip location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn @click="downloadFile(getFile('txt','overview_log.txt'))"  v-bind="props">
+                  <v-icon start>fas fa-download</v-icon>
                   Download Log.txt
                 </v-btn>
               </template>
@@ -138,19 +138,19 @@
         <template v-if="mode==='filter' || mode === 'reduce' || mode === 'ortho'">
           <v-divider></v-divider>
           <div style="display:flex">
-            <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Filter Details
-            </v-subheader>
+            <v-list-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Filter Details
+            </v-list-subheader>
           </div>
           <v-container>
             <v-row class="flex_content_center">
               <v-col cols="12" lg="6" class="flex_content_center">
                 <div style="width: 100%">
                   <div class="flex_content_center">
-                    <v-img :src="getPlot('detailed_log')" contain
+                    <v-img :src="getPlot('detailed_log')"
                            style="position: relative; max-width: 70%">
-                      <v-btn icon small style="position: absolute; right: 0"
+                      <v-btn icon density="compact" style="position: absolute; right: 0"
                              @click="downloadFile(getPlot('detailed_log'))">
-                        <v-icon small>fas fa-download</v-icon>
+                        <v-icon density="compact">fas fa-download</v-icon>
                       </v-btn>
                     </v-img>
                   </div>
@@ -160,10 +160,10 @@
           </v-container>
         </template>
         <div style="display: flex; justify-content: center; margin: 32px;">
-          <v-tooltip right>
-            <template v-slot:activator="{on, attrs}">
-              <v-btn @click="downloadFile(getFile('txt','detailed_log.txt'))" v-on="on" v-bind="attrs">
-                <v-icon left>fas fa-download</v-icon>
+          <v-tooltip location="end">
+            <template v-slot:activator="{ props }">
+              <v-btn @click="downloadFile(getFile('txt','detailed_log.txt'))"  v-bind="props">
+                <v-icon start>fas fa-download</v-icon>
                 Download Log.txt
               </v-btn>
             </template>
@@ -176,29 +176,29 @@
     <template v-if="input.organism === 'human' || mode==='network'">
       <template v-if="drugstoneNetwork && drugstoneNetwork.nodes">
         <v-divider></v-divider>
-        <v-expansion-panels :value="mode === 'network' ? 0: undefined">
+        <v-expansion-panels :model-value="mode === 'network' ? 0: undefined">
           <v-expansion-panel>
-            <v-expansion-panel-header>
+            <v-expansion-panel-title>
               <div style="display:flex">
-                <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Network integration
-                </v-subheader>
+                <v-list-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Network integration
+                </v-list-subheader>
               </div>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content v-if="drugstoneNetwork.nodes.length < 200">
+            </v-expansion-panel-title>
+            <v-expansion-panel-text v-if="drugstoneNetwork.nodes.length < 200">
               <drugst-one
                   groups='{"nodeGroups":{"protein":{"type":"protein","color":"#4da300","font":{"color":"#f0f0f0"},"groupName":"Protein","shape":"circle","id":"protein"}},"edgeGroups":{"default":{"color":"#000000","groupName":"default edge"}}}'
                   :config=getDrugstoneConfig()
                   :network="getDrugstoneNetwork(drugstoneNetwork)">
               </drugst-one>
-            </v-expansion-panel-content>
-            <v-expansion-panel-content v-else>
+            </v-expansion-panel-text>
+            <v-expansion-panel-text v-else>
               <div v-if="drugstoneNetwork" style="text-align: justify-all">
                 <i>The constructed network contains {{ drugstoneNetwork.nodes.length }} proteins, which cannot be
                   displayed
                   all together due to performance issues. Please use the network integration function on a subset of the
                   data instead.</i>
               </div>
-            </v-expansion-panel-content>
+            </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
       </template>
@@ -248,7 +248,7 @@ export default {
 
     getHeader: function () {
       return Object.keys(this.result).map(k => {
-            return {text: k, value: k}
+            return {title: k, key: k}
           }
       )
     },
@@ -335,7 +335,7 @@ export default {
 
 <style scoped lang="sass">
 
-.v-subheader
+.v-list-subheader
   font-size: 1.5rem
   margin-top: 8px
 

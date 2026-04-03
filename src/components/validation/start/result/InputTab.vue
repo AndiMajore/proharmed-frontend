@@ -5,24 +5,23 @@
       and output data are removed, either because the task is older than 24h or because you requested deletion. If you want to regenerate the results, please start a new task with the previously used parameters, which you can find below!</b>
     </v-card>
     <div style="display:flex;">
-      <v-subheader style="justify-self: center; margin-left: auto; margin-right: auto">
+      <v-list-subheader style="justify-self: center; margin-left: auto; margin-right: auto">
         <span v-if="mode === 'filter'">Filter Input</span>
         <span v-if="mode === 'remap'">Remap Input</span>
         <span v-if="mode === 'reduce'">Reduce Input</span>
         <span v-if="mode === 'ortho'">Map Orthologs Input</span>
-      </v-subheader>
+      </v-list-subheader>
     </div>
     <v-container v-if="input" style="margin-top:16px; margin-bottom: 32px">
       <v-row justify="center">
         <v-col cols="12" lg="4" md="6" class="flex_content_center">
           <div>
             <b>Configuration</b>
-            <v-simple-table dense style="max-height: 300px; overflow-y: auto;">
-              <template v-slot:default>
+            <v-table density="compact" style="max-height: 300px; overflow-y: auto;">
                 <thead>
                 <tr>
-                  <th>Parameter</th>
-                  <th>Value</th>
+                  <th class="text-left">Parameter</th>
+                  <th class="text-left">Value</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -32,14 +31,13 @@
                   <td style="margin:4px">{{ input[param] }}</td>
                 </tr>
                 </tbody>
-              </template>
-            </v-simple-table>
+            </v-table>
           </div>
         </v-col>
       </v-row>
       <div style="display: flex; justify-content: center; margin: 32px;">
         <v-btn @click="downloadInput()">
-          <v-icon left>fas fa-download</v-icon>
+          <v-icon start>fas fa-download</v-icon>
           Download Input
         </v-btn>
       </div>
@@ -76,7 +74,7 @@ export default {
 
 <style scoped lang="sass">
 
-.v-subheader
+.v-list-subheader
   font-size: 1.5rem
   margin-top: 8px
 
