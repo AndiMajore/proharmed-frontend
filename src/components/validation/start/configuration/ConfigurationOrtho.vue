@@ -37,8 +37,8 @@
                   <template v-slot:append>
                     <v-tooltip location="end">
                       <template v-slot:activator="{ props }">
-                        <v-btn icon small v-bind="props"  @click="downloadExample(idx)">
-                          <v-icon small icon="fa:fas fa-download"></v-icon>
+                        <v-btn icon density="compact" variant="text" elevation="0" v-bind="props"  @click="downloadExample(idx)">
+                          <v-icon size="small" icon="fa:fas fa-download"></v-icon>
                         </v-btn>
                       </template>
                       <div style="width: 250px; text-align: justify">
@@ -170,7 +170,7 @@
                             color="primary"
                             true-icon="fa:fas fa-check-square"
                             false-icon="fa:far fa-square"
-                            style="max-width: 170px" hide-details>
+                            style="max-width: 300px; white-space: nowrap" hide-details>
                   <template v-slot:append>
                     <v-tooltip location="end">
                       <template v-slot:activator="{ props }">

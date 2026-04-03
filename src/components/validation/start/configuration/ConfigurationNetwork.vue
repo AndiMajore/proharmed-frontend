@@ -36,8 +36,8 @@
                 <template v-slot:append>
                   <v-tooltip location="end">
                     <template v-slot:activator="{ props }">
-                      <v-btn icon small v-bind="props"  @click="downloadExample(idx)">
-                        <v-icon small icon="fa:fas fa-download"></v-icon>
+                      <v-btn icon density="compact" variant="text" elevation="0" v-bind="props"  @click="downloadExample(idx)">
+                        <v-icon size="small" icon="fa:fas fa-download"></v-icon>
                       </v-btn>
                     </template>
                     <div style="width: 250px; text-align: justify">
