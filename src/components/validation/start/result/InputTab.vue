@@ -1,9 +1,16 @@
 <template>
   <div>
-    <v-card tile color="warning" style="padding: 16px; margin: 16px" v-show="deleted"><b
-        style="color: white;display: flex; justify-content: center"> Your input
-      and output data are removed, either because the task is older than 24h or because you requested deletion. If you want to regenerate the results, please start a new task with the previously used parameters, which you can find below!</b>
-    </v-card>
+    <v-alert
+        v-show="deleted"
+        color="warning"
+        variant="flat"
+        style="margin: 16px; color: white"
+        density="comfortable"
+    >
+      <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%">
+        <b>Your input and output data are removed, either because the task is older than 24h or because you requested deletion. If you want to regenerate the results, please start a new task with the previously used parameters, which you can find below!</b>
+      </div>
+    </v-alert>
     <div style="display:flex;">
       <v-list-subheader style="justify-self: center; margin-left: auto; margin-right: auto">
         <span v-if="mode === 'filter'">Filter Input</span>
@@ -36,8 +43,8 @@
         </v-col>
       </v-row>
       <div style="display: flex; justify-content: center; margin: 32px;">
-        <v-btn @click="downloadInput()">
-          <v-icon start>fas fa-download</v-icon>
+        <v-btn @click="downloadInput()" variant="flat" color="primary">
+          <v-icon start icon="fa:fas fa-download"></v-icon>
           Download Input
         </v-btn>
       </div>

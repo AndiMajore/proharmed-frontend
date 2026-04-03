@@ -1,14 +1,19 @@
 <template>
   <div>
-    <v-card tile value="true" style="padding: 16px; margin: 16px" color="error"><b
-        style="color: white;display: flex; justify-content: center"> Your input
-      and output data will be deleted after 24h or click here to delete them now!</b>
-      <v-card-actions style="display: flex; justify-content: center; margin-top: 16px">
-        <v-btn @click="deleteDialogModel=true">Delete
-          <v-icon end>fas fa-trash</v-icon>
+    <v-alert
+        color="error"
+        variant="flat"
+        style="margin: 16px; color: white"
+        density="comfortable"
+    >
+      <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%">
+        <b>Your input and output data will be deleted after 24h or click here to delete them now!</b>
+        <v-btn @click="deleteDialogModel=true" color="white" variant="flat" style="margin-top: 16px; color: #ff5252">
+          Delete
+          <v-icon end icon="fa:fas fa-trash"></v-icon>
         </v-btn>
-      </v-card-actions>
-    </v-card>
+      </div>
+    </v-alert>
     <v-dialog v-model="deleteDialogModel" max-width="700px">
       <v-sheet>
         <v-card>
@@ -32,9 +37,9 @@
       </v-list-subheader>
       <v-tooltip location="top">
         <template v-slot:activator="{ props }">
-          <v-btn icon @click="downloadFile(getZIP('.zip'))"  v-bind="props"
+          <v-btn icon @click="downloadFile(getZIP('.zip'))"  v-bind="props" variant="text"
                  style="justify-self: flex-end; margin-left: auto; margin-right: 0; top: 12px">
-            <v-icon :style="{'color':mode==='network'?'gray':'black'}">fas fa-download</v-icon>
+            <v-icon :style="{'color':mode==='network'?'gray':'black'}" icon="fa:fas fa-download"></v-icon>
 
           </v-btn>
         </template>
@@ -46,15 +51,16 @@
       <v-row justify="center" style="padding-top:16px; padding-bottom: 16px" v-if="result">
         <v-col cols="12" style="display: flex; justify-content: center">
           <v-data-table :headers="getHeader()" :items="getItems()"
-                        style="overflow-y: auto; max-width: 100%"
+                        class="matrix-table"
+                        style="overflow-y: auto; width: auto; max-width: 100%; margin-left: auto; margin-right: auto"
                         :items-per-page="5">
           </v-data-table>
         </v-col>
         <div style="display: flex; justify-content: center; margin: 32px;" v-show="mode!=='network'">
           <v-tooltip location="end">
             <template v-slot:activator="{ props }">
-              <v-btn @click="$emit('downloadResultEvent')"  v-bind="props">
-                <v-icon start>fas fa-download</v-icon>
+              <v-btn @click="$emit('downloadResultEvent')"  v-bind="props" variant="flat" color="primary">
+                <v-icon start icon="fa:fas fa-download"></v-icon>
                 Download Output
               </v-btn>
             </template>
@@ -77,8 +83,8 @@
                 <v-img :src="getPlot('overview_intersections')"
                        style="position: relative; max-width: 70%">
                   <v-btn icon density="compact" style="position: absolute; right: 0"
-                         @click="downloadFile(getPlot('overview_intersections'))">
-                    <v-icon density="compact">fas fa-download</v-icon>
+                         @click="downloadFile(getPlot('overview_intersections'))" variant="text">
+                    <v-icon density="compact" icon="fa:fas fa-download"></v-icon>
                   </v-btn>
                 </v-img>
               </div>
@@ -102,8 +108,8 @@
                   <v-img :src="getPlot('overview_log_bar')"
                          style="position: relative; max-width: 70%">
                     <v-btn icon density="compact" style="position: absolute; right: 0"
-                           @click="downloadFile(getPlot('overview_log_bar'))">
-                      <v-icon density="compact">fas fa-download</v-icon>
+                           @click="downloadFile(getPlot('overview_log_bar'))" variant="text">
+                      <v-icon density="compact" icon="fa:fas fa-download"></v-icon>
                     </v-btn>
                   </v-img>
                 </div>
@@ -115,8 +121,8 @@
                   <v-img :src="getPlot('overview_log_box')"
                          style="position: relative; max-width: 70%">
                     <v-btn icon density="compact" style="position: absolute; right: 0"
-                           @click="downloadFile(getPlot('overview_log_box'))">
-                      <v-icon density="compact">fas fa-download</v-icon>
+                           @click="downloadFile(getPlot('overview_log_box'))" variant="text">
+                      <v-icon density="compact" icon="fa:fas fa-download"></v-icon>
                     </v-btn>
                   </v-img>
                 </div>
@@ -126,8 +132,8 @@
           <div style="display: flex; justify-content: center; margin: 32px;">
             <v-tooltip location="end">
               <template v-slot:activator="{ props }">
-                <v-btn @click="downloadFile(getFile('txt','overview_log.txt'))"  v-bind="props">
-                  <v-icon start>fas fa-download</v-icon>
+                <v-btn @click="downloadFile(getFile('txt','overview_log.txt'))"  v-bind="props" variant="flat" color="primary">
+                  <v-icon start icon="fa:fas fa-download"></v-icon>
                   Download Log.txt
                 </v-btn>
               </template>
@@ -149,8 +155,8 @@
                     <v-img :src="getPlot('detailed_log')"
                            style="position: relative; max-width: 70%">
                       <v-btn icon density="compact" style="position: absolute; right: 0"
-                             @click="downloadFile(getPlot('detailed_log'))">
-                        <v-icon density="compact">fas fa-download</v-icon>
+                             @click="downloadFile(getPlot('detailed_log'))" variant="text">
+                        <v-icon density="compact" icon="fa:fas fa-download"></v-icon>
                       </v-btn>
                     </v-img>
                   </div>
@@ -162,8 +168,8 @@
         <div style="display: flex; justify-content: center; margin: 32px;">
           <v-tooltip location="end">
             <template v-slot:activator="{ props }">
-              <v-btn @click="downloadFile(getFile('txt','detailed_log.txt'))"  v-bind="props">
-                <v-icon start>fas fa-download</v-icon>
+              <v-btn @click="downloadFile(getFile('txt','detailed_log.txt'))"  v-bind="props" variant="flat" color="primary">
+                <v-icon start icon="fa:fas fa-download"></v-icon>
                 Download Log.txt
               </v-btn>
             </template>
@@ -179,8 +185,9 @@
         <v-expansion-panels :model-value="mode === 'network' ? 0: undefined">
           <v-expansion-panel>
             <v-expansion-panel-title>
-              <div style="display:flex">
-                <v-list-subheader style="justify-self: center; margin-left: auto; margin-right: auto">Network integration
+              <div style="display:flex; align-items: center">
+                <v-icon icon="fa:fas fa-network-wired" color="primary" style="margin-right: 16px"></v-icon>
+                <v-list-subheader style="font-size: 1.5rem; margin-top: 0">Network integration
                 </v-list-subheader>
               </div>
             </v-expansion-panel-title>
@@ -384,5 +391,11 @@ export default {
 .flex_content_center
   justify-content: center
   display: flex
+
+.matrix-table
+  ::v-deep(th)
+    background-color: #f5f5f5 !important
+    font-weight: bold !important
+    color: #484848 !important
 
 </style>

@@ -1,13 +1,13 @@
 <template>
   <div style="width: 100%;  padding: 16px">
-    <v-sheet style="margin-top: 16px;">
+    <v-sheet style="margin-top: 16px; border: none !important" flat elevation="0">
       <div style="display: flex; justify-content: center" v-if="!error && !result">
         <v-list-subheader :class="{sh:!mobile, sh_mobile:mobile}">Status: {{
             status ? status + (status === "Queued" ? "(" + queueStats.queuePosition + "/" + queueStats.queueLength + ")" : '') : "communicating..."
           }}
         </v-list-subheader>
       </div>
-      <div v-if="!result">
+      <div v-if="!result && !error">
         <v-progress-linear :color="error?'error':'primary'" :indeterminate="progress===undefined"
                            :model-value="progress" density="compact"></v-progress-linear>
         <div style="width: 100%; display: flex; justify-content: center; margin-top:8px;">
@@ -15,8 +15,8 @@
               :href="getCurrentURL()">{{ getCurrentURL() }}</a></i>
         </div>
       </div>
-      <div v-else :style="{'padding-left': isMobile() ? '16px':'64px', 'padding-right': isMobile() ? '16px': '64px'}">
-        <v-tabs v-model="resultTab" align-tabs="center">
+      <div v-else-if="result" :style="{'padding-left': isMobile() ? '16px':'64px', 'padding-right': isMobile() ? '16px': '64px'}">
+        <v-tabs v-model="resultTab" align-tabs="center" color="primary">
           <v-tab :value="0">
             Input
           </v-tab>
@@ -40,7 +40,14 @@
           </v-window-item>
         </v-window>
       </div>
-      <span v-if="error"><i>An error with following message occurred: {{ status }}</i></span>
+      <v-alert
+          v-if="error"
+          type="error"
+          variant="flat"
+          style="margin: 16px"
+      >
+        An error occurred: {{ status }}
+      </v-alert>
     </v-sheet>
   </div>
 </template>
@@ -188,5 +195,9 @@ export default {
 </script>
 
 <style scoped lang="sass">
+.sh_mobile
+  font-size: 1.2rem
 
+.sh
+  font-size: 1.5rem
 </style>
