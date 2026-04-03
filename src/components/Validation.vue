@@ -124,16 +124,12 @@ export default {
       if (this.$route.query.id) {
         this.step = 2
       } 
-      // If the path is strictly "/" and there is NO hash and NO ID, 
-      // it means the user clicked "Home" or ProHarMeD in the nav-bar.
-      // In this case, we reset to the landing page.
-      else if (this.$route.path === '/' && !this.$route.hash && !this.$route.query.id) {
+      // If the path is strictly "/", we reset to the landing page 
+      // unless an ID is present (handled above).
+      else if (this.$route.path === '/') {
         this.step = 0
         this.mode = undefined
       }
-      // Note: We don't reset if there is a hash (e.g. /#overview) 
-      // or if we are internally in step 1 (Configuration) because 
-      // the "Run" buttons keep the path as "/".
     },
     isMobile: function () {
       let check = false;

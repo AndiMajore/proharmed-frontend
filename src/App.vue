@@ -3,20 +3,20 @@
     <v-main>
       <v-toolbar elevation="4" density="compact" color="white"
                  :style="{'padding-left': isMobile()? '0': '15vw', 'padding-right': isMobile()? '5vw':'15vw', position: 'fixed', 'z-index': 1000, width: '100%'}">
-        <v-toolbar-title v-if="!isMobile()" style="cursor:pointer; color: #484848" @click="$router.push('/')">ProHarMeD
+        <v-toolbar-title v-if="!isMobile()" style="cursor:pointer; color: #484848" @click="goHome()">ProHarMeD
         </v-toolbar-title>
         <v-spacer v-if="!isMobile()"></v-spacer>
-        <v-btn variant="plain" to="/" :class="['nav-btn', { 'active-link': $route.path === '/' && !$route.hash }]" :ripple="false">Home</v-btn>
-        <v-btn variant="plain" to="/#overview" :class="['nav-btn', { 'active-link': $route.hash === '#overview' }]" :ripple="false">Overview</v-btn>
-        <v-btn variant="plain" to="/#harmonize" :class="['nav-btn', { 'active-link': $route.hash === '#harmonize' }]" :ripple="false">Harmonize</v-btn>
-        <v-btn variant="plain" to="/#explore" :class="['nav-btn', { 'active-link': $route.hash === '#explore' }]" :ripple="false">Explore</v-btn>
+        <v-btn variant="plain" :class="['nav-btn', { 'active-link': $route.path === '/' && !$route.hash }]" :ripple="false" @click="goHome()">Home</v-btn>
+        <v-btn variant="plain" :class="['nav-btn', { 'active-link': $route.hash === '#overview' }]" :ripple="false" @click="goHome('#overview')">Overview</v-btn>
+        <v-btn variant="plain" :class="['nav-btn', { 'active-link': $route.hash === '#harmonize' }]" :ripple="false" @click="goHome('#harmonize')">Harmonize</v-btn>
+        <v-btn variant="plain" :class="['nav-btn', { 'active-link': $route.hash === '#explore' }]" :ripple="false" @click="goHome('#explore')">Explore</v-btn>
         <v-btn variant="plain" to="/about" :class="['nav-btn', { 'active-link': $route.path === '/about' }]" :ripple="false">About</v-btn>
       </v-toolbar>
       <v-card v-if="isMobile()" style="min-height: 100vh; top: 60px">
-        <router-view></router-view>
+        <router-view :key="refreshKey"></router-view>
       </v-card>
       <v-card v-else style="width: 70vw; justify-self: center; margin-left: auto; margin-right: auto; top: 60px">
-        <router-view></router-view>
+        <router-view :key="refreshKey"></router-view>
       </v-card>
     </v-main>
   </v-app>
@@ -40,9 +40,15 @@ export default {
        }
     }
   },
-  data: () => ({}),
+  data: () => ({
+    refreshKey: 0
+  }),
 
   methods: {
+    goHome: async function(hash = '') {
+      await this.$router.push({ path: '/', hash: hash, query: {} });
+      this.refreshKey++;
+    },
     isMobile: function () {
       let check = false;
       (function (a) {
