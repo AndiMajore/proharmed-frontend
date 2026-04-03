@@ -5,7 +5,7 @@
         <v-col>
           <v-btn color="error" @click="$emit('resetEvent')"
                  style="justify-self: flex-start; margin-right: auto;">
-            <v-icon start>fas fa-angle-left</v-icon>
+            <v-icon start icon="fa:fas fa-angle-left"></v-icon>
             Back
           </v-btn>
         </v-col>
@@ -18,7 +18,7 @@
                   v-bind="props"
                   
               >
-                <v-icon start>far fa-lightbulb</v-icon>
+                <v-icon start icon="fa:far fa-lightbulb"></v-icon>
                 Load Example
               </v-btn>
             </template>
@@ -28,7 +28,7 @@
                   {{ example.label }}
                   <v-tooltip location="end">
                     <template v-slot:activator="{ props }">
-                      <v-icon end v-bind="props" >far fa-question-circle</v-icon>
+                      <v-icon end v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                     </template>
                     <div style="width: 250px; text-align: justify">
                       Load example {{ example.label }} input and sets parameters to those used in this example.
@@ -38,7 +38,7 @@
                     <v-tooltip location="end">
                       <template v-slot:activator="{ props }">
                         <v-btn icon small v-bind="props"  @click="downloadExample(idx)">
-                          <v-icon small>fas fa-download</v-icon>
+                          <v-icon small icon="fa:fas fa-download"></v-icon>
                         </v-btn>
                       </template>
                       <div style="width: 250px; text-align: justify">
@@ -55,25 +55,25 @@
         <v-col align-self="end" class="flex">
           <v-btn color="primary" @click="checkEvent" class="flex_self_end">
             Harmonize
-            <v-icon end>fas fa-angle-right</v-icon>
+            <v-icon end icon="fa:fas fa-angle-right"></v-icon>
           </v-btn>
         </v-col>
       </v-row>
     </v-container>
     <template v-if="uid">
-      <v-sheet style="margin-top: 16px;">
-        <v-divider></v-divider>
-        <div style="display: flex; justify-content: center">
+      <v-sheet flat elevation="0" style="margin-top: 16px; border: none !important;">
+        <div style="display: flex; justify-content: center; padding-top: 16px; padding-bottom: 16px">
           <v-list-subheader class="sh">
             <b>Map Orthologs Configuration</b>
           </v-list-subheader>
         </div>
         <v-divider></v-divider>
-        <div style="display: flex; justify-content: center">
+        <div style="display: flex; justify-content: center; padding-top: 16px; padding-bottom: 16px">
           <v-list-subheader class="sh">
             File Upload
           </v-list-subheader>
         </div>
+        <v-divider></v-divider>
         <v-alert v-if="errorColumnName" type="error" density="compact">Missing column name to filter from the file!</v-alert>
         <v-alert v-if="errorFile" type="error" density="compact">Missing input file!</v-alert>
         <div :class="{border_mobile:mobile, border:!mobile}">
@@ -83,14 +83,16 @@
                 <v-file-input ref="tarInput" :label="tarInputModel"
                               hide-details
                               density="compact"
+                              variant="underlined"
+                              color="primary"
                               single-line
                               style="width: 300px; max-width: 300px; cursor: pointer"
                               @change="uploadFile"
-                              prepend-inner-icon="fas fa-arrow-up-from-bracket">
+                              prepend-inner-icon="fa:fas fa-paperclip">
                   <template v-slot:append>
                     <v-tooltip location="end">
                       <template v-slot:activator="{ props }">
-                        <v-icon v-bind="props" >far fa-question-circle</v-icon>
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Upload file with a column containing gene symbols.
@@ -102,11 +104,13 @@
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-text-field density="compact" label="Column name" style="max-width: 300px;"
+                              variant="underlined"
+                              color="primary"
                               v-model="gColumnNameModel">
                   <template v-slot:append>
                     <v-tooltip location="end">
                       <template v-slot:activator="{ props }">
-                        <v-icon v-bind="props" >far fa-question-circle</v-icon>
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Define the name of the column in the uploaded file containing the gene symbols.
@@ -118,7 +122,7 @@
             </v-row>
           </v-container>
           <v-divider></v-divider>
-          <div style="display: flex; justify-content: center">
+          <div style="display: flex; justify-content: center; padding-top: 16px; padding-bottom: 16px">
             <v-list-subheader class="sh">
               Optional Parameters
             </v-list-subheader>
@@ -128,11 +132,11 @@
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-select label="Organism"
                           v-model="organismModel" :items="organismList.map(o=>{return{title:o, value:o}})"
-                          style="max-width: 210px; min-width: 210px" variant="outlined" density="compact" hide-details>
+                          style="max-width: 210px; min-width: 210px" variant="underlined" color="primary" density="compact" hide-details>
                   <template v-slot:append>
                     <v-tooltip location="end">
                       <template v-slot:activator="{ props }">
-                        <v-icon v-bind="props" >far fa-question-circle</v-icon>
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Organism that the given gene symbols are associated to.
@@ -145,11 +149,11 @@
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-select label="Target Organism"
                           v-model="tarOrganismModel" :items="organismList.map(o=>{return{title:o, value:o}})"
-                          style="max-width: 210px; min-width: 210px" variant="outlined" density="compact" hide-details>
+                          style="max-width: 210px; min-width: 210px" variant="underlined" color="primary" density="compact" hide-details>
                   <template v-slot:append>
                     <v-tooltip location="end">
                       <template v-slot:activator="{ props }">
-                        <v-icon v-bind="props" >far fa-question-circle</v-icon>
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Target organism that the given gene symbol orthologs should be from.
@@ -163,11 +167,14 @@
             <v-row justify="center">
               <v-col cols="12" md="6" lg="3" class="flex_content_center">
                 <v-checkbox v-model="keepEmptyModel" label="Keep Empty"
+                            color="primary"
+                            true-icon="fa:fas fa-check-square"
+                            false-icon="fa:far fa-square"
                             style="max-width: 170px" hide-details>
                   <template v-slot:append>
                     <v-tooltip location="end">
                       <template v-slot:activator="{ props }">
-                        <v-icon v-bind="props" >far fa-question-circle</v-icon>
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Set checkmark if empty rows after ortholog mapping should be kept.
@@ -180,11 +187,13 @@
             <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-text-field density="compact" label="Result Column" style="max-width: 300px;"
+                              variant="underlined"
+                              color="primary"
                               v-model="resultColumnNameModel">
                   <template v-slot:append>
                     <v-tooltip location="end">
                       <template v-slot:activator="{ props }">
-                        <v-icon v-bind="props" >far fa-question-circle</v-icon>
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Define name of the column, where the column with ortholog gene symbols should be saved.
@@ -194,40 +203,41 @@
                 </v-text-field>
               </v-col>
             </v-row>
-            <v-divider></v-divider>
             <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-text-field label="E-Mail" style="max-width: 300px;"
+                              variant="underlined"
+                              color="primary"
+                              density="compact"
                               v-model="mailModel">
-                  <template v-slot:append>
-                    <v-tooltip location="end">
-                      <template v-slot:activator="{ props }">
-                        <v-icon v-bind="props" >far fa-question-circle</v-icon>
-                      </template>
-                      <div style="width: 250px; text-align: justify">
-                        Include your E-Mail address if you wish to be notified once the reduction is finished.
-                      </div>
-                    </v-tooltip>
-                  </template>
+                <template v-slot:append>
+                  <v-tooltip location="end">
+                    <template v-slot:activator="{ props }">
+                      <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
+                    </template>
+                    <div style="width: 250px; text-align: justify">
+                      Include your E-Mail address if you wish to be notified once the reduction is finished.
+                    </div>
+                  </v-tooltip>
+                </template>
                 </v-text-field>
               </v-col>
             </v-row>
           </v-container>
         </div>
-        <v-divider></v-divider>
       </v-sheet>
       <v-container>
         <v-row style="margin-top:8px">
           <v-col>
             <v-btn color="error" @click="$emit('resetEvent')" style="justify-self: left; margin-right: auto;">
-              <v-icon start>fas fa-angle-left</v-icon>
+              <v-icon start icon="fa:fas fa-angle-left"></v-icon>
               Back
             </v-btn>
           </v-col>
           <v-col align-self="end" class="flex">
             <v-btn color="primary" @click="checkEvent" class="flex_self_end">
               Harmonize
-              <v-icon end>fas fa-angle-right</v-icon>
+              <v-icon end icon="fa:fas fa-angle-right"></v-icon>
             </v-btn>
           </v-col>
         </v-row>
@@ -450,10 +460,14 @@ export default {
 .border
   padding-right: 64px
   padding-left: 64px
+  border: none !important
+  box-shadow: none !important
 
 .border_mobile
   padding-right: 16px
   padding-left: 16px
+  border: none !important
+  box-shadow: none !important
 
 .margin_mobile
   padding-left: 8px
