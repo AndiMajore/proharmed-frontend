@@ -182,13 +182,14 @@
     <template v-if="input.organism === 'human' || mode==='network'">
       <template v-if="drugstoneNetwork && drugstoneNetwork.nodes">
         <v-divider></v-divider>
-        <v-expansion-panels :model-value="mode === 'network' ? 0: undefined">
+        <v-expansion-panels :model-value="mode === 'network' ? 0: undefined" 
+                            expand-icon="fa:fas fa-chevron-down" 
+                            collapse-icon="fa:fas fa-chevron-up">
           <v-expansion-panel>
             <v-expansion-panel-title>
-              <div style="display:flex; align-items: center">
+              <div style="display:flex; align-items: center; width: 100%">
                 <v-icon icon="fa:fas fa-network-wired" color="primary" style="margin-right: 16px"></v-icon>
-                <v-list-subheader style="font-size: 1.5rem; margin-top: 0">Network integration
-                </v-list-subheader>
+                <v-list-subheader style="font-size: 1.5rem; margin-top: 0">Network integration</v-list-subheader>
               </div>
             </v-expansion-panel-title>
             <v-expansion-panel-text v-if="drugstoneNetwork.nodes.length < 200">
@@ -345,6 +346,8 @@ export default {
 .v-list-subheader
   font-size: 1.5rem
   margin-top: 8px
+  padding-bottom: 8px
+  line-height: 1.4 !important
 
 .sh_mobile
   font-size: 1.2rem
