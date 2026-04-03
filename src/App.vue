@@ -70,6 +70,7 @@ a:hover {
   color: #484848 !important;
   text-transform: none !important;
   font-weight: normal;
+  font-size: 1.1rem !important;
   opacity: 1 !important; /* Force full opacity for variant="plain" */
   
   // Hide Vuetify's default backgrounds/overlays
