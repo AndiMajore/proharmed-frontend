@@ -15,6 +15,9 @@ export default defineConfig({
     vuetify({ autoImport: true }),
   ],
   base: '/proharmed/',
+  build: {
+    target: 'esnext'
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

@@ -3,19 +3,21 @@ import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
 import path from 'path'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue({
       template: {
         compilerOptions: {
-          // Treat all tags starting with drugst- as custom elements
           isCustomElement: (tag) => tag.startsWith('drugst-')
         }
       }
     }),
     vuetify({ autoImport: true }),
   ],
+  base: '/proharmed/',
+  build: {
+    target: 'esnext'
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -24,5 +26,5 @@ export default defineConfig({
   },
   server: {
     port: 8080,
-  }
+  },
 })
