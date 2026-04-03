@@ -196,8 +196,8 @@ export default {
 
 <style scoped lang="sass">
 .sh_mobile
-  font-size: 1.2rem
+  font-size: 1.0rem
 
 .sh
-  font-size: 1.5rem
+  font-size: 1.2rem
 </style>
