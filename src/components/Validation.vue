@@ -14,8 +14,14 @@
         </div>
       </div>
     </v-card>
-    <Selection v-if="step===0" @filterEvent="startConfiguration" @remapEvent="startConfiguration"
-               @reduceEvent="startConfiguration" @orthoEvent="startConfiguration" :mobile="mobile"></Selection>
+    <Selection v-if="step===0" 
+               @filterEvent="startConfiguration" 
+               @remapEvent="startConfiguration"
+               @reduceEvent="startConfiguration" 
+               @orthoEvent="startConfiguration"
+               @intersectEvent="startConfiguration" 
+               @networkEvent="startConfiguration" 
+               :mobile="mobile"></Selection>
     <template v-if="step===1 && mode">
       <ConfigurationFilter @applyFilterEvent="runFilter" @resetEvent="resetValidation" v-if="mode==='filter'" :mode="mode"
                            :organism-list="organismList"></ConfigurationFilter>
@@ -103,11 +109,32 @@ export default {
   },
 
   created() {
-    if (this.$route.query.id)
-      this.step = 2
+    this.syncRouteState()
+  },
+
+  watch: {
+    '$route'() {
+      this.syncRouteState()
+    }
   },
 
   methods: {
+    syncRouteState: function() {
+      // If we have an ID in the URL, we are always in results mode
+      if (this.$route.query.id) {
+        this.step = 2
+      } 
+      // If the path is strictly "/" and there is NO hash and NO ID, 
+      // it means the user clicked "Home" or ProHarMeD in the nav-bar.
+      // In this case, we reset to the landing page.
+      else if (this.$route.path === '/' && !this.$route.hash && !this.$route.query.id) {
+        this.step = 0
+        this.mode = undefined
+      }
+      // Note: We don't reset if there is a hash (e.g. /#overview) 
+      // or if we are internally in step 1 (Configuration) because 
+      // the "Run" buttons keep the path as "/".
+    },
     isMobile: function () {
       let check = false;
       (function (a) {
@@ -128,50 +155,41 @@ export default {
       this.mode = data.mode
     },
     resetValidation: function () {
-      this.step = 0
-      this.result = undefined;
-      this.mode = undefined
-      this.params = {}
+      this.$router.push("/")
     },
 
     runFilter: function (payload) {
       this.$http.runFilter(payload).then(response => {
         this.saveTaskResponse(response)
-        this.step = 2
       })
     },
 
     runRemap: function (payload) {
       this.$http.runRemap(payload).then(response => {
         this.saveTaskResponse(response)
-        this.step = 2
       })
     },
 
     runReduce: function (payload) {
       this.$http.runReduce(payload).then(response => {
         this.saveTaskResponse(response)
-        this.step = 2
       })
     },
 
     runOrtho: function (payload) {
       this.$http.runOrtho(payload).then(response => {
         this.saveTaskResponse(response)
-        this.step = 2
       })
     },
 
     runNetwork: function(payload){
       this.$http.runNetwork(payload).then(response=>{
         this.saveTaskResponse(response)
-        this.step = 2
       })
     },
     runIntersect: function (payload){
       this.$http.runIntersect(payload).then(response=>{
         this.saveTaskResponse(response)
-        this.step = 2
       })
     },
 

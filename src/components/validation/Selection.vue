@@ -92,7 +92,18 @@ export default {
       return this.$config.STATIC_PATH + "assets/" + mode + ".png"
     },
     startEvent: function (data) {
-      this.$emit("filterEvent", data)
+      if (data.mode === 'filter')
+        this.$emit("filterEvent", data)
+      if (data.mode === 'remap')
+        this.$emit("remapEvent", data)
+      if (data.mode === 'reduce')
+        this.$emit("reduceEvent", data)
+      if (data.mode === 'ortho')
+        this.$emit("orthoEvent", data)
+      if (data.mode === 'intersect')
+        this.$emit("intersectEvent", data)
+      if (data.mode === 'network')
+        this.$emit("networkEvent", data)
     },
   }
 }
