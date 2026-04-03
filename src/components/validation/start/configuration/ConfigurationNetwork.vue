@@ -375,6 +375,8 @@ export default {
   font-size: 1.5rem
   margin-left: 64px
   margin-right: 64px
+  padding-bottom: 8px
+  line-height: 1.4 !important
 
 .margin_normal
   padding-left: 64px
