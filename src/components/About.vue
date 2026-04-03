@@ -29,16 +29,16 @@
 
       <b style="font-size: 1.5rem">Resources</b>
       <div style="margin-top: 16px; margin-bottom: 32px">
-        <div style="display: flex; align-items: center; margin-bottom: 4px">
-          <v-btn icon="fab fa-python" variant="text" target="_blank" href="https://pypi.org/project/proharmed/" color="primary"></v-btn>
+        <div style="display: flex; align-items: center; margin-bottom: 0px">
+          <v-btn icon="fa:fab fa-python" variant="text" target="_blank" href="https://pypi.org/project/proharmed/" color="primary"></v-btn>
           <span style="margin-left: 8px">Python package (proharmed)</span>
         </div>
-        <div style="display: flex; align-items: center; margin-bottom: 4px">
-          <v-btn icon="fab fa-r-project" variant="text" target="_blank" href="https://github.com/symbod/proharmed-R" color="primary"></v-btn>
+        <div style="display: flex; align-items: center; margin-bottom: 0px">
+          <v-btn icon="fa:fab fa-r-project" variant="text" target="_blank" href="https://github.com/symbod/proharmed-R" color="primary"></v-btn>
           <span style="margin-left: 8px">ProHarMeD R Package</span>
         </div>
-        <div style="display: flex; align-items: center; margin-bottom: 4px">
-          <v-btn icon="fab fa-github" variant="text" target="_blank" href="https://github.com/symbod/proharmed" color="primary"></v-btn>
+        <div style="display: flex; align-items: center; margin-bottom: 0px">
+          <v-btn icon="fa:fab fa-github" variant="text" target="_blank" href="https://github.com/symbod/proharmed" color="primary"></v-btn>
           <span style="margin-left: 8px">ProHarMeD source code</span>
         </div>
       </div>
@@ -46,19 +46,19 @@
 
       <b style="font-size: 1.5rem">Contact</b>
       <div style="margin-top: 16px; margin-bottom: 32px">
-        <div style="display: flex; align-items: center; margin-bottom: 4px">
-          <v-btn icon="fas fa-envelope" variant="text" :href="'mailto:'+getKAMail()" color="primary"></v-btn>
+        <div style="display: flex; align-items: center; margin-bottom: 0px">
+          <v-btn icon="fa:fas fa-envelope" variant="text" :href="'mailto:'+getKAMail()" color="primary"></v-btn>
           <span style="margin-left: 8px">klaudia.adamowicz(_at-]uni-hamburg.de</span>
         </div>
-        <div style="display: flex; align-items: center; margin-bottom: 4px">
-          <v-btn icon="fas fa-envelope" variant="text" :href="'mailto:'+getJBMail()" color="primary"></v-btn>
+        <div style="display: flex; align-items: center; margin-bottom: 0px">
+          <v-btn icon="fa:fas fa-envelope" variant="text" :href="'mailto:'+getJBMail()" color="primary"></v-btn>
           <span style="margin-left: 8px">jan.baumbach(_at-]uni-hamburg.de</span>
         </div>
       </div>
       <b style="font-size: 1.5rem">Web-Application</b>
       <div style="margin-top: 16px; margin-bottom: 32px">
-        <div style="display: flex; align-items: center; margin-bottom: 4px">
-          <v-btn icon="fas fa-envelope" variant="text" :href="'mailto:'+getAMMail()" color="primary"></v-btn>
+        <div style="display: flex; align-items: center; margin-bottom: 0px">
+          <v-btn icon="fa:fas fa-envelope" variant="text" :href="'mailto:'+getAMMail()" color="primary"></v-btn>
           <span style="margin-left: 8px">andreas.maier-1(_at-]uni-hamburg.de</span>
         </div>
       </div>
