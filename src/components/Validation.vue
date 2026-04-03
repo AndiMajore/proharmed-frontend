@@ -139,11 +139,11 @@ export default {
       return check;
     },
     getIllustration: function () {
-      return "/static/assets/ProHarMeD.png"
+      return this.$config.STATIC_PATH + "assets/ProHarMeD.png"
     },
 
     getLogoPath: function () {
-      return "/static/assets/ProHarMeD_Logo.png"
+      return this.$config.STATIC_PATH + "assets/ProHarMeD_Logo.png"
     },
 
     startConfiguration: function (data) {
