@@ -6,11 +6,11 @@
         <v-toolbar-title v-if="!isMobile()" style="cursor:pointer; color: #484848" @click="$router.push('/')">ProHarMeD
         </v-toolbar-title>
         <v-spacer v-if="!isMobile()"></v-spacer>
-        <v-btn variant="text" to="/" class="nav-btn" :ripple="false">Home</v-btn>
-        <v-btn variant="text" to="/#overview" class="nav-btn" :ripple="false">Overview</v-btn>
-        <v-btn variant="text" to="/#harmonize" class="nav-btn" :ripple="false">Harmonize</v-btn>
-        <v-btn variant="text" to="/#explore" class="nav-btn" :ripple="false">Explore</v-btn>
-        <v-btn variant="text" to="/about" class="nav-btn" :ripple="false">About</v-btn>
+        <v-btn variant="plain" to="/" :class="['nav-btn', { 'active-link': $route.path === '/' && !$route.hash }]" :ripple="false">Home</v-btn>
+        <v-btn variant="plain" to="/#overview" :class="['nav-btn', { 'active-link': $route.hash === '#overview' }]" :ripple="false">Overview</v-btn>
+        <v-btn variant="plain" to="/#harmonize" :class="['nav-btn', { 'active-link': $route.hash === '#harmonize' }]" :ripple="false">Harmonize</v-btn>
+        <v-btn variant="plain" to="/#explore" :class="['nav-btn', { 'active-link': $route.hash === '#explore' }]" :ripple="false">Explore</v-btn>
+        <v-btn variant="plain" to="/about" :class="['nav-btn', { 'active-link': $route.path === '/about' }]" :ripple="false">About</v-btn>
       </v-toolbar>
       <v-card v-if="isMobile()" style="min-height: 100vh; top: 60px">
         <router-view></router-view>
@@ -70,12 +70,19 @@ a:hover {
   color: #484848 !important;
   text-transform: none !important;
   font-weight: normal;
+  opacity: 1 !important; /* Force full opacity for variant="plain" */
   
+  // Hide Vuetify's default backgrounds/overlays
+  .v-btn__overlay, .v-btn__underlay {
+    display: none !important;
+  }
+
   &:hover {
     color: #6495ED !important;
+    text-decoration: none !important;
   }
   
-  &.v-btn--active {
+  &.active-link {
     color: #6495ED !important;
   }
 }
