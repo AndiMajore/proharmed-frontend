@@ -2,8 +2,8 @@
   <div>
     <v-divider></v-divider>
     <div id="harmonize" style="display: flex; justify-content: center; margin-top:32px">
-      <v-subheader :style="{'font-size': mobile ? '1.4rem' : '1.5rem'}">Harmonize your data now!
-      </v-subheader>
+      <v-list-subheader :style="{'font-size': mobile ? '1.4rem' : '1.5rem'}">Harmonize your data now!
+      </v-list-subheader>
     </div>
     <v-container style="padding-bottom: 32px">
       <v-row justify="center">
@@ -32,8 +32,8 @@
     </v-container>
     <v-divider></v-divider>
     <div id="explore" style="display: flex; justify-content: center; margin-top:32px">
-      <v-subheader :style="{'font-size': mobile ? '1.4rem' : '1.5rem'}">Explore your data now!
-      </v-subheader>
+      <v-list-subheader :style="{'font-size': mobile ? '1.4rem' : '1.5rem'}">Explore your data now!
+      </v-list-subheader>
     </div>
     <v-container style="padding-bottom: 32px">
       <v-row justify="center">
@@ -92,7 +92,18 @@ export default {
       return this.$config.STATIC_PATH + "assets/" + mode + ".png"
     },
     startEvent: function (data) {
-      this.$emit("filterEvent", data)
+      if (data.mode === 'filter')
+        this.$emit("filterEvent", data)
+      if (data.mode === 'remap')
+        this.$emit("remapEvent", data)
+      if (data.mode === 'reduce')
+        this.$emit("reduceEvent", data)
+      if (data.mode === 'ortho')
+        this.$emit("orthoEvent", data)
+      if (data.mode === 'intersect')
+        this.$emit("intersectEvent", data)
+      if (data.mode === 'network')
+        this.$emit("networkEvent", data)
     },
   }
 }

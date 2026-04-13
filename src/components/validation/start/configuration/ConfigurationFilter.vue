@@ -5,20 +5,20 @@
         <v-col>
           <v-btn color="error" @click="$emit('resetEvent')"
                  style="justify-self: flex-start; margin-right: auto;">
-            <v-icon left>fas fa-angle-left</v-icon>
+            <v-icon start icon="fa:fas fa-angle-left"></v-icon>
             Back
           </v-btn>
         </v-col>
         <v-col class="flex_content_center">
-          <v-menu offset-y open-on-hover>
-            <template v-slot:activator="{ on, attrs }">
+          <v-menu  open-on-hover>
+            <template v-slot:activator="{ props }">
               <v-btn
                   color="primary"
-                  dark
-                  v-bind="attrs"
-                  v-on="on"
+                  
+                  v-bind="props"
+                  
               >
-                <v-icon left>far fa-lightbulb</v-icon>
+                <v-icon start icon="fa:far fa-lightbulb"></v-icon>
                 Load Example
               </v-btn>
             </template>
@@ -26,26 +26,26 @@
               <v-list>
                 <v-list-item link v-for="(example,idx) in examples" :key="example.label" @click="loadExample(idx)">
                   {{ example.label }}
-                  <v-tooltip right>
-                    <template v-slot:activator="{on, attrs}">
-                      <v-icon right v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                  <v-tooltip location="end">
+                    <template v-slot:activator="{ props }">
+                      <v-icon end v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                     </template>
                     <div style="width: 250px; text-align: justify">
                       Load example {{ example.label }} input and sets parameters to those used in this example.
                     </div>
                   </v-tooltip>
-                  <v-list-item-action>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-btn icon small v-bind="attrs" v-on="on" @click="downloadExample(idx)">
-                          <v-icon small>fas fa-download</v-icon>
+                  <template v-slot:append>
+                    <v-tooltip location="end">
+                      <template v-slot:activator="{ props }">
+                        <v-btn icon density="compact" variant="text" elevation="0" v-bind="props"  @click="downloadExample(idx)">
+                          <v-icon size="small" icon="fa:fas fa-download"></v-icon>
                         </v-btn>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Download the example file {{ example.label }}.
                       </div>
                     </v-tooltip>
-                  </v-list-item-action>
+                  </template>
                 </v-list-item>
               </v-list>
             </v-list>
@@ -54,42 +54,44 @@
         <v-col align-self="end" class="flex">
           <v-btn color="primary" @click="checkEvent" class="flex_self_end">
             Harmonize
-            <v-icon right>fas fa-angle-right</v-icon>
+            <v-icon end icon="fa:fas fa-angle-right"></v-icon>
           </v-btn>
         </v-col>
       </v-row>
     </v-container>
     <template v-if="uid">
-      <v-sheet style="margin-top: 16px;">
-        <v-divider></v-divider>
-        <div style="display: flex; justify-content: center">
-          <v-subheader class="sh">
+      <v-sheet style="margin-top: 16px; border: none !important;" flat elevation="0">
+        <div style="display: flex; justify-content: center; padding-top: 16px; padding-bottom: 16px">
+          <v-list-subheader class="sh">
             <b>Filter Protein IDs Configuration</b>
-          </v-subheader>
+          </v-list-subheader>
         </div>
         <v-divider></v-divider>
-        <div style="display: flex; justify-content: center">
-          <v-subheader class="sh">
+        <div style="display: flex; justify-content: center; padding-top: 16px; padding-bottom: 16px">
+          <v-list-subheader class="sh">
             File Upload
-          </v-subheader>
+          </v-list-subheader>
         </div>
-        <v-alert v-if="errorColumnName" type="error" dense>Missing column name to filter from the file!</v-alert>
-        <v-alert v-if="errorFile" type="error" dense>Missing input file!</v-alert>
+        <v-divider></v-divider>
+        <v-alert v-if="errorColumnName" type="error" density="compact">Missing column name to filter from the file!</v-alert>
+        <v-alert v-if="errorFile" type="error" density="compact">Missing input file!</v-alert>
         <div :class="{border_mobile:mobile, border:!mobile}">
           <v-container style="padding-top: 16px">
             <v-row style="width:100%" justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-file-input ref="tarInput" :label="tarInputModel"
                               hide-details
-                              dense
+                              density="compact"
+                              variant="underlined"
+                              color="primary"
                               single-line
                               style="width: 300px; max-width: 300px; cursor: pointer"
                               @change="uploadFile"
-                              prepend-inner-icon="fas fa-arrow-up-from-bracket">
-                  <template v-slot:append-outer>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                              prepend-inner-icon="fa:fas fa-paperclip">
+                  <template v-slot:append>
+                    <v-tooltip location="end">
+                      <template v-slot:activator="{ props }">
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Upload file with a column containing the IDs that should be integrated. <br><i>Note: File can
@@ -101,12 +103,14 @@
                 </v-file-input>
               </v-col>
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="Column name" style="max-width: 300px;"
+                <v-text-field density="compact" label="Column name" style="max-width: 300px;"
+                              variant="underlined"
+                              color="primary"
                               v-model="columnNameModel">
-                  <template v-slot:append-outer>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                  <template v-slot:append>
+                    <v-tooltip location="end">
+                      <template v-slot:activator="{ props }">
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Define the name of the column in the uploaded file containing the protein IDs.
@@ -118,21 +122,21 @@
             </v-row>
           </v-container>
           <v-divider></v-divider>
-          <div style="display: flex; justify-content: center">
-            <v-subheader class="sh">
+          <div style="display: flex; justify-content: center; padding-top: 16px; padding-bottom: 16px">
+            <v-list-subheader class="sh">
               Optional Parameters
-            </v-subheader>
+            </v-list-subheader>
           </div>
           <v-container>
             <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-select label="Organism"
-                          v-model="organismModel" :items="organismList.map(o=>{return{text:o, value:o}})"
-                          style="max-width: 210px; min-width: 210px" outlined dense filled hide-details>
-                  <template v-slot:append-outer>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                          v-model="organismModel" :items="organismList.map(o=>{return{title:o, value:o}})"
+                          style="max-width: 210px; min-width: 210px" variant="underlined" color="primary" density="compact" hide-details>
+                  <template v-slot:append>
+                    <v-tooltip location="end">
+                      <template v-slot:activator="{ props }">
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Organism that the protein IDs should be associated to. <br><i>Click on the drop-down
@@ -146,11 +150,14 @@
             <v-row justify="center">
               <v-col cols="12" md="6" lg="3" class="flex_content_center">
                 <v-checkbox v-model="keepEmptyModel" label="Keep Empty"
-                            style="max-width: 170px" hide-details>
+                            color="primary"
+                            true-icon="fa:fas fa-check-square"
+                            false-icon="fa:far fa-square"
+                            style="max-width: 300px; white-space: nowrap" hide-details>
                   <template v-slot:append>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                    <v-tooltip location="end">
+                      <template v-slot:activator="{ props }">
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Set checkmark if empty rows after removal through filtering should be kept.
@@ -161,11 +168,14 @@
               </v-col>
               <v-col cols="12" md="6" lg="3" class="flex_content_center">
                 <v-checkbox v-model="reviewedModel" label="Reviewed"
-                            style="max-width: 170px" hide-details>
+                            color="primary"
+                            true-icon="fa:fas fa-check-square"
+                            false-icon="fa:far fa-square"
+                            style="max-width: 300px; white-space: nowrap" hide-details>
                   <template v-slot:append>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                    <v-tooltip location="end">
+                      <template v-slot:activator="{ props }">
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Set checkmark if only reviewed IDs according to UniProt should be kept.
@@ -176,11 +186,14 @@
               </v-col>
               <v-col cols="12" md="6" lg="3" class="flex_content_center">
                 <v-checkbox v-model="revConModel" label="Decoy & Contaminat"
-                            style="max-width: 220px" hide-details>
+                            color="primary"
+                            true-icon="fa:fas fa-check-square"
+                            false-icon="fa:far fa-square"
+                            style="max-width: 300px; white-space: nowrap" hide-details>
                   <template v-slot:append>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                    <v-tooltip location="end">
+                      <template v-slot:activator="{ props }">
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Set checkmark if decoy (REV__) and contaminants (CON__) protein IDs should be kept.
@@ -192,12 +205,14 @@
             </v-row>
             <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
-                <v-text-field dense label="Result Column" style="max-width: 300px;"
+                <v-text-field density="compact" label="Result Column" style="max-width: 300px;"
+                              variant="underlined"
+                              color="primary"
                               v-model="resultColumnNameModel">
-                  <template v-slot:append-outer>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                  <template v-slot:append>
+                    <v-tooltip location="end">
+                      <template v-slot:activator="{ props }">
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Define name of the column, where the filtered column with protein IDs should be saved.
@@ -207,15 +222,17 @@
                 </v-text-field>
               </v-col>
             </v-row>
-            <v-divider ></v-divider>
             <v-row justify="center">
               <v-col cols="12" md="6" class="flex_content_center">
                 <v-text-field label="E-Mail" style="max-width: 300px;"
+                              variant="underlined"
+                              color="primary"
+                              density="compact"
                               v-model="mailModel">
-                  <template v-slot:append-outer>
-                    <v-tooltip right>
-                      <template v-slot:activator="{on, attrs}">
-                        <v-icon v-bind="attrs" v-on="on">far fa-question-circle</v-icon>
+                  <template v-slot:append>
+                    <v-tooltip location="end">
+                      <template v-slot:activator="{ props }">
+                        <v-icon v-bind="props" icon="fa:far fa-question-circle"></v-icon>
                       </template>
                       <div style="width: 250px; text-align: justify">
                         Include your E-Mail address if you wish to be notified once the filtering is finished.
@@ -227,20 +244,19 @@
             </v-row>
           </v-container>
         </div>
-        <v-divider></v-divider>
       </v-sheet>
       <v-container>
         <v-row style="margin-top:8px">
           <v-col>
             <v-btn color="error" @click="$emit('resetEvent')" style="justify-self: left; margin-right: auto;">
-              <v-icon left>fas fa-angle-left</v-icon>
+              <v-icon start icon="fa:fas fa-angle-left"></v-icon>
               Back
             </v-btn>
           </v-col>
           <v-col align-self="end" class="flex">
             <v-btn color="primary" @click="checkEvent" class="flex_self_end">
               Harmonize
-              <v-icon right>fas fa-angle-right</v-icon>
+              <v-icon end icon="fa:fas fa-angle-right"></v-icon>
             </v-btn>
           </v-col>
         </v-row>
@@ -255,15 +271,13 @@
       </div>
     </template>
     <v-snackbar v-model="notification.show" :multi-line="true" :timeout="notification.timeout"
-                color="warning" dark>
+                color="warning">
       {{ notification.message }}
     </v-snackbar>
   </div>
 </template>
 
 <script>
-
-import {CONTEXT_PATH} from "../../../../../docker/Config";
 
 export default {
   name: "ConfigurationFilter",
@@ -492,6 +506,8 @@ export default {
   font-size: 1.5rem
   margin-left: 64px
   margin-right: 64px
+  padding-bottom: 8px
+  line-height: 1.4 !important
 
 .margin_normal
   padding-left: 64px
@@ -500,10 +516,14 @@ export default {
 .border
   padding-right: 64px
   padding-left: 64px
+  border: none !important
+  box-shadow: none !important
 
 .border_mobile
   padding-right: 16px
   padding-left: 16px
+  border: none !important
+  box-shadow: none !important
 
 .margin_mobile
   padding-left: 8px

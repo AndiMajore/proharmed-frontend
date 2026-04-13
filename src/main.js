@@ -1,24 +1,21 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import VueRouter from 'vue-router'
-
-import '@mdi/font/css/materialdesignicons.css'
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import * as CONFIG from "./Config"
-import ApiService from "../services/api.service";
 import vuetify from './plugins/vuetify'
 
-ApiService.init(CONFIG.HOST_URL+CONFIG.CONTEXT_PATH)
+import '@mdi/font/css/materialdesignicons.css'
 
-Vue.prototype.$config=CONFIG
-Vue.prototype.$http = ApiService
-Vue.use(VueRouter)
+import * as CONFIG from "./Config"
+import ApiService from "../services/api.service";
 
-Vue.component('font-awesome-icon', FontAwesomeIcon)
+ApiService.init(CONFIG.HOST_URL + CONFIG.CONTEXT_PATH)
 
-new Vue({
-  vuetify,
-  router,
-  render: h => h(App)
-}).$mount('#app')
+const app = createApp(App)
+
+app.config.globalProperties.$config = CONFIG
+app.config.globalProperties.$http = ApiService
+
+app.use(router)
+app.use(vuetify)
+
+app.mount('#app')

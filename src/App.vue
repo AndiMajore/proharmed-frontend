@@ -1,32 +1,22 @@
 <template>
   <v-app>
     <v-main>
-      <v-toolbar elevation="4" dense
-                 :style="{'padding-left': isMobile()? '0': '15vw', 'padding-right': isMobile()? '5vw':'15vw', position: 'fixed', 'z-index': 1, width: '100%'}">
-        <v-toolbar-title v-if="!isMobile()" style="cursor:pointer;" @click="$router.push('/'); $router.go()">ProHarMeD
+      <v-toolbar elevation="4" density="compact" color="white"
+                 :style="{'padding-left': isMobile()? '0': '15vw', 'padding-right': isMobile()? '5vw':'15vw', position: 'fixed', 'z-index': 1000, width: '100%'}">
+        <v-toolbar-title v-if="!isMobile()" style="cursor:pointer; color: #484848" @click="goHome()">ProHarMeD
         </v-toolbar-title>
         <v-spacer v-if="!isMobile()"></v-spacer>
-        <v-btn depressed plain @click="checkRouting()">
-          <router-link style="text-decoration: none" to="/">Home</router-link>
-        </v-btn>
-        <v-btn depressed plain @click="checkRouting()">
-          <router-link style="text-decoration: none" to="/#overview">Overview</router-link>
-        </v-btn>
-        <v-btn depressed plain @click="checkRouting()">
-          <router-link style="text-decoration: none" to="/#harmonize">Harmonize</router-link>
-        </v-btn>
-        <v-btn depressed plain @click="checkRouting()">
-          <router-link style="text-decoration: none" to="/#explore">Explore</router-link>
-        </v-btn>
-        <v-btn depressed plain>
-          <router-link style="text-decoration: none" to="/about">About</router-link>
-        </v-btn>
+        <v-btn variant="plain" :class="['nav-btn', { 'active-link': $route.path === '/' && !$route.hash }]" :ripple="false" @click="goHome()">Home</v-btn>
+        <v-btn variant="plain" :class="['nav-btn', { 'active-link': $route.hash === '#overview' }]" :ripple="false" @click="goHome('#overview')">Overview</v-btn>
+        <v-btn variant="plain" :class="['nav-btn', { 'active-link': $route.hash === '#harmonize' }]" :ripple="false" @click="goHome('#harmonize')">Harmonize</v-btn>
+        <v-btn variant="plain" :class="['nav-btn', { 'active-link': $route.hash === '#explore' }]" :ripple="false" @click="goHome('#explore')">Explore</v-btn>
+        <v-btn variant="plain" to="/about" :class="['nav-btn', { 'active-link': $route.path === '/about' }]" :ripple="false">About</v-btn>
       </v-toolbar>
       <v-card v-if="isMobile()" style="min-height: 100vh; top: 60px">
-        <router-view></router-view>
+        <router-view :key="refreshKey"></router-view>
       </v-card>
       <v-card v-else style="width: 70vw; justify-self: center; margin-left: auto; margin-right: auto; top: 60px">
-        <router-view></router-view>
+        <router-view :key="refreshKey"></router-view>
       </v-card>
     </v-main>
   </v-app>
@@ -39,33 +29,26 @@ export default {
 
   components: {},
   watch: {
-    '$route'(to, from) {
-      if (to.path === '/' && (from.path !== to.path)) {
-        if (to.hash !== from.hash) {
-          location.href = "/" + to.hash
-        } else {
-          location.href = "/"
-        }
-        this.$router.go()
-      }
+    '$route'(to) {
+       if (to.hash) {
+         setTimeout(() => {
+           const element = document.getElementById(to.hash.slice(1));
+           if (element) {
+             element.scrollIntoView({ behavior: 'smooth' });
+           }
+         }, 200);
+       }
     }
   },
-  data: () => ({}),
+  data: () => ({
+    refreshKey: 0
+  }),
 
   methods: {
-
-    checkRouting: function () {
-      if (this.$route.path === "/") {
-        if (this.$route.hash) {
-          location.href = this.$route.hash
-          return
-        }
-        this.$router.push("/")
-        this.$router.go()
-      }
-
-    }
-    ,
+    goHome: async function(hash = '') {
+      await this.$router.push({ path: '/', hash: hash, query: {} });
+      this.refreshKey++;
+    },
     isMobile: function () {
       let check = false;
       (function (a) {
@@ -73,13 +56,52 @@ export default {
       })(navigator.userAgent || navigator.vendor || window.opera);
       return check;
     }
-    ,
   }
 
 };
 </script>
 
 <style lang="scss">
+a {
+  color: #6495ED;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #6495ED;
+}
+
+.nav-btn {
+  color: #484848 !important;
+  text-transform: none !important;
+  font-weight: normal;
+  font-size: 1.1rem !important;
+  opacity: 1 !important; /* Force full opacity for variant="plain" */
+  
+  // Hide Vuetify's default backgrounds/overlays
+  .v-btn__overlay, .v-btn__underlay {
+    display: none !important;
+  }
+
+  &:hover {
+    color: #6495ED !important;
+    text-decoration: none !important;
+  }
+  
+  &.active-link {
+    color: #6495ED !important;
+  }
+}
+
+.v-toolbar {
+  background-color: white !important;
+}
+
+.v-toolbar-title {
+  color: #484848 !important;
+}
+
 a:not([href]) {
   scroll-margin-top: 50px;
 }
